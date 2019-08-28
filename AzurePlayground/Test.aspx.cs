@@ -7,8 +7,6 @@ namespace AzurePlayground {
         protected void Page_Load(object sender, EventArgs e) {
             var context = new PlaygroundContext();
 
-            context.DatabaseInitialize();
-
             test.Value = context.Users.Count().ToString();
         }
     }
