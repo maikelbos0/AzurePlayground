@@ -52,7 +52,11 @@
     <Compile Include="Migrations\201908271811511_Users.Designer.cs">
       <DependentUpon>201908271811511_Users.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlaygroundConfiguration.cs" />
+    <Compile Include="Migrations\201908281820577_users-name.cs" />
+    <Compile Include="Migrations\201908281820577_users-name.Designer.cs">
+      <DependentUpon>201908281820577_users-name.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PlaygroundContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -69,6 +73,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201908271811511_Users.resx">
       <DependentUpon>201908271811511_Users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908281820577_users-name.resx">
+      <DependentUpon>201908281820577_users-name.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

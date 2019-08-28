@@ -8,8 +8,6 @@ namespace AzurePlayground {
             var context = new PlaygroundContext();
 
             try {
-                //context.DatabaseInitialize();
-
                 resultDisplay.InnerText = context.Users.Count().ToString();
             }
             catch (Exception ex) {
