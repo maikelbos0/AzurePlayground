@@ -7,7 +7,14 @@ namespace AzurePlayground {
         protected void Page_Load(object sender, EventArgs e) {
             var context = new PlaygroundContext();
 
-            test.Value = context.Users.Count().ToString();
+            try {
+                context.DatabaseInitialize();
+
+                resultDisplay.InnerText = context.Users.Count().ToString();
+            }
+            catch (Exception ex) {
+                resultDisplay.InnerHtml = $"{ex.Message}<br/>{ex.StackTrace.Replace(Environment.NewLine, "<br/>")}";
+            }
         }
     }
 }

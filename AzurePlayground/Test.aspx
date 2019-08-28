@@ -8,7 +8,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <input runat="server" id="test" />
+        <div runat="server" id="resultDisplay"></div>
     </form>
 </body>
 </html>
