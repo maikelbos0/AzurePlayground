@@ -7,12 +7,7 @@ namespace AzurePlayground {
         protected void Page_Load(object sender, EventArgs e) {
             var context = new PlaygroundContext();
 
-            try {
-                resultDisplay.InnerText = context.Users.Count().ToString();
-            }
-            catch (Exception ex) {
-                resultDisplay.InnerHtml = $"{ex.Message}<br/>{ex.StackTrace.Replace(Environment.NewLine, "<br/>")}";
-            }
+            resultDisplay.InnerText = context.Users.Count().ToString();
         }
     }
 }

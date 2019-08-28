@@ -9,13 +9,18 @@ namespace AzurePlayground.Database.Migrations {
         }
 
         protected override void Seed(AzurePlayground.Database.PlaygroundContext context) {
-            var user = context.Users.SingleOrDefault(u => u.Email == "maikel.bos0@gmail.com") ?? new User() {
-                Email = "maikel.bos0@gmail.com"
-            };
+            var user = context.Users.SingleOrDefault(u => u.Email == "maikel.bos0@gmail.com");
+
+            if (user == null) {
+                user = new User() {
+                    Email = "maikel.bos0@gmail.com"
+                };
+
+                context.Users.Add(user);
+            }
 
             user.UserName = "maikel.bos0";
 
-            context.Users.AddOrUpdate(user);
             context.SaveChanges();
         }
     }
