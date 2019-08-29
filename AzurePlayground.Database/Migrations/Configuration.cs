@@ -3,12 +3,12 @@ namespace AzurePlayground.Database.Migrations {
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<AzurePlayground.Database.PlaygroundContext> {
+    internal sealed class Configuration : DbMigrationsConfiguration<PlaygroundContext> {
         public Configuration() {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(AzurePlayground.Database.PlaygroundContext context) {
+        protected override void Seed(PlaygroundContext context) {
             var user = context.Users.SingleOrDefault(u => u.Email == "maikel.bos0@gmail.com");
 
             if (user == null) {
