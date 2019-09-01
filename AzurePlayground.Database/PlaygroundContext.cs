@@ -5,12 +5,14 @@ using System.Data.Entity.Migrations;
 
 namespace AzurePlayground.Database {
     public class PlaygroundContext : DbContext {
-        public IDbSet<User> Users { get; set; }
-
-        public void DatabaseInitialize() {
-            Database.Initialize(false);
+        static PlaygroundContext() {
+            using (var context = new PlaygroundContext()) {
+                context.Database.Initialize(false);
+            }
 
             new DbMigrator(new Configuration()).Update();
         }
+
+        public IDbSet<User> Users { get; set; }
     }
 }
