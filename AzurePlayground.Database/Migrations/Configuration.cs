@@ -1,5 +1,5 @@
 namespace AzurePlayground.Database.Migrations {
-    using AzurePlayground.Domain;
+    using Security = AzurePlayground.Domain.Security;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
@@ -8,14 +8,12 @@ namespace AzurePlayground.Database.Migrations {
             var user = context.Users.SingleOrDefault(u => u.Email == "maikel.bos0@gmail.com");
 
             if (user == null) {
-                user = new User() {
+                user = new Security.User() {
                     Email = "maikel.bos0@gmail.com"
                 };
 
                 context.Users.Add(user);
             }
-
-            user.UserName = "maikel.bos0";
 
             context.SaveChanges();
         }

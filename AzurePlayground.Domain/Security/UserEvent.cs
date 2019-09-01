@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AzurePlayground.Domain {
+namespace AzurePlayground.Domain.Security {
     [Table("UserEvents", Schema = "Security")]
     public class UserEvent {
         [Key]

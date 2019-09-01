@@ -1,4 +1,4 @@
-﻿namespace AzurePlayground.Domain {
+﻿namespace AzurePlayground.Domain.Security {
     public enum UserEventType {
         PasswordChanged = 0,
         SuccessfulLogin = 1,

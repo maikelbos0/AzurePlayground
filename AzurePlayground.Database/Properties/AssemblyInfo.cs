@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AzurePlayground.Database")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("Copyright © 2019 Maikel Bos")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

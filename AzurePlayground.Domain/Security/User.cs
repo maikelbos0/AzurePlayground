@@ -2,17 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AzurePlayground.Domain {
+namespace AzurePlayground.Domain.Security {
     [Table("Users", Schema = "Security")]
     public class User {
         [Key]
         public int Id { get; set; }
         [Required]
+        [Index("uq_Email", IsUnique = true)]
         [StringLength(255)]
         public string Email { get; set; }
-        [Required]
-        [StringLength(255)]
-        public string UserName { get; set; }
         [MaxLength(20)]
         public byte[] PasswordSalt { get; set; }
         [MaxLength(20)]

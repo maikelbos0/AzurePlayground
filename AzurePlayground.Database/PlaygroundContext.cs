@@ -1,5 +1,5 @@
 ﻿using AzurePlayground.Database.Migrations;
-using AzurePlayground.Domain;
+using Security = AzurePlayground.Domain.Security;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -14,11 +14,15 @@ namespace AzurePlayground.Database {
                     context.Database.Initialize(false);
                 }
             }
-            catch (InvalidOperationException) { }
+            catch (Exception) { }
 
-            new DbMigrator(new Configuration()).Update();
+            // The update command also tries to instantiate the context
+            try {
+                new DbMigrator(new Configuration()).Update();
+            }
+            catch (Exception) { }
         }
 
-        public IDbSet<User> Users { get; set; }
+        public IDbSet<Security.User> Users { get; set; }
     }
 }
