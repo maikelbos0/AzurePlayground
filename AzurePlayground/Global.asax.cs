@@ -1,6 +1,10 @@
-﻿using Microsoft.ApplicationInsights.Extensibility;
+﻿using AzurePlayground.App_Start;
+using Microsoft.ApplicationInsights.Extensibility;
 using System;
 using System.Configuration;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
 
 namespace AzurePlayground {
     public class Global : System.Web.HttpApplication {
@@ -13,6 +17,11 @@ namespace AzurePlayground {
             else {
                 TelemetryConfiguration.Active.InstrumentationKey = instrumentationKey;
             }
+
+            AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
 }
