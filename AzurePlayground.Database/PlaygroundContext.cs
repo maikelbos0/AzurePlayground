@@ -5,7 +5,7 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 
 namespace AzurePlayground.Database {
-    public class PlaygroundContext : DbContext {
+    public class PlaygroundContext : DbContext, IPlaygroundContext {
         static PlaygroundContext() {
             // When adding migrations the context can not be instantiated
             // So far I have not worked out how to detect that the model has changed manually
@@ -24,5 +24,9 @@ namespace AzurePlayground.Database {
         }
 
         public IDbSet<Security.User> Users { get; set; }
+
+        public void FixEfProviderServicesProblem() {
+            var instance = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
+        }
     }
 }

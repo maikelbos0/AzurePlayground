@@ -7,6 +7,13 @@ namespace AzurePlayground.Controllers {
         [Route]
         [Route("Index")]
         public ActionResult Index() {
+            var cmd = new Commands.Security.UserCommands();
+
+            cmd.Register(new Models.Security.UserRegistration() {
+                Email = "test@test.com",
+                Password = "test"
+            });
+
             return View();
         }
     }

@@ -48,9 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\UserLoginCommand.cs" />
+    <Compile Include="Security\IUserCommands.cs" />
+    <Compile Include="Security\UserCommands.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
