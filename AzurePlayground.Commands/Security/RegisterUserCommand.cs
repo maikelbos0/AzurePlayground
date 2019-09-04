@@ -4,7 +4,7 @@ using AzurePlayground.Database;
 using System.Security.Cryptography;
 
 namespace AzurePlayground.Commands.Security {
-    public class UserCommands : IUserCommands {
+    public class RegisterUserCommand : IRegisterUserCommand {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         private readonly int passwordHashIterations = 1000;
 
@@ -12,25 +12,27 @@ namespace AzurePlayground.Commands.Security {
         //_playgroundContextFactory = playgroundContextFactory;
         //}
 
-        public UserCommands() {
+        public RegisterUserCommand() {
             _playgroundContextFactory = new PlaygroundContextFactory();
         }
 
-        public UserRegistration Register(UserRegistration userRegistration) {
+        public CommandResult Execute(UserRegistration parameter) {
+            var result = new CommandResult();
+
             var user = new User() {
-                Email = userRegistration.Email,
+                Email = parameter.Email,
                 PasswordSalt = GetNewPasswordSalt(),
                 PasswordHashIterations = passwordHashIterations
             };
 
-            user.PasswordHash = GetPasswordHash(userRegistration.Password, user.PasswordSalt, user.PasswordHashIterations);
+            user.PasswordHash = GetPasswordHash(parameter.Password, user.PasswordSalt, user.PasswordHashIterations);
 
             using (var context = _playgroundContextFactory.GetContext()) {
                 context.Users.Add(user);
                 context.SaveChanges();
             }
 
-            return userRegistration;
+            return result;
         }
 
         private byte[] GetNewPasswordSalt() {

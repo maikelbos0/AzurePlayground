@@ -48,9 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandResult.cs" />
+    <Compile Include="ICommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\IUserCommands.cs" />
-    <Compile Include="Security\UserCommands.cs" />
+    <Compile Include="Security\IRegisterUserCommand.cs" />
+    <Compile Include="Security\RegisterUserCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
