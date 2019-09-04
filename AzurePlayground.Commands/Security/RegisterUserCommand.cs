@@ -1,6 +1,8 @@
 ﻿using AzurePlayground.Models.Security;
 using AzurePlayground.Domain.Security;
 using AzurePlayground.Database;
+using System;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace AzurePlayground.Commands.Security {
@@ -16,9 +18,8 @@ namespace AzurePlayground.Commands.Security {
             _playgroundContextFactory = new PlaygroundContextFactory();
         }
 
-        public CommandResult Execute(UserRegistration parameter) {
-            var result = new CommandResult();
-
+        public CommandResult<UserRegistration> Execute(UserRegistration parameter) {
+            var result = new CommandResult<UserRegistration>();
             var user = new User() {
                 Email = parameter.Email,
                 PasswordSalt = GetNewPasswordSalt(),
@@ -28,8 +29,13 @@ namespace AzurePlayground.Commands.Security {
             user.PasswordHash = GetPasswordHash(parameter.Password, user.PasswordSalt, user.PasswordHashIterations);
 
             using (var context = _playgroundContextFactory.GetContext()) {
-                context.Users.Add(user);
-                context.SaveChanges();
+                if (context.Users.Any(u => u.Email.Equals(user.Email, StringComparison.InvariantCultureIgnoreCase))) {
+                    result.AddError(p => p.Email, "Email address already exists");
+                }
+                else {
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                }
             }
 
             return result;

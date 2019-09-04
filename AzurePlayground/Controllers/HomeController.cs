@@ -1,4 +1,5 @@
 ﻿using AzurePlayground.Commands.Security;
+using AzurePlayground.Extensions;
 using AzurePlayground.Models.Security;
 using System.Web.Mvc;
 
@@ -24,10 +25,8 @@ namespace AzurePlayground.Controllers {
         public ActionResult Register(UserRegistration model) {
             if (ModelState.IsValid) {
                 var command = new RegisterUserCommand();
-                var result = command.Execute(model);
 
-                // todo validate result
-
+                ModelState.Merge(command.Execute(model));
             }
 
             if (ModelState.IsValid) {
