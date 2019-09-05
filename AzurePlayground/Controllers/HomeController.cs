@@ -32,7 +32,7 @@ namespace AzurePlayground.Controllers {
             if (ModelState.IsValid) {
                 ModelState.Merge(_registerUserCommand.Execute(model));
             }
-
+            
             if (ModelState.IsValid) {
                 return PartialView("Registered");
             }

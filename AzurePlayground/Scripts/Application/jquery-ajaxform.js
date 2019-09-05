@@ -1,11 +1,12 @@
 ﻿$(function () {
     $('body').on('submit', 'form', function () {
-        if ($(this).valid()) {
-            // Find the panel to hold this partial; in case of modals or partials it could be different from site-content and we may need to add selectors
-            var panel = $(this).closest('.site-content');
+        // Find the panel to hold this partial; in case of modals or partials it could be different from site-content and we may need to add selectors
+        var panel = $(this).closest('.site-content');
 
-            // TODO show error when there's no panel
-
+        if (panel.length === 0) {
+            toastr.error("An error occurred locating content panel; please contact support to resolve this issue.");
+        }
+        else if ($(this).valid()) {
             $.ajax({
                 url: this.action,
                 type: this.method,
@@ -14,7 +15,7 @@
                     panel.html(result);
                 },
                 error: function () {
-                    // TODO show error
+                    toastr.error("An error occurred processing data; please try again.");
                 }
             });
         }
