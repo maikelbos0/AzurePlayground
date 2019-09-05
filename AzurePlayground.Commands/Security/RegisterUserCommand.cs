@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Security.Cryptography;
 using AzurePlayground.Utilities.Container;
+using AzurePlayground.Utilities.Mail;
 
 namespace AzurePlayground.Commands.Security {
     [Injectable]
@@ -40,6 +41,10 @@ namespace AzurePlayground.Commands.Security {
                     context.SaveChanges();
                 }
             }
+
+            var client = new MailClient();
+
+            client.Send();
 
             return result;
         }
