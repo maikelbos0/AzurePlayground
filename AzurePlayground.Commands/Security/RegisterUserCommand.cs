@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using AzurePlayground.Utilities.Container;
 
 namespace AzurePlayground.Commands.Security {
-    [Register]
+    [Injectable]
     public class RegisterUserCommand : IRegisterUserCommand {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         private readonly int passwordHashIterations = 1000;

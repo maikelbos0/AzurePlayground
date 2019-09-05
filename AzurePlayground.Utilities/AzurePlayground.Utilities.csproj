@@ -50,8 +50,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Container\RegisterAttribute.cs" />
-    <Compile Include="Container\Registrar.cs" />
+    <Compile Include="Container\InjectableAttribute.cs" />
+    <Compile Include="Container\InjectionRegistrar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

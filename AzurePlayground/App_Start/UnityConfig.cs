@@ -33,7 +33,7 @@ namespace AzurePlayground {
         /// registered.
         /// </remarks>
         public static void RegisterTypes(IUnityContainer container) {
-            var registrar = new Registrar();
+            var registrar = new InjectionRegistrar();
 
             registrar.RegisterTypes(container);
         }

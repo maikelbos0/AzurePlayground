@@ -1,7 +1,7 @@
 ﻿using AzurePlayground.Utilities.Container;
 
 namespace AzurePlayground.Database {
-    [Register]
+    [Injectable]
     public class PlaygroundContextFactory : IPlaygroundContextFactory {
         public IPlaygroundContext GetContext() {
             return new PlaygroundContext();
