@@ -26,6 +26,11 @@ namespace AzurePlayground.Commands.Security {
 
             user.PasswordHash = GetPasswordHash(parameter.Password, user.PasswordSalt, user.PasswordHashIterations);
 
+            user.UserEvents.Add(new UserEvent() {
+                Date = DateTime.UtcNow,
+                UserEventType = UserEventType.Registered
+            });
+
             using (var context = _playgroundContextFactory.GetContext()) {
                 if (context.Users.Any(u => u.Email.Equals(user.Email, StringComparison.InvariantCultureIgnoreCase))) {
                     result.AddError(p => p.Email, "Email address already exists");
