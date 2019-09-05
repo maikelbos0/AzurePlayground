@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AF5556D3-A4CB-4519-8FD6-3F7478656709}</ProjectGuid>
+    <ProjectGuid>{D4E722C8-0CD3-47C9-A479-CA3FA83FA225}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AzurePlayground.Commands</RootNamespace>
-    <AssemblyName>AzurePlayground.Commands</AssemblyName>
+    <RootNamespace>AzurePlayground.Utilities</RootNamespace>
+    <AssemblyName>AzurePlayground.Utilities</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,51 +31,32 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.Abstractions, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.11.1\lib\net47\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.11.1\lib\net47\Unity.Container.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandError.cs" />
-    <Compile Include="CommandResult.cs" />
-    <Compile Include="ICommand.cs" />
+    <Compile Include="Container\RegisterAttribute.cs" />
+    <Compile Include="Container\Registrar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\IRegisterUserCommand.cs" />
-    <Compile Include="Security\RegisterUserCommand.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AzurePlayground.Database\AzurePlayground.Database.csproj">
-      <Project>{a6de6643-8d01-4398-abed-536d33860ab6}</Project>
-      <Name>AzurePlayground.Database</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AzurePlayground.Domain\AzurePlayground.Domain.csproj">
-      <Project>{e157b9c5-042f-4dc3-b2e2-a721eca67cdc}</Project>
-      <Name>AzurePlayground.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AzurePlayground.Models\AzurePlayground.Models.csproj">
-      <Project>{fe4c0d69-d134-4f3a-b19e-0be8e3cb6fc2}</Project>
-      <Name>AzurePlayground.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AzurePlayground.Utilities\AzurePlayground.Utilities.csproj">
-      <Project>{d4e722c8-0cd3-47c9-a479-ca3fa83fa225}</Project>
-      <Name>AzurePlayground.Utilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

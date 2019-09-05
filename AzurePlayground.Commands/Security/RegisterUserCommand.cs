@@ -4,18 +4,16 @@ using AzurePlayground.Database;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using AzurePlayground.Utilities.Container;
 
 namespace AzurePlayground.Commands.Security {
+    [Register]
     public class RegisterUserCommand : IRegisterUserCommand {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         private readonly int passwordHashIterations = 1000;
 
-        //public UserCommands(IPlaygroundContextFactory playgroundContextFactory) {
-        //_playgroundContextFactory = playgroundContextFactory;
-        //}
-
-        public RegisterUserCommand() {
-            _playgroundContextFactory = new PlaygroundContextFactory();
+        public RegisterUserCommand(IPlaygroundContextFactory playgroundContextFactory) {
+            _playgroundContextFactory = playgroundContextFactory;
         }
 
         public CommandResult<UserRegistration> Execute(UserRegistration parameter) {

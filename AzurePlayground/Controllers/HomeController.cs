@@ -6,6 +6,12 @@ using System.Web.Mvc;
 namespace AzurePlayground.Controllers {
     [RoutePrefix("Home")]
     public class HomeController : Controller {
+        private readonly IRegisterUserCommand _registerUserCommand;
+
+        public HomeController (IRegisterUserCommand registerUserCommand) {
+            _registerUserCommand = registerUserCommand;
+        }
+
         [Route("~/")]
         [Route]
         [Route("Index")]
@@ -24,9 +30,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult Register(UserRegistration model) {
             if (ModelState.IsValid) {
-                var command = new RegisterUserCommand();
-
-                ModelState.Merge(command.Execute(model));
+                ModelState.Merge(_registerUserCommand.Execute(model));
             }
 
             if (ModelState.IsValid) {
