@@ -12,7 +12,7 @@ namespace AzurePlayground.App_Start {
             bundles.Add(new ScriptBundle("~/Scripts/bootstrap").Include(
                 "~/Scripts/bootstrap.js"));
 
-            bundles.Add(new ScriptBundle("~/Scripts/application").Include(
+            bundles.Add(new ScriptBundle("~/Scripts/app").Include(
                 "~/Scripts/application/jquery-ajaxform.js",
                 "~/Scripts/application/toastr-defaults.js"));
 
