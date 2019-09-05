@@ -1,21 +1,22 @@
-﻿using SendGrid;
+﻿using AzurePlayground.Utilities.Container;
+using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Configuration;
 
 namespace AzurePlayground.Utilities.Mail {
-    public class MailClient {
-        public void Send() {
-            var apiKey = ConfigurationManager.AppSettings["SendGrid.ApiKey"];
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage() {
+    [Injectable]
+    public class MailClient : IMailClient {
+        public void Send(string to, string subject, string plainTextBody, string htmlBody) {
+            var client = new SendGridClient(ConfigurationManager.AppSettings["SendGrid.ApiKey"]);
+            var message = new SendGridMessage() {
                 From = new EmailAddress("maikel.bos0@gmail.com"),
-                Subject = "Hello World from the SendGrid CSharp SDK!",
-                PlainTextContent = "Hello, Email!",
-                HtmlContent = "<strong>Hello, Email!</strong>"
+                Subject = subject,
+                PlainTextContent = plainTextBody,
+                HtmlContent = htmlBody
             };
 
-            msg.AddTo(new EmailAddress("maikel.bos0@gmail.com"));
-            client.SendEmailAsync(msg);
+            message.AddTo(new EmailAddress(to));
+            client.SendEmailAsync(message);
         }
     }
 }

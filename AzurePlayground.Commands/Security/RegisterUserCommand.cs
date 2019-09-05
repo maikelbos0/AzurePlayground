@@ -11,10 +11,12 @@ namespace AzurePlayground.Commands.Security {
     [Injectable]
     public class RegisterUserCommand : IRegisterUserCommand {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
+        private readonly IMailClient _mailClient;
         private readonly int passwordHashIterations = 1000;
 
-        public RegisterUserCommand(IPlaygroundContextFactory playgroundContextFactory) {
+        public RegisterUserCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient) {
             _playgroundContextFactory = playgroundContextFactory;
+            _mailClient = mailClient;
         }
 
         public CommandResult<UserRegistration> Execute(UserRegistration parameter) {
@@ -42,9 +44,7 @@ namespace AzurePlayground.Commands.Security {
                 }
             }
 
-            var client = new MailClient();
-
-            client.Send();
+            _mailClient.Send(user.Email, "Please activate your account", "Activate!", "<b>Activate!</b>");
 
             return result;
         }
