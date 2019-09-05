@@ -6,7 +6,9 @@
     <title>@ViewBag.Title - Azure Playground</title>
 
     @Scripts.Render("~/Scripts/jquery")
+    @Scripts.Render("~/Scripts/jquery.validate")
     @Scripts.Render("~/Scripts/bootstrap")
+    @Scripts.Render("~/Scripts/application")
 
     @Styles.Render("~/Content/css")
 </head>
@@ -21,8 +23,6 @@
 
     <div class="container site-container">
         <div class="site-content">
-            <h2>@ViewBag.Title</h2>
-
             @RenderBody()
         </div>
     </div>

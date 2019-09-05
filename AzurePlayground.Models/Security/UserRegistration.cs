@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace AzurePlayground.Models.Security {
     public class UserRegistration {
-        [Display(Description = "Email address")]
+        [DisplayName("Email address")]
         [Required(ErrorMessage = "A valid email address is required")]
         public string Email { get; set; }
 
-        [Display(Description = "Password")]
+        [DisplayName("Password")]
         [Required(ErrorMessage = "A password is required")]
         public string Password { get; set; }
     }
