@@ -1,6 +1,7 @@
 ﻿using AzurePlayground.Models.Security;
 using AzurePlayground.Domain.Security;
 using AzurePlayground.Database;
+using Resources = AzurePlayground.Resources;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -24,7 +25,8 @@ namespace AzurePlayground.Commands.Security {
             var user = new User() {
                 Email = parameter.Email,
                 PasswordSalt = GetNewPasswordSalt(),
-                PasswordHashIterations = passwordHashIterations
+                PasswordHashIterations = passwordHashIterations,
+                ActivationCode = GetNewActivationCode()
             };
 
             user.PasswordHash = GetPasswordHash(parameter.Password, user.PasswordSalt, user.PasswordHashIterations);
@@ -44,9 +46,23 @@ namespace AzurePlayground.Commands.Security {
                 }
             }
 
-            _mailClient.Send(user.Email, "Please activate your account", "Activate!", "<b>Activate!</b>");
+            if (!result.Errors.Any()) {
+                var subject = Resources.Security.ActivationEmailSubject.Replace("{ActivationCode}", user.ActivationCode.ToString());
+                var plainTextBody = Resources.Security.ActivationEmailPlainTextBody.Replace("{ActivationCode}", user.ActivationCode.ToString());
+                var htmlBody = Resources.Security.ActivationEmailPlainTextBody.Replace("{ActivationCode}", user.ActivationCode.ToString());
+
+                _mailClient.Send(user.Email, subject, plainTextBody, htmlBody);
+            }
 
             return result;
+        }
+
+        private int GetNewActivationCode() {
+            byte[] code = new byte[4];
+
+            new RNGCryptoServiceProvider().GetBytes(code);
+
+            return BitConverter.ToInt32(code, 0);
         }
 
         private byte[] GetNewPasswordSalt() {

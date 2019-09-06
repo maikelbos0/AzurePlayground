@@ -66,6 +66,10 @@
     <Compile Include="Migrations\201909011210150_Users-RemoveName.Designer.cs">
       <DependentUpon>201909011210150_Users-RemoveName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909061654502_Users-Activationcode.cs" />
+    <Compile Include="Migrations\201909061654502_Users-Activationcode.Designer.cs">
+      <DependentUpon>201909061654502_Users-Activationcode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PlaygroundContext.cs" />
     <Compile Include="PlaygroundContextFactory.cs" />
@@ -97,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909011210150_Users-RemoveName.resx">
       <DependentUpon>201909011210150_Users-RemoveName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909061654502_Users-Activationcode.resx">
+      <DependentUpon>201909061654502_Users-Activationcode.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
