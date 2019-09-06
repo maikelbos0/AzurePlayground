@@ -58,11 +58,7 @@ namespace AzurePlayground.Commands.Security {
         }
 
         private int GetNewActivationCode() {
-            byte[] code = new byte[4];
-
-            new RNGCryptoServiceProvider().GetBytes(code);
-
-            return BitConverter.ToInt32(code, 0);
+            return new Random().Next(10000, int.MaxValue);
         }
 
         private byte[] GetNewPasswordSalt() {
