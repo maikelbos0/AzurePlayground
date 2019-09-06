@@ -92,6 +92,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="Configuration\IAppSettings.cs" />
     <Compile Include="Container\InjectableAttribute.cs" />
     <Compile Include="Container\InjectionRegistrar.cs" />
     <Compile Include="Mail\IMailClient.cs" />

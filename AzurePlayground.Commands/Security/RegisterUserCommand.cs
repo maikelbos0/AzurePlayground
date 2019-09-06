@@ -7,17 +7,20 @@ using System.Linq;
 using System.Security.Cryptography;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
+using AzurePlayground.Utilities.Configuration;
 
 namespace AzurePlayground.Commands.Security {
     [Injectable]
     public class RegisterUserCommand : IRegisterUserCommand {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         private readonly IMailClient _mailClient;
+        private readonly IAppSettings _appSettings;
         private readonly int passwordHashIterations = 1000;
 
-        public RegisterUserCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient) {
+        public RegisterUserCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) {
             _playgroundContextFactory = playgroundContextFactory;
             _mailClient = mailClient;
+            _appSettings = appSettings;
         }
 
         public CommandResult<UserRegistration> Execute(UserRegistration parameter) {
@@ -47,14 +50,21 @@ namespace AzurePlayground.Commands.Security {
             }
 
             if (!result.Errors.Any()) {
-                var subject = Resources.Security.ActivationEmailSubject.Replace("{ActivationCode}", user.ActivationCode.ToString());
-                var plainTextBody = Resources.Security.ActivationEmailPlainTextBody.Replace("{ActivationCode}", user.ActivationCode.ToString());
-                var htmlBody = Resources.Security.ActivationEmailPlainTextBody.Replace("{ActivationCode}", user.ActivationCode.ToString());
+                var activationCode = user.ActivationCode.ToString();
+                var activationUrl = $"{_appSettings["Application.BaseUrl"]}Home/Activate/";
+                var subject = FillTemplate(Resources.Security.ActivationEmailSubject, activationCode, activationUrl);
+                var plainTextBody = FillTemplate(Resources.Security.ActivationEmailPlainTextBody, activationCode, activationUrl);
+                var htmlBody = FillTemplate(Resources.Security.ActivationEmailPlainTextBody, activationCode, activationUrl);
 
                 _mailClient.Send(user.Email, subject, plainTextBody, htmlBody);
             }
 
             return result;
+        }
+
+        // TODO: probably generalize this and move it to a utility
+        private string FillTemplate(string template, string activationCode, string activationUrl) {
+            return template.Replace("{ActivationCode}", activationCode).Replace("{ActivationUrl}", activationUrl);
         }
 
         private int GetNewActivationCode() {
