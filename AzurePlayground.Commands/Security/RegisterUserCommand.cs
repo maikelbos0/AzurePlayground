@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
 using AzurePlayground.Utilities.Configuration;
+using System.Net;
 
 namespace AzurePlayground.Commands.Security {
     [Injectable]
@@ -50,26 +51,18 @@ namespace AzurePlayground.Commands.Security {
             }
 
             if (!result.Errors.Any()) {
-                var activationCode = user.ActivationCode.ToString();
-                var activationUrl = $"{_appSettings["Application.BaseUrl"]}Home/Activate/";
-                var subject = FillTemplate(Resources.Security.ActivationEmailSubject, activationCode, activationUrl);
-                var plainTextBody = FillTemplate(Resources.Security.ActivationEmailPlainTextBody, activationCode, activationUrl);
-                var htmlBody = FillTemplate(Resources.Security.ActivationEmailPlainTextBody, activationCode, activationUrl);
+                var activationUrl = $"{_appSettings["Application.BaseUrl"]}Home/Activate/?activationCode={user.ActivationCode}&email={WebUtility.UrlEncode(user.Email)}";
+                var subject = Resources.Security.ActivationEmailSubject.Replace("{ActivationUrl}", activationUrl);
+                var body = Resources.Security.ActivationEmailBody.Replace("{ActivationUrl}", activationUrl);
 
                 _mailClient.Send(new MailMessage() {
                     To = user.Email,
                     Subject = subject,
-                    PlainTextBody = plainTextBody,
-                    HtmlBody = htmlBody
+                    Body = body
                 });
             }
 
             return result;
-        }
-
-        // TODO: probably generalize this and move it to a utility
-        private string FillTemplate(string template, string activationCode, string activationUrl) {
-            return template.Replace("{ActivationCode}", activationCode).Replace("{ActivationUrl}", activationUrl);
         }
 
         private int GetNewActivationCode() {

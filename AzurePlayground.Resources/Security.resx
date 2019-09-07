@@ -117,14 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ActivationEmailHtmlBody" xml:space="preserve">
-    <value>&lt;p&gt;Please &lt;a href="{ActivationUrl}{ActivationCode}"&gt;click here to activate your account.&lt;/p&gt;</value>
-  </data>
-  <data name="ActivationEmailPlainTextBody" xml:space="preserve">
-    <value>Please go to the following url to activate your account:
-{ActivationUrl}
-
-Your activation code: {ActivationCode}</value>
+  <data name="ActivationEmailBody" xml:space="preserve">
+    <value>&lt;p&gt;Please &lt;a href="{ActivationUrl}"&gt;click here to activate your account.&lt;/p&gt;</value>
   </data>
   <data name="ActivationEmailSubject" xml:space="preserve">
     <value>Please activate your account</value>

@@ -11,8 +11,7 @@ namespace AzurePlayground.Utilities.Mail {
             var message = new SendGridMessage() {
                 From = new EmailAddress("maikel.bos0@gmail.com"),
                 Subject = model.Subject,
-                PlainTextContent = model.PlainTextBody,
-                HtmlContent = model.HtmlBody
+                HtmlContent = model.Body
             };
 
             message.AddTo(new EmailAddress(model.To));
