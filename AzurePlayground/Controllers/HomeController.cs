@@ -34,10 +34,10 @@ namespace AzurePlayground.Controllers {
             }
             
             if (ModelState.IsValid) {
-                return PartialView("Registered");
+                return View("Registered");
             }
             else {
-                return PartialView(model);
+                return View(model);
             }
         }
     }
