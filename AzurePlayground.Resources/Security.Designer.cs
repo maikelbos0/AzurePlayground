@@ -61,7 +61,9 @@ namespace AzurePlayground.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Please &lt;a href=&quot;{ActivationUrl}&quot;&gt;click here to activate your account.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Please &lt;a href=&quot;{ActivationUrl}&quot;&gt;click here to activate your account&lt;/p&gt;.
+        ///
+        ///&lt;p&gt;Activation code: {ActivationCode}&lt;/p&gt;.
         /// </summary>
         public static string ActivationEmailBody {
             get {

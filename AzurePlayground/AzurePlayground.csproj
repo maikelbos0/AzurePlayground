@@ -239,6 +239,8 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\Registered.cshtml" />
+    <Content Include="Views\Home\Activate.cshtml" />
+    <Content Include="Views\Home\Activated.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

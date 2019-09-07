@@ -117,12 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ActivationEmailBody" xml:space="preserve">
-    <value>&lt;p&gt;Please &lt;a href="{ActivationUrl}"&gt;click here to activate your account&lt;/p&gt;.
-
-&lt;p&gt;Activation code: {ActivationCode}&lt;/p&gt;</value>
+  <data name="Target" xml:space="preserve">
+    <value>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</value>
   </data>
-  <data name="ActivationEmailSubject" xml:space="preserve">
-    <value>Please activate your account</value>
+  <data name="DefaultSchema" xml:space="preserve">
+    <value>dbo</value>
   </data>
 </root>

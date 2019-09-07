@@ -5,18 +5,19 @@ using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AzurePlayground.Commands.Test {
     [TestClass]
     public class SecurityTests {
-        private FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
-        private FakeMailClient _mailClient = new FakeMailClient();
-        private FakeAppSettings _appSettings = new FakeAppSettings() {
+        private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
+        private readonly FakeMailClient _mailClient = new FakeMailClient();
+        private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
             Settings = new Dictionary<string, string>() {
                 { "Application.BaseUrl", "http://localhost" }
             }
         };
-        
+
         [TestMethod]
         public void RegisterUserCommand_Succeeds() {
             var command = new RegisterUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
@@ -65,6 +66,90 @@ namespace AzurePlayground.Commands.Test {
             _mailClient.SentMessages.Should().HaveCount(1);
             _mailClient.SentMessages[0].Subject.Should().Be("Please activate your account");
             _mailClient.SentMessages[0].To.Should().Be("test@test.com");
+        }
+
+        [TestMethod]
+        public void ActivateUserCommand_Succeeds() {
+            var command = new ActivateUserCommand(_playgroundContextFactory);
+            var model = new UserActivation() {
+                Email = "test@test.com",
+                ActivationCode = "999999"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999
+            });
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().BeEmpty();
+            _playgroundContextFactory.Context.Users.Single().IsActive.Should().BeTrue();
+            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void ActivateUserCommand_Fails_For_Nonexistent_User() {
+            var command = new ActivateUserCommand(_playgroundContextFactory);
+            var model = new UserActivation() {
+                Email = "test@test.com",
+                ActivationCode = "999999"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test1@test.com",
+                ActivationCode = 999999
+            });
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
+            result.Errors[0].Message.Should().Be("This activation code is invalid");
+            _playgroundContextFactory.Context.Users.Single().IsActive.Should().BeFalse();
+            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().Equals(999999);
+        }
+
+        [TestMethod]
+        public void ActivateUserCommand_Fails_For_Active_User() {
+            var command = new ActivateUserCommand(_playgroundContextFactory);
+            var model = new UserActivation() {
+                Email = "test@test.com",
+                ActivationCode = "999999"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                IsActive = true
+            });
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
+            result.Errors[0].Message.Should().Be("This activation code is invalid");
+        }
+
+        [TestMethod]
+        public void ActivateUserCommand_Fails_For_Wrong_Code() {
+            var command = new ActivateUserCommand(_playgroundContextFactory);
+            var model = new UserActivation() {
+                Email = "test@test.com",
+                ActivationCode = "999987"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999
+            });
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
+            result.Errors[0].Message.Should().Be("This activation code is invalid");
+            _playgroundContextFactory.Context.Users.Single().IsActive.Should().BeFalse();
+            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().Equals(999999);
         }
     }
 }

@@ -70,6 +70,10 @@
     <Compile Include="Migrations\201909061654502_Users-Activationcode.Designer.cs">
       <DependentUpon>201909061654502_Users-Activationcode.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909071811254_Users-IsActive.cs" />
+    <Compile Include="Migrations\201909071811254_Users-IsActive.Designer.cs">
+      <DependentUpon>201909071811254_Users-IsActive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PlaygroundContext.cs" />
     <Compile Include="PlaygroundContextFactory.cs" />
@@ -104,6 +108,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909061654502_Users-Activationcode.resx">
       <DependentUpon>201909061654502_Users-Activationcode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909071811254_Users-IsActive.resx">
+      <DependentUpon>201909071811254_Users-IsActive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

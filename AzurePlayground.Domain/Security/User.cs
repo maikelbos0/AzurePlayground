@@ -17,6 +17,7 @@ namespace AzurePlayground.Domain.Security {
         public byte[] PasswordHash { get; set; }
         public int PasswordHashIterations { get; set; }
         public int? ActivationCode { get; set; }
+        public bool IsActive { get; set; }
         public virtual ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
     }
 }

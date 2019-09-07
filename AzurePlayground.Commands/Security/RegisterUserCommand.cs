@@ -1,7 +1,6 @@
 ﻿using AzurePlayground.Models.Security;
 using AzurePlayground.Domain.Security;
 using AzurePlayground.Database;
-using Resources = AzurePlayground.Resources;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -52,8 +51,8 @@ namespace AzurePlayground.Commands.Security {
 
             if (!result.Errors.Any()) {
                 var activationUrl = $"{_appSettings["Application.BaseUrl"]}Home/Activate/?activationCode={user.ActivationCode}&email={WebUtility.UrlEncode(user.Email)}";
-                var subject = Resources.Security.ActivationEmailSubject.Replace("{ActivationUrl}", activationUrl);
-                var body = Resources.Security.ActivationEmailBody.Replace("{ActivationUrl}", activationUrl);
+                var subject = Resources.Security.ActivationEmailSubject.Replace("{ActivationUrl}", activationUrl).Replace("{ActivationCode}", user.ActivationCode.ToString());
+                var body = Resources.Security.ActivationEmailBody.Replace("{ActivationUrl}", activationUrl).Replace("{ActivationCode}", user.ActivationCode.ToString());
 
                 _mailClient.Send(new MailMessage() {
                     To = user.Email,
