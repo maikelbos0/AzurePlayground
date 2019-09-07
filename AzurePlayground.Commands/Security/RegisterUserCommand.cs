@@ -56,7 +56,12 @@ namespace AzurePlayground.Commands.Security {
                 var plainTextBody = FillTemplate(Resources.Security.ActivationEmailPlainTextBody, activationCode, activationUrl);
                 var htmlBody = FillTemplate(Resources.Security.ActivationEmailPlainTextBody, activationCode, activationUrl);
 
-                _mailClient.Send(user.Email, subject, plainTextBody, htmlBody);
+                _mailClient.Send(new MailMessage() {
+                    To = user.Email,
+                    Subject = subject,
+                    PlainTextBody = plainTextBody,
+                    HtmlBody = htmlBody
+                });
             }
 
             return result;

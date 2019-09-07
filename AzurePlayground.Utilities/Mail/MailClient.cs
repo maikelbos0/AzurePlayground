@@ -6,16 +6,16 @@ using System.Configuration;
 namespace AzurePlayground.Utilities.Mail {
     [Injectable]
     public class MailClient : IMailClient {
-        public void Send(string to, string subject, string plainTextBody, string htmlBody) {
+        public void Send(MailMessage model) {
             var client = new SendGridClient(ConfigurationManager.AppSettings["SendGrid.ApiKey"]);
             var message = new SendGridMessage() {
                 From = new EmailAddress("maikel.bos0@gmail.com"),
-                Subject = subject,
-                PlainTextContent = plainTextBody,
-                HtmlContent = htmlBody
+                Subject = model.Subject,
+                PlainTextContent = model.PlainTextBody,
+                HtmlContent = model.HtmlBody
             };
 
-            message.AddTo(new EmailAddress(to));
+            message.AddTo(new EmailAddress(model.To));
             client.SendEmailAsync(message);
         }
     }
