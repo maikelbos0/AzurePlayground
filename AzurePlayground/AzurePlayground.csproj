@@ -241,6 +241,8 @@
     <Content Include="Views\Home\Registered.cshtml" />
     <Content Include="Views\Home\Activate.cshtml" />
     <Content Include="Views\Home\Activated.cshtml" />
+    <Content Include="Views\Home\SendActivation.cshtml" />
+    <Content Include="Views\Home\ActivationSent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

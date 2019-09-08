@@ -8,10 +8,12 @@ namespace AzurePlayground.Controllers {
     public class HomeController : Controller {
         private readonly IRegisterUserCommand _registerUserCommand;
         private readonly IActivateUserCommand _activateUserCommand;
+        private readonly ISendUserActivationCommand _sendUserActivationCommand;
 
-        public HomeController(IRegisterUserCommand registerUserCommand, IActivateUserCommand activateUserCommand) {
+        public HomeController(IRegisterUserCommand registerUserCommand, IActivateUserCommand activateUserCommand, ISendUserActivationCommand sendUserActivationCommand) {
             _registerUserCommand = registerUserCommand;
             _activateUserCommand = activateUserCommand;
+            _sendUserActivationCommand = sendUserActivationCommand;
         }
 
         [Route("~/")]
@@ -70,6 +72,27 @@ namespace AzurePlayground.Controllers {
 
             if (ModelState.IsValid) {
                 return View("Activated");
+            }
+            else {
+                return View(model);
+            }
+        }
+
+        [Route("SendActivation")]
+        [HttpGet]
+        public ActionResult SendActivation() {
+            return View(new SendUserActivation());
+        }
+
+        [Route("SendActivation")]
+        [HttpPost]
+        public ActionResult SendActivation(SendUserActivation model) {
+            if (ModelState.IsValid) {
+                ModelState.Merge(_sendUserActivationCommand.Execute(model));
+            }
+
+            if (ModelState.IsValid) {
+                return View("ActivationSent");
             }
             else {
                 return View(model);

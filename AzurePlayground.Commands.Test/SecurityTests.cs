@@ -107,7 +107,7 @@ namespace AzurePlayground.Commands.Test {
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
             result.Errors[0].Message.Should().Be("This activation code is invalid");
             _playgroundContextFactory.Context.Users.Single().IsActive.Should().BeFalse();
-            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().Equals(999999);
+            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().Be(999999);
         }
 
         [TestMethod]
@@ -149,7 +149,84 @@ namespace AzurePlayground.Commands.Test {
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
             result.Errors[0].Message.Should().Be("This activation code is invalid");
             _playgroundContextFactory.Context.Users.Single().IsActive.Should().BeFalse();
-            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().Equals(999999);
+            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().Be(999999);
+        }
+
+        [TestMethod]
+        public void SendUserActivationCommand_Sends_Email() {
+            var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new SendUserActivation() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999
+            });
+
+            var result = command.Execute(model);
+
+            result.Success.Should().BeTrue();
+            _mailClient.SentMessages.Should().HaveCount(1);
+            _mailClient.SentMessages[0].Subject.Should().Be("Please activate your account");
+            _mailClient.SentMessages[0].To.Should().Be("test@test.com");
+        }
+
+        [TestMethod]
+        public void SendUserActivationCommand_Creates_New_Activation_Code() {
+            var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new SendUserActivation() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999
+            });
+
+            var result = command.Execute(model);
+
+            result.Success.Should().BeTrue();
+            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().NotBe(999999);
+        }
+
+        [TestMethod]
+        public void SendUserActivationCommand_Does_Nothing_For_Active_User() {
+            var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new SendUserActivation() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                ActivationCode = null,
+                IsActive = true
+            });
+
+            var result = command.Execute(model);
+
+            result.Success.Should().BeTrue();
+            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().BeNull();
+            _mailClient.SentMessages.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void SendUserActivationCommand_Does_Nothing_For_Nonexistent_User() {
+            var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new SendUserActivation() {
+                Email = "test1@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999
+            });
+
+            var result = command.Execute(model);
+
+            result.Success.Should().BeTrue();
+            _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().Be(999999);
+            _mailClient.SentMessages.Should().HaveCount(0);
         }
     }
 }

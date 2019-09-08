@@ -5,6 +5,7 @@
         FailedLogin = 2,
         Registered = 3,
         Activated = 4,
-        FailedActivation = 5
+        FailedActivation = 5,
+        ActivationCodeSent = 6
     }
 }

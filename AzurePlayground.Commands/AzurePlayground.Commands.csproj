@@ -53,9 +53,12 @@
     <Compile Include="ICommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ActivateUserCommand.cs" />
+    <Compile Include="Security\BaseUserCommand.cs" />
     <Compile Include="Security\IActivateUserCommand.cs" />
     <Compile Include="Security\IRegisterUserCommand.cs" />
+    <Compile Include="Security\ISendUserActivationCommand.cs" />
     <Compile Include="Security\RegisterUserCommand.cs" />
+    <Compile Include="Security\SendUserActivationCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

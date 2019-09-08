@@ -1,26 +1,20 @@
-﻿using AzurePlayground.Models.Security;
+﻿using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Database;
-using System;
-using System.Linq;
-using System.Security.Cryptography;
+using AzurePlayground.Models.Security;
+using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
-using AzurePlayground.Utilities.Configuration;
-using System.Net;
+using System;
+using System.Linq;
 
 namespace AzurePlayground.Commands.Security {
     [Injectable]
-    public class RegisterUserCommand : IRegisterUserCommand {
+    public class RegisterUserCommand : BaseUserCommand, IRegisterUserCommand {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
-        private readonly IMailClient _mailClient;
-        private readonly IAppSettings _appSettings;
         private readonly int passwordHashIterations = 1000;
 
-        public RegisterUserCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) {
+        public RegisterUserCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
             _playgroundContextFactory = playgroundContextFactory;
-            _mailClient = mailClient;
-            _appSettings = appSettings;
         }
 
         public CommandResult<UserRegistration> Execute(UserRegistration parameter) {
@@ -50,37 +44,10 @@ namespace AzurePlayground.Commands.Security {
             }
 
             if (!result.Errors.Any()) {
-                var activationUrl = $"{_appSettings["Application.BaseUrl"]}Home/Activate/?activationCode={user.ActivationCode}&email={WebUtility.UrlEncode(user.Email)}";
-                var subject = Resources.Security.ActivationEmailSubject.Replace("{ActivationUrl}", activationUrl).Replace("{ActivationCode}", user.ActivationCode.ToString());
-                var body = Resources.Security.ActivationEmailBody.Replace("{ActivationUrl}", activationUrl).Replace("{ActivationCode}", user.ActivationCode.ToString());
-
-                _mailClient.Send(new MailMessage() {
-                    To = user.Email,
-                    Subject = subject,
-                    Body = body
-                });
+                SendActivationEmail(user);
             }
 
             return result;
-        }
-
-        private int GetNewActivationCode() {
-            return new Random().Next(10000, int.MaxValue);
-        }
-
-        private byte[] GetNewPasswordSalt() {
-            byte[] salt = new byte[20];
-
-            new RNGCryptoServiceProvider().GetBytes(salt);
-
-            return salt;
-        }
-
-        private byte[] GetPasswordHash(string password, byte[] salt, int iterations) {
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations);
-
-            // Return 20 bytes because after that it repeats
-            return pbkdf2.GetBytes(20);
         }
     }
 }
