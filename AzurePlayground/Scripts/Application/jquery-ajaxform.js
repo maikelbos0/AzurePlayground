@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $('body').on('submit', 'form', function () {
+    $('body').on('submit', 'form:not(.html-only)', function () {
         // Find the panel to hold this partial; in case of modals or partials it could be different from site-content and we may need to add selectors
         var panel = $(this).closest('.site-content');
         var submitButtons = $(this).find('button[type="submit"]');
@@ -16,6 +16,13 @@
                 data: $(this).serialize(),
                 success: function (result) {
                     panel.html(result);
+
+                    // Since the page won't be refreshed we try to find the title in the new content
+                    var title = panel.find('h2').text();
+
+                    if (title) {
+                        document.title = title + ' - Azure Playground';
+                    }
                 },
                 error: function () {
                     toastr.error("An error occurred processing data; please try again.");

@@ -2,6 +2,7 @@
 using AzurePlayground.Extensions;
 using AzurePlayground.Models.Security;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace AzurePlayground.Controllers {
     [RoutePrefix("Home")]
@@ -9,11 +10,13 @@ namespace AzurePlayground.Controllers {
         private readonly IRegisterUserCommand _registerUserCommand;
         private readonly IActivateUserCommand _activateUserCommand;
         private readonly ISendUserActivationCommand _sendUserActivationCommand;
+        private readonly ILogInUserCommand _logInUserCommand;
 
-        public HomeController(IRegisterUserCommand registerUserCommand, IActivateUserCommand activateUserCommand, ISendUserActivationCommand sendUserActivationCommand) {
+        public HomeController(IRegisterUserCommand registerUserCommand, IActivateUserCommand activateUserCommand, ISendUserActivationCommand sendUserActivationCommand, ILogInUserCommand logInUserCommand) {
             _registerUserCommand = registerUserCommand;
             _activateUserCommand = activateUserCommand;
             _sendUserActivationCommand = sendUserActivationCommand;
+            _logInUserCommand = logInUserCommand;
         }
 
         [Route("~/")]
@@ -97,6 +100,35 @@ namespace AzurePlayground.Controllers {
             else {
                 return View(model);
             }
+        }
+
+        [Route("LogIn")]
+        [HttpGet]
+        public ActionResult LogIn() {
+            return View(new UserLogIn());
+        }
+
+        [Route("LogIn")]
+        [HttpPost]
+        public ActionResult LogIn(UserLogIn model) {
+            if (ModelState.IsValid) {
+                ModelState.Merge(_logInUserCommand.Execute(model));
+            }
+
+            if (ModelState.IsValid) {
+                FormsAuthentication.SetAuthCookie(model.Email, false);
+                return RedirectToAction("LoggedIn");
+            }
+            else {
+                return View(model);
+            }
+        }
+
+        [Route("LoggedIn")]
+        [HttpGet]
+        [Authorize]
+        public ActionResult LoggedIn() {
+            return View();
         }
     }
 }

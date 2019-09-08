@@ -30,11 +30,12 @@ namespace AzurePlayground.Commands.Test {
 
             result.Errors.Should().BeEmpty();
             _playgroundContextFactory.Context.Users.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.Registered);
         }
 
-
         [TestMethod]
-        public void RegisterUserCommand_Returns_Error_For_Existing_Email() {
+        public void RegisterUserCommand_Fails_For_Existing_Email() {
             var command = new RegisterUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var model = new UserRegistration() {
                 Email = "test@test.com",
@@ -86,6 +87,8 @@ namespace AzurePlayground.Commands.Test {
             result.Errors.Should().BeEmpty();
             _playgroundContextFactory.Context.Users.Single().IsActive.Should().BeTrue();
             _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().BeNull();
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.Activated);
         }
 
         [TestMethod]
@@ -97,7 +100,7 @@ namespace AzurePlayground.Commands.Test {
             };
 
             _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test1@test.com",
+                Email = "other@test.com",
                 ActivationCode = 999999
             });
 
@@ -128,6 +131,8 @@ namespace AzurePlayground.Commands.Test {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
             result.Errors[0].Message.Should().Be("This activation code is invalid");
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedActivation);
         }
 
         [TestMethod]
@@ -150,6 +155,8 @@ namespace AzurePlayground.Commands.Test {
             result.Errors[0].Message.Should().Be("This activation code is invalid");
             _playgroundContextFactory.Context.Users.Single().IsActive.Should().BeFalse();
             _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().Be(999999);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedActivation);
         }
 
         [TestMethod]
@@ -188,6 +195,8 @@ namespace AzurePlayground.Commands.Test {
 
             result.Success.Should().BeTrue();
             _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().NotBe(999999);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.ActivationCodeSent);
         }
 
         [TestMethod]
@@ -207,6 +216,7 @@ namespace AzurePlayground.Commands.Test {
 
             result.Success.Should().BeTrue();
             _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().BeNull();
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(0);
             _mailClient.SentMessages.Should().HaveCount(0);
         }
 
@@ -214,7 +224,7 @@ namespace AzurePlayground.Commands.Test {
         public void SendUserActivationCommand_Does_Nothing_For_Nonexistent_User() {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var model = new SendUserActivation() {
-                Email = "test1@test.com"
+                Email = "other@test.com"
             };
 
             _playgroundContextFactory.Context.Users.Add(new User() {
@@ -227,6 +237,101 @@ namespace AzurePlayground.Commands.Test {
             result.Success.Should().BeTrue();
             _playgroundContextFactory.Context.Users.Single().ActivationCode.Should().Be(999999);
             _mailClient.SentMessages.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void LogInUserCommand_Succeeds() {
+            var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserLogIn() {
+                Email = "test@test.com",
+                Password = "test"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 },
+                PasswordHashIterations = 1000,
+                PasswordSalt = Enumerable.Range(0, 20).Select(i => (byte)0).ToArray(),
+                IsActive = true
+            });
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().BeEmpty();
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.LoggedIn);
+        }
+
+        [TestMethod]
+        public void LogInUserCommand_Fails_For_Nonexistent_User() {
+            var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserLogIn() {
+                Email = "other@test.com",
+                Password = "test"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 },
+                PasswordHashIterations = 1000,
+                PasswordSalt = Enumerable.Range(0, 20).Select(i => (byte)0).ToArray(),
+                IsActive = true
+            });
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
+            result.Errors[0].Message.Should().Be("Invalid email or password");
+        }
+
+        [TestMethod]
+        public void LogInUserCommand_Fails_For_Inactive_User() {
+            var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserLogIn() {
+                Email = "test@test.com",
+                Password = "test"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 },
+                PasswordHashIterations = 1000,
+                PasswordSalt = Enumerable.Range(0, 20).Select(i => (byte)0).ToArray()
+            });
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
+            result.Errors[0].Message.Should().Be("Invalid email or password");
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedLogIn);
+        }
+
+        [TestMethod]
+        public void LogInUserCommand_Fails_For_Invalid_Password() {
+            var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserLogIn() {
+                Email = "test@test.com",
+                Password = "wrong"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 },
+                PasswordHashIterations = 1000,
+                PasswordSalt = Enumerable.Range(0, 20).Select(i => (byte)0).ToArray(),
+                IsActive = true
+            });
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
+            result.Errors[0].Message.Should().Be("Invalid email or password");
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedLogIn);
         }
     }
 }
