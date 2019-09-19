@@ -91,12 +91,12 @@ namespace AzurePlayground.Controllers {
         [Route("SendActivation")]
         [HttpGet]
         public ActionResult SendActivation() {
-            return View(new SendUserActivation());
+            return View(new UserSendActivation());
         }
 
         [Route("SendActivation")]
         [HttpPost]
-        public ActionResult SendActivation(SendUserActivation model) {
+        public ActionResult SendActivation(UserSendActivation model) {
             if (ModelState.IsValid) {
                 ModelState.Merge(_sendUserActivationCommand.Execute(model));
             }

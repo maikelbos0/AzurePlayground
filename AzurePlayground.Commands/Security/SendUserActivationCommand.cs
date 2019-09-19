@@ -16,8 +16,8 @@ namespace AzurePlayground.Commands.Security {
             _playgroundContextFactory = playgroundContextFactory;
         }
 
-        public CommandResult<SendUserActivation> Execute(SendUserActivation parameter) {
-            var result = new CommandResult<SendUserActivation>();
+        public CommandResult<UserSendActivation> Execute(UserSendActivation parameter) {
+            var result = new CommandResult<UserSendActivation>();
 
             using (var context = _playgroundContextFactory.GetContext()) {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));

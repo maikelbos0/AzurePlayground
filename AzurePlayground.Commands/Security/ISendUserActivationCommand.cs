@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.Models.Security;
 
 namespace AzurePlayground.Commands.Security {
-    public interface ISendUserActivationCommand : ICommand<SendUserActivation> {
+    public interface ISendUserActivationCommand : ICommand<UserSendActivation> {
     }
 }

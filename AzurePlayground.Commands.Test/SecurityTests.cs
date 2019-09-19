@@ -163,7 +163,7 @@ namespace AzurePlayground.Commands.Test {
         [TestMethod]
         public void SendUserActivationCommand_Sends_Email() {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new SendUserActivation() {
+            var model = new UserSendActivation() {
                 Email = "test@test.com"
             };
 
@@ -183,7 +183,7 @@ namespace AzurePlayground.Commands.Test {
         [TestMethod]
         public void SendUserActivationCommand_Creates_New_Activation_Code() {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new SendUserActivation() {
+            var model = new UserSendActivation() {
                 Email = "test@test.com"
             };
 
@@ -203,7 +203,7 @@ namespace AzurePlayground.Commands.Test {
         [TestMethod]
         public void SendUserActivationCommand_Does_Nothing_For_Active_User() {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new SendUserActivation() {
+            var model = new UserSendActivation() {
                 Email = "test@test.com"
             };
 
@@ -224,7 +224,7 @@ namespace AzurePlayground.Commands.Test {
         [TestMethod]
         public void SendUserActivationCommand_Does_Nothing_For_Nonexistent_User() {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new SendUserActivation() {
+            var model = new UserSendActivation() {
                 Email = "other@test.com"
             };
 
