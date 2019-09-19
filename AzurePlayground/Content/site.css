@@ -17,6 +17,9 @@
     color: #333399;
     font-weight: bold;
     text-decoration: none;
+    vertical-align: initial;
+    padding: 0;
+    border: 0;
 }
 
 .site-navbar-item:hover {

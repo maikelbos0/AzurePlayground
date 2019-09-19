@@ -11,12 +11,19 @@ namespace AzurePlayground.Controllers {
         private readonly IActivateUserCommand _activateUserCommand;
         private readonly ISendUserActivationCommand _sendUserActivationCommand;
         private readonly ILogInUserCommand _logInUserCommand;
+        private readonly ILogOutUserCommand _logOutUserCommand;
 
-        public HomeController(IRegisterUserCommand registerUserCommand, IActivateUserCommand activateUserCommand, ISendUserActivationCommand sendUserActivationCommand, ILogInUserCommand logInUserCommand) {
+        public HomeController(IRegisterUserCommand registerUserCommand, 
+            IActivateUserCommand activateUserCommand, 
+            ISendUserActivationCommand sendUserActivationCommand, 
+            ILogInUserCommand logInUserCommand,
+            ILogOutUserCommand logOutUserCommand) {
+
             _registerUserCommand = registerUserCommand;
             _activateUserCommand = activateUserCommand;
             _sendUserActivationCommand = sendUserActivationCommand;
             _logInUserCommand = logInUserCommand;
+            _logOutUserCommand = logOutUserCommand;
         }
 
         [Route("~/")]
@@ -129,6 +136,15 @@ namespace AzurePlayground.Controllers {
         [Authorize]
         public ActionResult LoggedIn() {
             return View();
+        }
+
+        [Route("LogOut")]
+        [HttpPost]
+        [Authorize]
+        public ActionResult LogOut() {
+            _logOutUserCommand.Execute(new UserLogOut() { Email = User.Identity.Name });
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index");
         }
     }
 }

@@ -6,6 +6,7 @@
         Registered = 3,
         Activated = 4,
         FailedActivation = 5,
-        ActivationCodeSent = 6
+        ActivationCodeSent = 6,
+        LoggedOut = 7
     }
 }

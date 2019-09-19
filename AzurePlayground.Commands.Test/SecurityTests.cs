@@ -4,6 +4,7 @@ using AzurePlayground.Models.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -332,6 +333,56 @@ namespace AzurePlayground.Commands.Test {
             result.Errors[0].Message.Should().Be("Invalid email or password");
             _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
             _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedLogIn);
+        }
+
+        [TestMethod]
+        public void LogOutUserCommand_Succeeds() {
+            var command = new LogOutUserCommand(_playgroundContextFactory);
+            var model = new UserLogOut() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                IsActive = true
+            });
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(0);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
+            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.LoggedOut);
+        }
+
+        [TestMethod]
+        public void LogOutUserCommand_Throws_Exception_For_Inactive_User() {
+            var command = new LogOutUserCommand(_playgroundContextFactory);
+            var model = new UserLogOut() {
+                Email = "test@test.com"
+            };
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                IsActive = false
+            });
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out inactive user 'test@test.com'");
+        }
+
+        [TestMethod]
+        public void LogOutUserCommand_Throws_Exception_For_Nonexistent_User() {
+            var command = new LogOutUserCommand(_playgroundContextFactory);
+            var model = new UserLogOut() {
+                Email = "test@test.com"
+            };
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out non-existent user 'test@test.com'");
         }
     }
 }

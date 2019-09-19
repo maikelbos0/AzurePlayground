@@ -46,6 +46,7 @@
     <Compile Include="Security\SendUserActivation.cs" />
     <Compile Include="Security\UserActivation.cs" />
     <Compile Include="Security\UserLogIn.cs" />
+    <Compile Include="Security\UserLogOut.cs" />
     <Compile Include="Security\UserRegistration.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

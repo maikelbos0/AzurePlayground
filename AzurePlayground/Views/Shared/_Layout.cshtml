@@ -19,6 +19,9 @@
 
             @if (User.Identity.IsAuthenticated) {
                 @Html.ActionLink("Logged in", "LoggedIn", "Home", null, new { @class = "site-navbar-item" })
+                using (Html.BeginForm("LogOut", "Home", FormMethod.Post, new { @class = "html-only d-inline" })) {
+                    <button type="submit" class="btn btn-link site-navbar-item">Log out</button>
+                }
             }
             else {
                 @Html.ActionLink("Log in", "LogIn", "Home", null, new { @class = "site-navbar-item" })
