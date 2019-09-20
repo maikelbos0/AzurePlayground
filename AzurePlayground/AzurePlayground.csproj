@@ -245,6 +245,8 @@
     <Content Include="Views\Home\ActivationSent.cshtml" />
     <Content Include="Views\Home\LogIn.cshtml" />
     <Content Include="Views\Home\LoggedIn.cshtml" />
+    <Content Include="Views\Home\ChangePassword.cshtml" />
+    <Content Include="Views\Home\PasswordChanged.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

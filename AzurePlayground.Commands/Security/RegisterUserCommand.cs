@@ -11,7 +11,6 @@ namespace AzurePlayground.Commands.Security {
     [Injectable]
     public class RegisterUserCommand : BaseUserCommand, IRegisterUserCommand {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
-        private readonly int passwordHashIterations = 1000;
 
         public RegisterUserCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
             _playgroundContextFactory = playgroundContextFactory;
@@ -22,7 +21,7 @@ namespace AzurePlayground.Commands.Security {
             var user = new User() {
                 Email = parameter.Email,
                 PasswordSalt = GetNewPasswordSalt(),
-                PasswordHashIterations = passwordHashIterations,
+                PasswordHashIterations = _passwordHashIterations,
                 ActivationCode = GetNewActivationCode()
             };
 

@@ -12,18 +12,21 @@ namespace AzurePlayground.Controllers {
         private readonly ISendUserActivationCommand _sendUserActivationCommand;
         private readonly ILogInUserCommand _logInUserCommand;
         private readonly ILogOutUserCommand _logOutUserCommand;
+        private readonly IChangeUserPasswordCommand _changeUserPasswordCommand;
 
         public HomeController(IRegisterUserCommand registerUserCommand, 
             IActivateUserCommand activateUserCommand, 
             ISendUserActivationCommand sendUserActivationCommand, 
             ILogInUserCommand logInUserCommand,
-            ILogOutUserCommand logOutUserCommand) {
+            ILogOutUserCommand logOutUserCommand,
+            IChangeUserPasswordCommand changeUserPasswordCommand) {
 
             _registerUserCommand = registerUserCommand;
             _activateUserCommand = activateUserCommand;
             _sendUserActivationCommand = sendUserActivationCommand;
             _logInUserCommand = logInUserCommand;
             _logOutUserCommand = logOutUserCommand;
+            _changeUserPasswordCommand = changeUserPasswordCommand;
         }
 
         [Route("~/")]
@@ -145,6 +148,29 @@ namespace AzurePlayground.Controllers {
             _logOutUserCommand.Execute(new UserLogOut() { Email = User.Identity.Name });
             FormsAuthentication.SignOut();
             return RedirectToAction("Index");
+        }
+
+        [Route("ChangePassword")]
+        [HttpGet]
+        public ActionResult ChangePassword() {
+            return View(new UserChangePassword());
+        }
+
+        [Route("ChangePassword")]
+        [HttpPost]
+        public ActionResult ChangePassword(UserChangePassword model) {
+            if (ModelState.IsValid) {
+                model.Email = User.Identity.Name;
+
+                ModelState.Merge(_changeUserPasswordCommand.Execute(model));
+            }
+
+            if (ModelState.IsValid) {
+                return View("PasswordChanged");
+            }
+            else {
+                return View(model);
+            }
         }
     }
 }

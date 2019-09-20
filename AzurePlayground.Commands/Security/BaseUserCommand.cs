@@ -9,6 +9,7 @@ namespace AzurePlayground.Commands.Security {
     public class BaseUserCommand {
         private readonly IMailClient _mailClient;
         private readonly IAppSettings _appSettings;
+        protected readonly int _passwordHashIterations = 1000;
 
         public BaseUserCommand(IMailClient mailClient, IAppSettings appSettings) {
             _mailClient = mailClient;

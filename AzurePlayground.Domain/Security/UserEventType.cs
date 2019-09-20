@@ -7,6 +7,7 @@
         Activated = 4,
         FailedActivation = 5,
         ActivationCodeSent = 6,
-        LoggedOut = 7
+        LoggedOut = 7,
+        FailedPasswordChange = 8
     }
 }
