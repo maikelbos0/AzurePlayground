@@ -315,7 +315,7 @@ namespace AzurePlayground.Commands.Test {
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
             result.Errors[0].Message.Should().Be("Invalid email or password");
         }
-        
+
         [TestMethod]
         public void LogInUserCommand_Fails_For_Inactive_User() {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
@@ -563,7 +563,7 @@ namespace AzurePlayground.Commands.Test {
             });
 
             command.Execute(model);
-            
+
             _mailClient.SentMessages.Should().HaveCount(1);
             _mailClient.SentMessages[0].Subject.Should().Be("Your password reset request");
             _mailClient.SentMessages[0].To.Should().Be("test@test.com");
@@ -653,22 +653,108 @@ namespace AzurePlayground.Commands.Test {
 
         [TestMethod]
         public void ResetUserPasswordCommand_Throws_Exception_For_Inactive_User() {
-            throw new NotImplementedException();
+            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserPasswordReset() {
+                Email = "test@test.com",
+                PasswordResetToken = null,
+                NewPassword = "test2",
+                ConfirmNewPassword = "test2"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = false
+            });
+
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for inactive user 'test@test.com'");
+            _playgroundContextFactory.Context.Users.Single().PasswordHash.Should().BeEquivalentTo(_passwordHash);
+            _playgroundContextFactory.Context.Users.Single().PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
         }
 
         [TestMethod]
         public void ResetUserPasswordCommand_Throws_Exception_For_Nonexistent_User() {
-            throw new NotImplementedException();
+            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserPasswordReset() {
+                Email = "test@test.com",
+                PasswordResetToken = null,
+                NewPassword = "test2",
+                ConfirmNewPassword = "test2"
+            };
+
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for non-existent user 'test@test.com'");
         }
 
         [TestMethod]
         public void ResetUserPasswordCommand_Throws_Exception_For_Missing_Token() {
-            throw new NotImplementedException();
+            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserPasswordReset() {
+                Email = "test@test.com",
+                PasswordResetToken = null,
+                NewPassword = "test2",
+                ConfirmNewPassword = "test2"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = true,
+                PasswordResetTokenExpiryDate = DateTime.UtcNow.AddSeconds(3600),
+                PasswordResetTokenHash = _passwordHash,
+                PasswordResetTokenHashIterations = _passwordHashIterations,
+                PasswordResetTokenSalt = _passwordSalt
+            });
+
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password with missing token for user 'test@test.com'");
+            _playgroundContextFactory.Context.Users.Single().PasswordHash.Should().BeEquivalentTo(_passwordHash);
+            _playgroundContextFactory.Context.Users.Single().PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
         }
 
         [TestMethod]
         public void ResetUserPasswordCommand_Throws_Exception_For_Incorrect_Token() {
-            throw new NotImplementedException();
+            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserPasswordReset() {
+                Email = "test@test.com",
+                PasswordResetToken = "wrong",
+                NewPassword = "test2",
+                ConfirmNewPassword = "test2"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = true,
+                PasswordResetTokenExpiryDate = DateTime.UtcNow.AddSeconds(3600),
+                PasswordResetTokenHash = _passwordHash,
+                PasswordResetTokenHashIterations = _passwordHashIterations,
+                PasswordResetTokenSalt = _passwordSalt
+            });
+
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password with incorrect token for user 'test@test.com'");
+            _playgroundContextFactory.Context.Users.Single().PasswordHash.Should().BeEquivalentTo(_passwordHash);
+            _playgroundContextFactory.Context.Users.Single().PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
         }
     }
 }
