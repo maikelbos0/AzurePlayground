@@ -31,7 +31,7 @@ namespace AzurePlayground.Commands.Security {
         }
 
         protected void SendPasswordResetEmail(User user, string token) {
-            var passwordResetUrl = $"{_appSettings["Application.BaseUrl"]}/Home/ResetPassword/?email={WebUtility.UrlEncode(user.Email)}&token={WebUtility.UrlEncode(token)}";
+            var passwordResetUrl = $"{_appSettings["Application.BaseUrl"]}Home/ResetPassword/?email={WebUtility.UrlEncode(user.Email)}&token={WebUtility.UrlEncode(token)}";
             var subject = Resources.Security.PasswordResetEmailSubject.Replace("{PasswordResetUrl}", passwordResetUrl);
             var body = Resources.Security.PasswordResetEmailBody.Replace("{PasswordResetUrl}", passwordResetUrl);
 

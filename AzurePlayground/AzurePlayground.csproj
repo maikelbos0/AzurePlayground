@@ -249,6 +249,8 @@
     <Content Include="Views\Home\PasswordChanged.cshtml" />
     <Content Include="Views\Home\ForgotPassword.cshtml" />
     <Content Include="Views\Home\PasswordResetSent.cshtml" />
+    <Content Include="Views\Home\PasswordReset.cshtml" />
+    <Content Include="Views\Home\ResetPassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

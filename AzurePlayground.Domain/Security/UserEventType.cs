@@ -10,6 +10,7 @@
         LoggedOut = 7,
         FailedPasswordChange = 8,
         PasswordResetRequested = 9,
-        PasswordReset = 10
+        PasswordReset = 10,
+        FailedPasswordReset = 11
     }
 }

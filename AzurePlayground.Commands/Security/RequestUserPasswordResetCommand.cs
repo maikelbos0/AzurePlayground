@@ -28,7 +28,7 @@ namespace AzurePlayground.Commands.Security {
 
                     user.PasswordResetTokenSalt = GetNewPasswordSalt();
                     user.PasswordResetTokenHashIterations = _passwordHashIterations;
-                    user.PasswordResetTokenHash = GetPasswordHash(token, user.PasswordSalt, user.PasswordHashIterations);
+                    user.PasswordResetTokenHash = GetPasswordHash(token, user.PasswordResetTokenSalt, user.PasswordResetTokenHashIterations.Value);
                     user.PasswordResetTokenExpiryDate = DateTime.UtcNow.AddSeconds(_expirationInSeconds);
 
                     user.UserEvents.Add(new UserEvent() {

@@ -14,6 +14,7 @@ namespace AzurePlayground.Controllers {
         private readonly ILogOutUserCommand _logOutUserCommand;
         private readonly IChangeUserPasswordCommand _changeUserPasswordCommand;
         private readonly IRequestUserPasswordResetCommand _requestUserPasswordResetCommand;
+        private readonly IResetUserPasswordCommand _resetUserPasswordCommand;
 
         public HomeController(IRegisterUserCommand registerUserCommand, 
             IActivateUserCommand activateUserCommand, 
@@ -21,7 +22,8 @@ namespace AzurePlayground.Controllers {
             ILogInUserCommand logInUserCommand,
             ILogOutUserCommand logOutUserCommand,
             IChangeUserPasswordCommand changeUserPasswordCommand,
-            IRequestUserPasswordResetCommand requestUserPasswordResetCommand) {
+            IRequestUserPasswordResetCommand requestUserPasswordResetCommand,
+            IResetUserPasswordCommand resetUserPasswordCommand) {
 
             _registerUserCommand = registerUserCommand;
             _activateUserCommand = activateUserCommand;
@@ -30,6 +32,7 @@ namespace AzurePlayground.Controllers {
             _logOutUserCommand = logOutUserCommand;
             _changeUserPasswordCommand = changeUserPasswordCommand;
             _requestUserPasswordResetCommand = requestUserPasswordResetCommand;
+            _resetUserPasswordCommand = resetUserPasswordCommand;
         }
 
         [Route("~/")]
@@ -191,6 +194,32 @@ namespace AzurePlayground.Controllers {
 
             if (ModelState.IsValid) {
                 return View("PasswordResetSent");
+            }
+            else {
+                return View(model);
+            }
+        }
+
+        [Route("ResetPassword")]
+        [HttpGet]
+        public ActionResult ResetPassword(string token, string email) {
+            var model = new UserPasswordReset() {
+                PasswordResetToken = token,
+                Email = email
+            };
+
+            return View(model);
+        }
+
+        [Route("ResetPassword")]
+        [HttpPost]
+        public ActionResult ResetPassword(UserPasswordReset model) {
+            if (ModelState.IsValid) {
+                ModelState.Merge(_resetUserPasswordCommand.Execute(model));
+            }
+
+            if (ModelState.IsValid) {
+                return View("PasswordReset");
             }
             else {
                 return View(model);

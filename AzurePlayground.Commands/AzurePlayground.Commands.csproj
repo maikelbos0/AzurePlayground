@@ -60,11 +60,13 @@
     <Compile Include="Security\ILogOutUserCommand.cs" />
     <Compile Include="Security\IRegisterUserCommand.cs" />
     <Compile Include="Security\IRequestUserPasswordResetCommand.cs" />
+    <Compile Include="Security\IResetUserPasswordCommand.cs" />
     <Compile Include="Security\ISendUserActivationCommand.cs" />
     <Compile Include="Security\ILogInUserCommand.cs" />
     <Compile Include="Security\LogOutUserCommand.cs" />
     <Compile Include="Security\RegisterUserCommand.cs" />
     <Compile Include="Security\RequestUserPasswordResetCommand.cs" />
+    <Compile Include="Security\ResetUserPasswordCommand.cs" />
     <Compile Include="Security\SendUserActivationCommand.cs" />
     <Compile Include="Security\LogInUserCommand.cs" />
   </ItemGroup>

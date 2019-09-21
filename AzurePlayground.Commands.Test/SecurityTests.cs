@@ -435,13 +435,14 @@ namespace AzurePlayground.Commands.Test {
 
             var result = command.Execute(model);
             var user = _playgroundContextFactory.Context.Users.Single();
-            var pbkdf2 = new Rfc2898DeriveBytes("test2", user.PasswordSalt, user.PasswordHashIterations);
 
             result.Errors.Should().HaveCount(0);
-
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType.Should().Be(UserEventType.PasswordChanged);
-            user.PasswordHash.Should().BeEquivalentTo(pbkdf2.GetBytes(20), options => options.WithStrictOrdering());
+
+            using (var pbkdf2 = new Rfc2898DeriveBytes("test2", user.PasswordSalt, user.PasswordHashIterations)) {
+                user.PasswordHash.Should().BeEquivalentTo(pbkdf2.GetBytes(20), options => options.WithStrictOrdering());
+            }
         }
 
         [TestMethod]
@@ -628,6 +629,46 @@ namespace AzurePlayground.Commands.Test {
             _playgroundContextFactory.Context.Users.Single().PasswordResetTokenHash.Should().BeNull();
             _playgroundContextFactory.Context.Users.Single().PasswordResetTokenHashIterations.Should().BeNull();
             _playgroundContextFactory.Context.Users.Single().PasswordResetTokenExpiryDate.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Succeeds() {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Fails_For_Unmatched_New_Password() {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Fails_For_Expired_Token() {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Fails_When_Already_Reset() {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Throws_Exception_For_Inactive_User() {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Throws_Exception_For_Nonexistent_User() {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Throws_Exception_For_Missing_Token() {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Throws_Exception_For_Incorrect_Token() {
+            throw new NotImplementedException();
         }
     }
 }
