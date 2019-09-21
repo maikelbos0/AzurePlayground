@@ -13,13 +13,15 @@ namespace AzurePlayground.Controllers {
         private readonly ILogInUserCommand _logInUserCommand;
         private readonly ILogOutUserCommand _logOutUserCommand;
         private readonly IChangeUserPasswordCommand _changeUserPasswordCommand;
+        private readonly IRequestUserPasswordResetCommand _requestUserPasswordResetCommand;
 
         public HomeController(IRegisterUserCommand registerUserCommand, 
             IActivateUserCommand activateUserCommand, 
             ISendUserActivationCommand sendUserActivationCommand, 
             ILogInUserCommand logInUserCommand,
             ILogOutUserCommand logOutUserCommand,
-            IChangeUserPasswordCommand changeUserPasswordCommand) {
+            IChangeUserPasswordCommand changeUserPasswordCommand,
+            IRequestUserPasswordResetCommand requestUserPasswordResetCommand) {
 
             _registerUserCommand = registerUserCommand;
             _activateUserCommand = activateUserCommand;
@@ -27,6 +29,7 @@ namespace AzurePlayground.Controllers {
             _logInUserCommand = logInUserCommand;
             _logOutUserCommand = logOutUserCommand;
             _changeUserPasswordCommand = changeUserPasswordCommand;
+            _requestUserPasswordResetCommand = requestUserPasswordResetCommand;
         }
 
         [Route("~/")]
@@ -167,6 +170,27 @@ namespace AzurePlayground.Controllers {
 
             if (ModelState.IsValid) {
                 return View("PasswordChanged");
+            }
+            else {
+                return View(model);
+            }
+        }
+
+        [Route("ForgotPassword")]
+        [HttpGet]
+        public ActionResult ForgotPassword() {
+            return View(new UserPasswordResetRequest());
+        }
+
+        [Route("ForgotPassword")]
+        [HttpPost]
+        public ActionResult ForgotPassword(UserPasswordResetRequest model) {
+            if (ModelState.IsValid) {
+                ModelState.Merge(_requestUserPasswordResetCommand.Execute(model));
+            }
+
+            if (ModelState.IsValid) {
+                return View("PasswordResetSent");
             }
             else {
                 return View(model);

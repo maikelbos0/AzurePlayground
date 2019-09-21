@@ -13,7 +13,7 @@ namespace AzurePlayground.Database.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201909210927019_Users-PasswordReset"; }
+            get { return "201909211418281_Users-PasswordReset"; }
         }
         
         string IMigrationMetadata.Source

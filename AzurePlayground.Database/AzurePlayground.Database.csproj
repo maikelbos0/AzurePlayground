@@ -74,9 +74,9 @@
     <Compile Include="Migrations\201909071811254_Users-IsActive.Designer.cs">
       <DependentUpon>201909071811254_Users-IsActive.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201909210927019_Users-PasswordReset.cs" />
-    <Compile Include="Migrations\201909210927019_Users-PasswordReset.Designer.cs">
-      <DependentUpon>201909210927019_Users-PasswordReset.cs</DependentUpon>
+    <Compile Include="Migrations\201909211418281_Users-PasswordReset.cs" />
+    <Compile Include="Migrations\201909211418281_Users-PasswordReset.Designer.cs">
+      <DependentUpon>201909211418281_Users-PasswordReset.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PlaygroundContext.cs" />
@@ -116,8 +116,8 @@
     <EmbeddedResource Include="Migrations\201909071811254_Users-IsActive.resx">
       <DependentUpon>201909071811254_Users-IsActive.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909210927019_Users-PasswordReset.resx">
-      <DependentUpon>201909210927019_Users-PasswordReset.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201909211418281_Users-PasswordReset.resx">
+      <DependentUpon>201909211418281_Users-PasswordReset.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

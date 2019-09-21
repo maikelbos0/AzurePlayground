@@ -61,7 +61,7 @@ namespace AzurePlayground.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Please &lt;a href=&quot;{ActivationUrl}&quot;&gt;click here to activate your account&lt;/a&gt;&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Please &lt;a href=&quot;{ActivationUrl}&quot;&gt;click here to activate your account&lt;/a&gt;.&lt;/p&gt;
         ///
         ///&lt;p&gt;Activation code: {ActivationCode}&lt;/p&gt;.
         /// </summary>
@@ -77,6 +77,24 @@ namespace AzurePlayground.Resources {
         public static string ActivationEmailSubject {
             get {
                 return ResourceManager.GetString("ActivationEmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Please &lt;a href=&quot;{PasswordResetUrl}&quot;&gt;click here to reset your password&lt;/a&gt;.&lt;/p&gt;.
+        /// </summary>
+        public static string PasswordResetEmailBody {
+            get {
+                return ResourceManager.GetString("PasswordResetEmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password reset request.
+        /// </summary>
+        public static string PasswordResetEmailSubject {
+            get {
+                return ResourceManager.GetString("PasswordResetEmailSubject", resourceCulture);
             }
         }
     }

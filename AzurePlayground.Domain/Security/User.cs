@@ -20,7 +20,10 @@ namespace AzurePlayground.Domain.Security {
         public int? ActivationCode { get; set; }
         public bool IsActive { get; set; }
         [MaxLength(20)]
+        public byte[] PasswordResetTokenSalt { get; set; }
+        [MaxLength(20)]
         public byte[] PasswordResetTokenHash { get; set; }
+        public int? PasswordResetTokenHashIterations { get; set; }
         public DateTime? PasswordResetTokenExpiryDate { get; set; }
         public virtual ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
     }

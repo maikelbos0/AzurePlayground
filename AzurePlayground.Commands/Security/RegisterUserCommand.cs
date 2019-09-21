@@ -42,7 +42,7 @@ namespace AzurePlayground.Commands.Security {
                 }
             }
 
-            if (!result.Errors.Any()) {
+            if (result.Success) {
                 SendActivationEmail(user);
             }
 

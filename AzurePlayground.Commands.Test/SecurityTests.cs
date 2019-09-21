@@ -285,9 +285,11 @@ namespace AzurePlayground.Commands.Test {
                 PasswordResetTokenExpiryDate = new DateTime()
             });
 
-            var result = command.Execute(model);
+            command.Execute(model);
 
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenSalt.Should().BeNull();
             _playgroundContextFactory.Context.Users.Single().PasswordResetTokenHash.Should().BeNull();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenHashIterations.Should().BeNull();
             _playgroundContextFactory.Context.Users.Single().PasswordResetTokenExpiryDate.Should().BeNull();
         }
 
@@ -313,7 +315,7 @@ namespace AzurePlayground.Commands.Test {
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
             result.Errors[0].Message.Should().Be("Invalid email or password");
         }
-
+        
         [TestMethod]
         public void LogInUserCommand_Fails_For_Inactive_User() {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
@@ -542,6 +544,90 @@ namespace AzurePlayground.Commands.Test {
             _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordChange);
             _playgroundContextFactory.Context.Users.Single().PasswordHash.Should().BeEquivalentTo(_passwordHash);
             _playgroundContextFactory.Context.Users.Single().PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
+        }
+
+        [TestMethod]
+        public void RequestUserPasswordResetCommand_Sends_Email() {
+            var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserPasswordResetRequest() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = true
+            });
+
+            command.Execute(model);
+            
+            _mailClient.SentMessages.Should().HaveCount(1);
+            _mailClient.SentMessages[0].Subject.Should().Be("Your password reset request");
+            _mailClient.SentMessages[0].To.Should().Be("test@test.com");
+        }
+
+        [TestMethod]
+        public void RequestUserPasswordResetCommand_Succeeds() {
+            var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserPasswordResetRequest() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = true
+            });
+
+            var result = command.Execute(model);
+
+            result.Success.Should().BeTrue();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenSalt.Should().NotBeNull();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenHash.Should().NotBeNull();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenHashIterations.Should().NotBeNull();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenExpiryDate.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public void RequestUserPasswordResetCommand_Does_Nothing_For_Nonexistent_User() {
+            var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserPasswordResetRequest() {
+                Email = "test@test.com"
+            };
+
+            var result = command.Execute(model);
+
+            result.Success.Should().BeTrue();
+            _mailClient.SentMessages.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void RequestUserPasswordResetCommand_Does_Nothing_For_Inactive_User() {
+            var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserPasswordResetRequest() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = false
+            });
+
+            var result = command.Execute(model);
+
+            result.Success.Should().BeTrue();
+            _mailClient.SentMessages.Should().BeEmpty();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenSalt.Should().BeNull();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenHash.Should().BeNull();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenHashIterations.Should().BeNull();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenExpiryDate.Should().BeNull();
         }
     }
 }
