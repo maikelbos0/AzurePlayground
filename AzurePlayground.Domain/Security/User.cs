@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,6 +19,9 @@ namespace AzurePlayground.Domain.Security {
         public int PasswordHashIterations { get; set; }
         public int? ActivationCode { get; set; }
         public bool IsActive { get; set; }
+        [MaxLength(20)]
+        public byte[] PasswordResetTokenHash { get; set; }
+        public DateTime? PasswordResetTokenExpiryDate { get; set; }
         public virtual ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
     }
 }

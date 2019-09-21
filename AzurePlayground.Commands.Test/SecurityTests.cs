@@ -268,6 +268,30 @@ namespace AzurePlayground.Commands.Test {
         }
 
         [TestMethod]
+        public void LogInUserCommand_Resets_Password_Reset_Data() {
+            var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserLogIn() {
+                Email = "test@test.com",
+                Password = "test"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = true,
+                PasswordResetTokenHash = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+                PasswordResetTokenExpiryDate = new DateTime()
+            });
+
+            var result = command.Execute(model);
+
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenHash.Should().BeNull();
+            _playgroundContextFactory.Context.Users.Single().PasswordResetTokenExpiryDate.Should().BeNull();
+        }
+
+        [TestMethod]
         public void LogInUserCommand_Fails_For_Nonexistent_User() {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var model = new UserLogIn() {
@@ -407,12 +431,12 @@ namespace AzurePlayground.Commands.Test {
                 IsActive = true
             });
 
-            var result = command.Execute(model);            
+            var result = command.Execute(model);
             var user = _playgroundContextFactory.Context.Users.Single();
             var pbkdf2 = new Rfc2898DeriveBytes("test2", user.PasswordSalt, user.PasswordHashIterations);
 
             result.Errors.Should().HaveCount(0);
-            
+
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType.Should().Be(UserEventType.PasswordChanged);
             user.PasswordHash.Should().BeEquivalentTo(pbkdf2.GetBytes(20), options => options.WithStrictOrdering());
@@ -427,7 +451,7 @@ namespace AzurePlayground.Commands.Test {
                 NewPassword = "test2",
                 ConfirmNewPassword = "test2"
             };
-            
+
             Action commandAction = () => {
                 var result = command.Execute(model);
             };
@@ -452,14 +476,12 @@ namespace AzurePlayground.Commands.Test {
                 PasswordSalt = _passwordSalt,
                 IsActive = false
             });
-            
+
             Action commandAction = () => {
                 var result = command.Execute(model);
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change password for inactive user 'test@test.com'");
-            _playgroundContextFactory.Context.Users.Single().UserEvents.Should().HaveCount(1);
-            _playgroundContextFactory.Context.Users.Single().UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordChange);
             _playgroundContextFactory.Context.Users.Single().PasswordHash.Should().BeEquivalentTo(_passwordHash);
             _playgroundContextFactory.Context.Users.Single().PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
         }
