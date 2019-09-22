@@ -1,4 +1,3 @@
-using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Container;
 using System;
 using Unity;
@@ -9,7 +8,7 @@ namespace AzurePlayground {
     /// </summary>
     public static class UnityConfig {
         #region Unity Container
-        private static Lazy<IUnityContainer> container =
+        private readonly static Lazy<IUnityContainer> container =
           new Lazy<IUnityContainer>(() => {
               var container = new UnityContainer();
               RegisterTypes(container);

@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FakeAppSettings.cs" />
+    <Compile Include="FakeAuthenticationProvider.cs" />
     <Compile Include="FakeDbSet.cs" />
     <Compile Include="FakeMailClient.cs" />
     <Compile Include="FakePlaygroundContext.cs" />
@@ -67,6 +68,10 @@
     <ProjectReference Include="..\AzurePlayground.Utilities\AzurePlayground.Utilities.csproj">
       <Project>{d4e722c8-0cd3-47c9-a479-ca3fa83fa225}</Project>
       <Name>AzurePlayground.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground\AzurePlayground.csproj">
+      <Project>{F35DA0DD-C226-42A8-B207-B773452C3183}</Project>
+      <Name>AzurePlayground</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
