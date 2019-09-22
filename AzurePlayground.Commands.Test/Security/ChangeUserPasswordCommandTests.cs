@@ -26,6 +26,13 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ChangeUserPasswordCommand_Succeeds() {
             var command = new ChangeUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = true
+            };
             var model = new UserChangePassword() {
                 Email = "test@test.com",
                 CurrentPassword = "test",
@@ -33,16 +40,9 @@ namespace AzurePlayground.Commands.Test.Security {
                 ConfirmNewPassword = "test2"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
-                IsActive = true
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
@@ -73,6 +73,13 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ChangeUserPasswordCommand_Throws_Exception_For_Inactive_User() {
             var command = new ChangeUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = false
+            };
             var model = new UserChangePassword() {
                 Email = "test@test.com",
                 CurrentPassword = "test",
@@ -80,28 +87,27 @@ namespace AzurePlayground.Commands.Test.Security {
                 ConfirmNewPassword = "test2"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
-                IsActive = false
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             Action commandAction = () => {
                 var result = command.Execute(model);
             };
 
-            var user = _playgroundContextFactory.Context.Users.Single();
-
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change password for inactive user 'test@test.com'");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash);
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
+            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
+            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
         }
 
         [TestMethod]
         public void ChangeUserPasswordCommand_Fails_For_Wrong_Password() {
             var command = new ChangeUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = true
+            };
             var model = new UserChangePassword() {
                 Email = "test@test.com",
                 CurrentPassword = "wrong",
@@ -109,29 +115,29 @@ namespace AzurePlayground.Commands.Test.Security {
                 ConfirmNewPassword = "test2"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
-                IsActive = true
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.CurrentPassword");
             result.Errors[0].Message.Should().Be("Invalid password");
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordChange);
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash);
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
+            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
+            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
         }
 
         [TestMethod]
         public void ChangeUserPasswordCommand_Fails_For_Unmatched_New_Password() {
             var command = new ChangeUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = true
+            };
             var model = new UserChangePassword() {
                 Email = "test@test.com",
                 CurrentPassword = "test",
@@ -139,24 +145,17 @@ namespace AzurePlayground.Commands.Test.Security {
                 ConfirmNewPassword = "wrong"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
-                IsActive = true
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmNewPassword");
             result.Errors[0].Message.Should().Be("New password and confirm new password must match");
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordChange);
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash);
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
+            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
+            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
         }
     }
 }

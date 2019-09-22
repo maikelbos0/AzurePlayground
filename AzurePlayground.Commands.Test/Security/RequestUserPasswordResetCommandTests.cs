@@ -46,20 +46,20 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void RequestUserPasswordResetCommand_Succeeds() {
             var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserPasswordResetRequest() {
-                Email = "test@test.com"
-            };
-
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true
-            });
+            };
+            var model = new UserPasswordResetRequest() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Success.Should().BeTrue();
             user.PasswordResetTokenSalt.Should().NotBeNull();
@@ -84,20 +84,20 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void RequestUserPasswordResetCommand_Does_Nothing_For_Inactive_User() {
             var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserPasswordResetRequest() {
-                Email = "test@test.com"
-            };
-
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = false
-            });
+            };
+            var model = new UserPasswordResetRequest() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Success.Should().BeTrue();
             _mailClient.SentMessages.Should().BeEmpty();

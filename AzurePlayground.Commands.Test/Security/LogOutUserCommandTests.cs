@@ -15,17 +15,17 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void LogOutUserCommand_Succeeds() {
             var command = new LogOutUserCommand(_playgroundContextFactory);
+            var user = new User() {
+                Email = "test@test.com",
+                IsActive = true
+            };
             var model = new UserLogOut() {
                 Email = "test@test.com"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                IsActive = true
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);

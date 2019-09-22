@@ -41,17 +41,17 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void SendUserActivationCommand_Creates_New_Activation_Code() {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999
+            };
             var model = new UserSendActivation() {
                 Email = "test@test.com"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                ActivationCode = 999999
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Success.Should().BeTrue();
             user.ActivationCode.Should().NotBe(999999);
@@ -62,18 +62,18 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void SendUserActivationCommand_Does_Nothing_For_Active_User() {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                ActivationCode = null,
+                IsActive = true
+            };
             var model = new UserSendActivation() {
                 Email = "test@test.com"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                ActivationCode = null,
-                IsActive = true
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Success.Should().BeTrue();
             user.ActivationCode.Should().BeNull();
@@ -84,17 +84,17 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void SendUserActivationCommand_Does_Nothing_For_Nonexistent_User() {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999
+            };
             var model = new UserSendActivation() {
                 Email = "other@test.com"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                ActivationCode = 999999
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Success.Should().BeTrue();
             user.ActivationCode.Should().Be(999999);

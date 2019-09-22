@@ -15,18 +15,18 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ActivateUserCommand_Succeeds() {
             var command = new ActivateUserCommand(_playgroundContextFactory);
+            var user = new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999
+            };
             var model = new UserActivation() {
                 Email = "test@test.com",
                 ActivationCode = "999999"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                ActivationCode = 999999
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().BeEmpty();
             user.IsActive.Should().BeTrue();
@@ -38,18 +38,18 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ActivateUserCommand_Fails_For_Nonexistent_User() {
             var command = new ActivateUserCommand(_playgroundContextFactory);
+            var user = new User() {
+                Email = "other@test.com",
+                ActivationCode = 999999
+            };
             var model = new UserActivation() {
                 Email = "test@test.com",
                 ActivationCode = "999999"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "other@test.com",
-                ActivationCode = 999999
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
@@ -61,18 +61,18 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ActivateUserCommand_Fails_For_Active_User() {
             var command = new ActivateUserCommand(_playgroundContextFactory);
+            var user = new User() {
+                Email = "test@test.com",
+                IsActive = true
+            };
             var model = new UserActivation() {
                 Email = "test@test.com",
                 ActivationCode = "999999"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                IsActive = true
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
@@ -84,18 +84,18 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ActivateUserCommand_Fails_For_Wrong_Code() {
             var command = new ActivateUserCommand(_playgroundContextFactory);
+            var user = new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999
+            };
             var model = new UserActivation() {
                 Email = "test@test.com",
                 ActivationCode = "999987"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                ActivationCode = 999999
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");

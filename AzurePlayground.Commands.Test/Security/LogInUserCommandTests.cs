@@ -25,21 +25,21 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void LogInUserCommand_Succeeds() {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserLogIn() {
-                Email = "test@test.com",
-                Password = "test"
-            };
-
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true
-            });
+            };
+            var model = new UserLogIn() {
+                Email = "test@test.com",
+                Password = "test"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
@@ -49,12 +49,7 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void LogInUserCommand_Resets_Password_Reset_Data() {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserLogIn() {
-                Email = "test@test.com",
-                Password = "test"
-            };
-
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
@@ -62,11 +57,15 @@ namespace AzurePlayground.Commands.Test.Security {
                 IsActive = true,
                 PasswordResetTokenHash = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },
                 PasswordResetTokenExpiryDate = new DateTime()
-            });
+            };
+            var model = new UserLogIn() {
+                Email = "test@test.com",
+                Password = "test"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
 
             command.Execute(model);
-
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             user.PasswordResetTokenSalt.Should().BeNull();
             user.PasswordResetTokenHash.Should().BeNull();
@@ -82,14 +81,6 @@ namespace AzurePlayground.Commands.Test.Security {
                 Password = "test"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
-                IsActive = true
-            });
-
             var result = command.Execute(model);
 
             result.Errors.Should().HaveCount(1);
@@ -100,20 +91,20 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void LogInUserCommand_Fails_For_Inactive_User() {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt
+            };
             var model = new UserLogIn() {
                 Email = "test@test.com",
                 Password = "test"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
@@ -125,21 +116,21 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void LogInUserCommand_Fails_For_Invalid_Password() {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserLogIn() {
-                Email = "test@test.com",
-                Password = "wrong"
-            };
-
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true
-            });
+            };
+            var model = new UserLogIn() {
+                Email = "test@test.com",
+                Password = "wrong"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");

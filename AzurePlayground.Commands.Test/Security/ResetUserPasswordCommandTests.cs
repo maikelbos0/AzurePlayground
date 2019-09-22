@@ -26,14 +26,7 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ResetUserPasswordCommand_Succeeds() {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserPasswordReset() {
-                Email = "test@test.com",
-                PasswordResetToken = "test",
-                NewPassword = "test2",
-                ConfirmNewPassword = "test2"
-            };
-
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
@@ -43,13 +36,17 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordResetTokenHash = _passwordHash,
                 PasswordResetTokenHashIterations = _passwordHashIterations,
                 PasswordResetTokenSalt = _passwordSalt
-            });
+            };
+            var model = new UserPasswordReset() {
+                Email = "test@test.com",
+                PasswordResetToken = "test",
+                NewPassword = "test2",
+                ConfirmNewPassword = "test2"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-
-            result.Success.Should().BeTrue();
-
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
@@ -63,14 +60,7 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ResetUserPasswordCommand_Fails_For_Unmatched_New_Password() {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserPasswordReset() {
-                Email = "test@test.com",
-                PasswordResetToken = "test",
-                NewPassword = "test2",
-                ConfirmNewPassword = "wrong"
-            };
-
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
@@ -80,16 +70,23 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordResetTokenHash = _passwordHash,
                 PasswordResetTokenHashIterations = _passwordHashIterations,
                 PasswordResetTokenSalt = _passwordSalt
-            });
+            };
+            var model = new UserPasswordReset() {
+                Email = "test@test.com",
+                PasswordResetToken = "test",
+                NewPassword = "test2",
+                ConfirmNewPassword = "wrong"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmNewPassword");
             result.Errors[0].Message.Should().Be("New password and confirm new password must match");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash);
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
+            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
+            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordReset);
         }
@@ -97,14 +94,7 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ResetUserPasswordCommand_Fails_For_Expired_Token() {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserPasswordReset() {
-                Email = "test@test.com",
-                PasswordResetToken = "test",
-                NewPassword = "test2",
-                ConfirmNewPassword = "test2"
-            };
-
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
@@ -114,23 +104,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordResetTokenHash = _passwordHash,
                 PasswordResetTokenHashIterations = _passwordHashIterations,
                 PasswordResetTokenSalt = _passwordSalt
-            });
-
-            var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
-
-            result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
-            result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash);
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
-            user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordReset);
-        }
-
-        [TestMethod]
-        public void ResetUserPasswordCommand_Fails_When_Already_Reset() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
                 PasswordResetToken = "test",
@@ -138,22 +112,45 @@ namespace AzurePlayground.Commands.Test.Security {
                 ConfirmNewPassword = "test2"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            _playgroundContextFactory.Context.Users.Add(user);
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
+            result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
+            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
+            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.UserEvents.Should().HaveCount(1);
+            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordReset);
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Fails_When_Already_Reset() {
+            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true
-            });
+            };
+            var model = new UserPasswordReset() {
+                Email = "test@test.com",
+                PasswordResetToken = "test",
+                NewPassword = "test2",
+                ConfirmNewPassword = "test2"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
 
             var result = command.Execute(model);
-            var user = _playgroundContextFactory.Context.Users.Single();
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
             result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash);
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
+            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
+            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordReset);
         }
@@ -161,6 +158,13 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ResetUserPasswordCommand_Throws_Exception_For_Inactive_User() {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = false
+            };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
                 PasswordResetToken = null,
@@ -168,23 +172,15 @@ namespace AzurePlayground.Commands.Test.Security {
                 ConfirmNewPassword = "test2"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
-                IsActive = false
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             Action commandAction = () => {
                 var result = command.Execute(model);
             };
 
-            var user = _playgroundContextFactory.Context.Users.Single();
-
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for inactive user 'test@test.com'");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash);
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
+            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
+            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
         }
 
         [TestMethod]
@@ -207,6 +203,17 @@ namespace AzurePlayground.Commands.Test.Security {
         [TestMethod]
         public void ResetUserPasswordCommand_Throws_Exception_For_Missing_Token() {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                PasswordHash = _passwordHash,
+                PasswordHashIterations = _passwordHashIterations,
+                PasswordSalt = _passwordSalt,
+                IsActive = true,
+                PasswordResetTokenExpiryDate = DateTime.UtcNow.AddSeconds(3600),
+                PasswordResetTokenHash = _passwordHash,
+                PasswordResetTokenHashIterations = _passwordHashIterations,
+                PasswordResetTokenSalt = _passwordSalt
+            };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
                 PasswordResetToken = null,
@@ -214,7 +221,21 @@ namespace AzurePlayground.Commands.Test.Security {
                 ConfirmNewPassword = "test2"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
+            _playgroundContextFactory.Context.Users.Add(user);
+
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password with missing token for user 'test@test.com'");
+            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
+            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Throws_Exception_For_Incorrect_Token() {
+            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
                 PasswordHashIterations = _passwordHashIterations,
@@ -224,22 +245,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordResetTokenHash = _passwordHash,
                 PasswordResetTokenHashIterations = _passwordHashIterations,
                 PasswordResetTokenSalt = _passwordSalt
-            });
-
-            Action commandAction = () => {
-                var result = command.Execute(model);
             };
-
-            var user = _playgroundContextFactory.Context.Users.Single();
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password with missing token for user 'test@test.com'");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash);
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
-        }
-
-        [TestMethod]
-        public void ResetUserPasswordCommand_Throws_Exception_For_Incorrect_Token() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
                 PasswordResetToken = "wrong",
@@ -247,27 +253,15 @@ namespace AzurePlayground.Commands.Test.Security {
                 ConfirmNewPassword = "test2"
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
-                IsActive = true,
-                PasswordResetTokenExpiryDate = DateTime.UtcNow.AddSeconds(3600),
-                PasswordResetTokenHash = _passwordHash,
-                PasswordResetTokenHashIterations = _passwordHashIterations,
-                PasswordResetTokenSalt = _passwordSalt
-            });
+            _playgroundContextFactory.Context.Users.Add(user);
 
             Action commandAction = () => {
                 var result = command.Execute(model);
             };
 
-            var user = _playgroundContextFactory.Context.Users.Single();
-
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password with incorrect token for user 'test@test.com'");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash);
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt);
+            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
+            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
         }
     }
 }
