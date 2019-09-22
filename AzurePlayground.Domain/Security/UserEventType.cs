@@ -1,5 +1,5 @@
 ﻿namespace AzurePlayground.Domain.Security {
-    public enum UserEventType {
+    public enum UserEventType : byte {
         PasswordChanged = 0,
         LoggedIn = 1,
         FailedLogIn = 2,

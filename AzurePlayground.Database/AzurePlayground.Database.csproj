@@ -78,6 +78,10 @@
     <Compile Include="Migrations\201909211418281_Users-PasswordReset.Designer.cs">
       <DependentUpon>201909211418281_Users-PasswordReset.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909221256039_UserEventType-Byte.cs" />
+    <Compile Include="Migrations\201909221256039_UserEventType-Byte.Designer.cs">
+      <DependentUpon>201909221256039_UserEventType-Byte.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PlaygroundContext.cs" />
     <Compile Include="PlaygroundContextFactory.cs" />
@@ -118,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909211418281_Users-PasswordReset.resx">
       <DependentUpon>201909211418281_Users-PasswordReset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909221256039_UserEventType-Byte.resx">
+      <DependentUpon>201909221256039_UserEventType-Byte.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
