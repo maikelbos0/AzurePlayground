@@ -5,9 +5,13 @@ using AzurePlayground.Providers;
 using AzurePlayground.Test.Utilities;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Mail;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web.Mvc;
 using Unity;
 
 namespace AzurePlayground.Tests.Integration {
@@ -33,12 +37,31 @@ namespace AzurePlayground.Tests.Integration {
         [TestMethod]
         public void HomeController_Registration_Activation_To_LogIn_Succeeds() {            
             var controller = UnityConfig.Container.Resolve<HomeController>();
-            var registerModel = new UserRegistration() {
+            
+            // Registration
+            var registrationResult = (ViewResult)controller.Register(new UserRegistration() {
                 Email = "test@test.com",
-                Password = ""
-            };
+                Password = "test",
+                ConfirmPassword = "test"
+            });
 
-            throw new NotImplementedException();
+            registrationResult.ViewName.Should().Be("Registered");
+            _mailClient.SentMessages.Should().NotBeEmpty();
+
+            // Activation
+            var activationCode = Regex.Match(_mailClient.SentMessages.Last().Body, "\\d+").Value;
+            var activationResult = (ViewResult)controller.Activate(activationCode, "test@test.com");
+
+            activationResult.ViewName.Should().Be("Activated");
+
+            // Log in
+            var logInResult = controller.LogIn(new UserLogIn() {
+                Email = "test@test.com",
+                Password = "test"
+            });
+
+            logInResult.Should().BeOfType<RedirectToRouteResult>();            
+            _authenticationProvider.Identity.Should().Be("test@test.com");
         }
     }
 }
