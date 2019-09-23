@@ -32,11 +32,16 @@ namespace AzurePlayground.Commands.Security {
                 UserEventType = UserEventType.Registered
             });
 
+            if (!parameter.Password.Equals(parameter.ConfirmPassword, StringComparison.Ordinal)) {
+                result.AddError(p => p.ConfirmPassword, "Password and confirm password must match");
+            }
+
             using (var context = _playgroundContextFactory.GetContext()) {
                 if (context.Users.Any(u => u.Email.Equals(user.Email, StringComparison.InvariantCultureIgnoreCase))) {
                     result.AddError(p => p.Email, "Email address already exists");
                 }
-                else {
+                
+                if (result.Success) {
                     context.Users.Add(user);
                     context.SaveChanges();
                 }

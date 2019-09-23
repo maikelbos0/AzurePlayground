@@ -23,7 +23,8 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new RegisterUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var model = new UserRegistration() {
                 Email = "test@test.com",
-                Password = "test"
+                Password = "test",
+                ConfirmPassword = "test"
             };
 
             var result = command.Execute(model);
@@ -36,11 +37,28 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
+        public void RegisterUserCommand_Fails_For_Unmatched_Password() {
+            var command = new RegisterUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserRegistration() {
+                Email = "test@test.com",
+                Password = "test",
+                ConfirmPassword = "wrong"
+            };
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmPassword");
+            result.Errors[0].Message.Should().Be("Password and confirm password must match");
+        }
+
+        [TestMethod]
         public void RegisterUserCommand_Fails_For_Existing_Email() {
             var command = new RegisterUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var model = new UserRegistration() {
                 Email = "test@test.com",
-                Password = "test"
+                Password = "test",
+                ConfirmPassword = "test"
             };
 
             _playgroundContextFactory.Context.Users.Add(new User() {
@@ -60,7 +78,8 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new RegisterUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var model = new UserRegistration() {
                 Email = "test@test.com",
-                Password = "test"
+                Password = "test",
+                ConfirmPassword = "test"
             };
 
             command.Execute(model);

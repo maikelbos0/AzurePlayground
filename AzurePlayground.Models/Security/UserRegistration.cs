@@ -11,5 +11,9 @@ namespace AzurePlayground.Models.Security {
         [DisplayName("Password")]
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
+
+        [DisplayName("Confirm password")]
+        [Required(ErrorMessage = "Confirm password is required")]
+        public string ConfirmPassword { get; set; }
     }
 }
