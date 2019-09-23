@@ -1,5 +1,6 @@
 ﻿using AzurePlayground.Controllers;
 using AzurePlayground.Database;
+using AzurePlayground.Models.Security;
 using AzurePlayground.Providers;
 using AzurePlayground.Test.Utilities;
 using AzurePlayground.Utilities.Configuration;
@@ -31,7 +32,11 @@ namespace AzurePlayground.Tests.Integration {
 
         [TestMethod]
         public void HomeController_Registration_Activation_To_LogIn_Succeeds() {            
-            var test = UnityConfig.Container.Resolve<HomeController>();
+            var controller = UnityConfig.Container.Resolve<HomeController>();
+            var registerModel = new UserRegistration() {
+                Email = "test@test.com",
+                Password = ""
+            };
 
             throw new NotImplementedException();
         }
