@@ -69,7 +69,7 @@ namespace AzurePlayground.Tests.Integration {
         public void HomeController_RequestPasswordReset_ResetPassword_To_LogIn_Succeeds() {
             var controller = UnityConfig.Container.Resolve<HomeController>();
 
-            // Set up user
+            // Set up
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
                 IsActive = true
@@ -98,6 +98,44 @@ namespace AzurePlayground.Tests.Integration {
             var logInResult = controller.LogIn(new UserLogIn() {
                 Email = "test@test.com",
                 Password = "test"
+            });
+
+            logInResult.Should().BeOfType<RedirectToRouteResult>();
+            _authenticationProvider.Identity.Should().Be("test@test.com");
+        }
+
+        [TestMethod]
+        public void HomeController_ChangePassword_LogOut_To_LogIn_Succeeds() {
+            var controller = UnityConfig.Container.Resolve<HomeController>();
+
+            // Set up
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                PasswordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 },
+                PasswordHashIterations = 1000,
+                PasswordSalt = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                IsActive = true
+            });
+            _authenticationProvider.Identity = "test@test.com";
+
+            // Change password
+            var changePasswordResult = (ViewResult)controller.ChangePassword(new UserChangePassword() {
+                CurrentPassword = "test",
+                NewPassword = "hunter2",
+                ConfirmNewPassword = "hunter2"
+            });
+            changePasswordResult.ViewName.Should().Be("PasswordChanged");
+
+            // Log out
+            var logOutResult = controller.LogOut();
+
+            logOutResult.Should().BeOfType<RedirectToRouteResult>();
+            _authenticationProvider.Identity.Should().BeNull();
+
+            // Log in
+            var logInResult = controller.LogIn(new UserLogIn() {
+                Email = "test@test.com",
+                Password = "hunter2"
             });
 
             logInResult.Should().BeOfType<RedirectToRouteResult>();
