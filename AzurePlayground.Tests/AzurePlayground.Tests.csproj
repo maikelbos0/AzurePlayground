@@ -39,6 +39,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions, Version=5.9.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.5.9.0\lib\net47\FluentAssertions.dll</HintPath>
     </Reference>
@@ -52,6 +58,7 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -99,6 +106,10 @@
     <ProjectReference Include="..\AzurePlayground.Database\AzurePlayground.Database.csproj">
       <Project>{A6DE6643-8D01-4398-ABED-536D33860AB6}</Project>
       <Name>AzurePlayground.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.Domain\AzurePlayground.Domain.csproj">
+      <Project>{E157B9C5-042F-4DC3-B2E2-A721ECA67CDC}</Project>
+      <Name>AzurePlayground.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Models\AzurePlayground.Models.csproj">
       <Project>{fe4c0d69-d134-4f3a-b19e-0be8e3cb6fc2}</Project>

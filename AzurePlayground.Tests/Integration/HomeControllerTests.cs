@@ -1,5 +1,6 @@
 ﻿using AzurePlayground.Controllers;
 using AzurePlayground.Database;
+using AzurePlayground.Domain.Security;
 using AzurePlayground.Models.Security;
 using AzurePlayground.Providers;
 using AzurePlayground.Test.Utilities;
@@ -35,9 +36,9 @@ namespace AzurePlayground.Tests.Integration {
         }
 
         [TestMethod]
-        public void HomeController_Registration_Activation_To_LogIn_Succeeds() {            
+        public void HomeController_Registration_Activation_To_LogIn_Succeeds() {
             var controller = UnityConfig.Container.Resolve<HomeController>();
-            
+
             // Registration
             var registrationResult = (ViewResult)controller.Register(new UserRegistration() {
                 Email = "test@test.com",
@@ -60,7 +61,46 @@ namespace AzurePlayground.Tests.Integration {
                 Password = "test"
             });
 
-            logInResult.Should().BeOfType<RedirectToRouteResult>();            
+            logInResult.Should().BeOfType<RedirectToRouteResult>();
+            _authenticationProvider.Identity.Should().Be("test@test.com");
+        }
+
+        [TestMethod]
+        public void HomeController_RequestPasswordReset_ResetPassword_To_LogIn_Succeeds() {
+            var controller = UnityConfig.Container.Resolve<HomeController>();
+
+            // Set up user
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                IsActive = true
+            });
+
+            // Request password reset
+            var forgotPasswordResult = (ViewResult)controller.ForgotPassword(new UserPasswordResetRequest() {
+                Email = "test@test.com"
+            });
+
+            forgotPasswordResult.ViewName.Should().Be("PasswordResetSent");
+            _mailClient.SentMessages.Should().NotBeEmpty();
+
+            // Reset password
+            var token = Regex.Match(_mailClient.SentMessages.Last().Body, "(?<=\\=)\\w+(?=\")").Value;
+            var resetResult = (ViewResult)controller.ResetPassword(new UserPasswordReset() {
+                Email = "test@test.com",
+                PasswordResetToken = token,
+                NewPassword = "test",
+                ConfirmNewPassword = "test"
+            });
+
+            resetResult.ViewName.Should().Be("PasswordReset");
+
+            // Log in
+            var logInResult = controller.LogIn(new UserLogIn() {
+                Email = "test@test.com",
+                Password = "test"
+            });
+
+            logInResult.Should().BeOfType<RedirectToRouteResult>();
             _authenticationProvider.Identity.Should().Be("test@test.com");
         }
     }
