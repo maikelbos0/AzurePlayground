@@ -1,8 +1,8 @@
 ﻿using AzurePlayground.Database.Migrations;
-using Security = AzurePlayground.Domain.Security;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using Security = AzurePlayground.Domain.Security;
 
 namespace AzurePlayground.Database {
     public class PlaygroundContext : DbContext, IPlaygroundContext {
@@ -25,8 +25,28 @@ namespace AzurePlayground.Database {
 
         public IDbSet<Security.User> Users { get; set; }
 
+        public IDbSet<Security.UserEventType> UserEventTypes { get; set; }
+
+        internal int BaseSaveChanges() {
+            return base.SaveChanges();
+        }
+
+        public override int SaveChanges() {
+            foreach (var entity in Security.UserEventType.GetValues()) {
+                var entry = Entry(entity);
+
+                if (entry.State == EntityState.Added) {
+                    entry.State = EntityState.Unchanged;
+                }
+            }
+
+            return base.SaveChanges();
+        }
+
         public void FixEfProviderServicesProblem() {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var instance = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
         }
     }
 }

@@ -82,6 +82,10 @@
     <Compile Include="Migrations\201909221256039_UserEventType-Byte.Designer.cs">
       <DependentUpon>201909221256039_UserEventType-Byte.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910021828289_UserEventTypes.cs" />
+    <Compile Include="Migrations\201910021828289_UserEventTypes.Designer.cs">
+      <DependentUpon>201910021828289_UserEventTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PlaygroundContext.cs" />
     <Compile Include="PlaygroundContextFactory.cs" />
@@ -125,6 +129,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909221256039_UserEventType-Byte.resx">
       <DependentUpon>201909221256039_UserEventType-Byte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910021828289_UserEventTypes.resx">
+      <DependentUpon>201910021828289_UserEventTypes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
