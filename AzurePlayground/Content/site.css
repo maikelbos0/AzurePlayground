@@ -12,17 +12,29 @@
     padding: 15px;
 }
 
-.site-navbar-item {
-    margin-right: 15px;
+.site-dropdown-menu {
+    background-color: #ddddee;
+    padding: 0.5rem 0;
+    margin: 0;
+    border: 1px solid #aaaaee;
+    border-radius: 0;
+}
+
+.site-dropdown-item {
+    padding: 0.25rem 0.75rem;
+}
+
+.site-dropdown-divider {
+    border-top: 1px solid #aaaaee;
+}
+
+.site-navbar a, .site-navbar button {
     color: #333399;
     font-weight: bold;
     text-decoration: none;
-    vertical-align: initial;
-    padding: 0;
-    border: 0;
+    background-color: inherit !important;
 }
-
-.site-navbar-item:hover {
+.site-navbar a:hover, .site-navbar button:hover {
     color: #6666cc;
     text-decoration: underline;
 }

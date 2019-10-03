@@ -10,6 +10,7 @@ namespace AzurePlayground.App_Start {
                 "~/Scripts/toastr.js"));
 
             bundles.Add(new ScriptBundle("~/Scripts/bootstrap").Include(
+                "~/Scripts/umd/popper.js",
                 "~/Scripts/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/Scripts/app").Include(

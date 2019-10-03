@@ -14,32 +14,57 @@
 </head>
 <body>
     <div class="container site-container">
-        <div class="site-navbar">
-            @Html.ActionLink("Home", "Index", "Home", null, new { @class = "site-navbar-item" })
+        <nav class="navbar navbar-expand-sm site-navbar">
+            <a class="navbar-brand" href="#">AzurePlayground</a>
 
-            @if (User.Identity.IsAuthenticated) {
-                @Html.ActionLink("Logged in", "LoggedIn", "Home", null, new { @class = "site-navbar-item" })
-                @Html.ActionLink("Change password", "ChangePassword", "Home", null, new { @class = "site-navbar-item" })
-                using (Html.BeginForm("LogOut", "Home", FormMethod.Post, new { @class = "html-only d-inline" })) {
-                    <button type="submit" class="btn btn-link site-navbar-item">Log out</button>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
+                </li>
+
+
+                @if (User.Identity.IsAuthenticated) {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbar-login-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @User.Identity.Name
+                        </a>
+                        <div class="dropdown-menu site-dropdown-menu" aria-labelledby="navbar-login-dropdown">
+                            @Html.ActionLink("Logged in", "LoggedIn", "Home", null, new { @class = "dropdown-item site-dropdown-item" })
+                            @Html.ActionLink("Change password", "ChangePassword", "Home", null, new { @class = "dropdown-item site-dropdown-item" })
+                            <div class="dropdown-divider site-dropdown-divider"></div>
+
+                            @using (Html.BeginForm("LogOut", "Home", FormMethod.Post, new { @class = "html-only d-inline" })) {
+                                <button type="submit" class="btn btn-link dropdown-item site-dropdown-item">Log out</button>
+                            }
+                        </div>
+                    </li>
                 }
-            }
-            else {
-                @Html.ActionLink("Log in", "LogIn", "Home", null, new { @class = "site-navbar-item" })
-                @Html.ActionLink("Register", "Register", "Home", null, new { @class = "site-navbar-item" })
-                @Html.ActionLink("Resend activation", "SendActivation", "Home", null, new { @class = "site-navbar-item" })
-                @Html.ActionLink("Activate", "Activate", "Home", null, new { @class = "site-navbar-item" })
-                @Html.ActionLink("Forgot password", "ForgotPassword", "Home", null, new { @class = "site-navbar-item" })
-            }
-        </div>
-    </div>
+                else {
+                    @Html.ActionLink("Log in", "LogIn", "Home", null, new { @class = "nav-link" })
+                    @Html.ActionLink("Register", "Register", "Home", null, new { @class = "nav-link" })
 
-    <div class="container site-container">
-        <div class="site-content">
-            @RenderBody()
-        </div>
-    </div>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbar-authentication-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Options
+                        </a>
+                        <div class="dropdown-menu site-dropdown-menu" aria-labelledby="navbar-authentication-dropdown">
+                            @Html.ActionLink("Resend activation", "SendActivation", "Home", null, new { @class = "dropdown-item site-dropdown-item" })
+                            @Html.ActionLink("Activate", "Activate", "Home", null, new { @class = "dropdown-item site-dropdown-item" })
+                            @Html.ActionLink("Forgot password", "ForgotPassword", "Home", null, new { @class = "dropdown-item site-dropdown-item" })
+                        </div>
+                    </li>
+                }
+            </ul>
 
-    @RenderSection("Scripts", required: false)
-</body>
+            </nav>
+        </div>
+
+        <div class="container site-container">
+            <div class="site-content">
+                @RenderBody()
+            </div>
+        </div>
+
+        @RenderSection("Scripts", required: false)
+    </body>
 </html>
