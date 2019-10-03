@@ -34,10 +34,22 @@ namespace AzurePlayground.Database {
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Security.UserEventType>()
+            var userEventTypes = modelBuilder.Entity<Security.UserEventType>()
                 .ToTable("UserEventTypes", "Security")
-                .HasKey(t => t.Id)
-                .Property(t => t.Name).IsRequired();
+                .HasKey(t => t.Id);
+
+            userEventTypes.Property(t => t.Name).IsRequired();
+
+            var users = modelBuilder.Entity<Security.User>()
+                .ToTable("Users", "Security")
+                .HasKey(u => u.Id);
+
+            users.HasIndex(u => u.Email).IsUnique();
+            users.Property(u => u.Email).IsRequired().HasMaxLength(255);
+            users.Property(u => u.PasswordSalt).IsRequired().HasMaxLength(20);
+            users.Property(u => u.PasswordHash).IsRequired().HasMaxLength(20);
+            users.Property(u => u.PasswordResetTokenSalt).HasMaxLength(20);
+            users.Property(u => u.PasswordResetTokenHash).HasMaxLength(20);
         }
 
         public override int SaveChanges() {
