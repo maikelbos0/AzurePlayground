@@ -34,22 +34,22 @@ namespace AzurePlayground.Database {
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
-            var userEventTypes = modelBuilder.Entity<Security.UserEventType>()
-                .ToTable("UserEventTypes", "Security")
-                .HasKey(t => t.Id);
+            var userEventTypes = modelBuilder.Entity<Security.UserEventType>().ToTable("UserEventTypes", "Security").HasKey(t => t.Id);
 
+            userEventTypes.HasMany(t => t.UserEvents).WithRequired(e => e.UserEventType);
             userEventTypes.Property(t => t.Name).IsRequired();
+            
+            var users = modelBuilder.Entity<Security.User>().ToTable("Users", "Security").HasKey(u => u.Id);
 
-            var users = modelBuilder.Entity<Security.User>()
-                .ToTable("Users", "Security")
-                .HasKey(u => u.Id);
-
+            users.HasMany(u => u.UserEvents).WithRequired(e => e.User);
             users.HasIndex(u => u.Email).IsUnique();
             users.Property(u => u.Email).IsRequired().HasMaxLength(255);
             users.Property(u => u.PasswordSalt).IsRequired().HasMaxLength(20);
             users.Property(u => u.PasswordHash).IsRequired().HasMaxLength(20);
             users.Property(u => u.PasswordResetTokenSalt).HasMaxLength(20);
             users.Property(u => u.PasswordResetTokenHash).HasMaxLength(20);
+
+            var userEvents = modelBuilder.Entity<Security.UserEvent>().ToTable("UserEvents", "Security").HasKey(e => e.Id);
         }
 
         public override int SaveChanges() {

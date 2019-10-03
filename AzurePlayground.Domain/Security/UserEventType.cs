@@ -41,5 +41,6 @@ namespace AzurePlayground.Domain.Security {
 
         public byte Id { get; private set; }
         public string Name { get; private set; }
+        public virtual ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
     }
 }
