@@ -46,7 +46,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.PasswordChanged);
+            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.PasswordChanged.Id);
 
             using (var pbkdf2 = new Rfc2898DeriveBytes("test2", user.PasswordSalt, user.PasswordHashIterations)) {
                 user.PasswordHash.Should().BeEquivalentTo(pbkdf2.GetBytes(20), options => options.WithStrictOrdering());
@@ -123,7 +123,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Expression.ToString().Should().Be("p => p.CurrentPassword");
             result.Errors[0].Message.Should().Be("Invalid password");
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordChange);
+            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordChange.Id);
             user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
             user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
         }
@@ -153,7 +153,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmNewPassword");
             result.Errors[0].Message.Should().Be("New password and confirm new password must match");
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordChange);
+            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordChange.Id);
             user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
             user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
         }

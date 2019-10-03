@@ -12,7 +12,7 @@ namespace AzurePlayground.Database.Migrations {
                 context.UserEventTypes.AddOrUpdate(entity);
             }
 
-            context.BaseSaveChanges();
+            context.SaveChanges();
         }
     }
 }

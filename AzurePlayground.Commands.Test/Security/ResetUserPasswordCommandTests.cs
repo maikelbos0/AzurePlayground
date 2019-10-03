@@ -50,7 +50,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.PasswordReset);
+            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.PasswordReset.Id);
 
             using (var pbkdf2 = new Rfc2898DeriveBytes("test2", user.PasswordSalt, user.PasswordHashIterations)) {
                 user.PasswordHash.Should().BeEquivalentTo(pbkdf2.GetBytes(20), options => options.WithStrictOrdering());
@@ -88,7 +88,7 @@ namespace AzurePlayground.Commands.Test.Security {
             user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
             user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordReset);
+            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
         }
 
         [TestMethod]
@@ -122,7 +122,7 @@ namespace AzurePlayground.Commands.Test.Security {
             user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
             user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordReset);
+            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
         }
 
         [TestMethod]
@@ -152,7 +152,7 @@ namespace AzurePlayground.Commands.Test.Security {
             user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
             user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.FailedPasswordReset);
+            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
         }
 
         [TestMethod]

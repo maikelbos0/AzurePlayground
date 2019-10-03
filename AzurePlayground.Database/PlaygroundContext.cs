@@ -32,7 +32,7 @@ namespace AzurePlayground.Database {
 
             var userEventTypes = modelBuilder.Entity<Security.UserEventType>().ToTable("UserEventTypes", "Security").HasKey(t => t.Id);
 
-            userEventTypes.HasMany(t => t.UserEvents).WithRequired(e => e.UserEventType);
+            userEventTypes.HasMany(t => t.UserEvents).WithRequired(e => e.UserEventType).HasForeignKey(e => e.UserEventType_Id);
             userEventTypes.Property(t => t.Name).IsRequired();
 
             var users = modelBuilder.Entity<Security.User>().ToTable("Users", "Security").HasKey(u => u.Id);
@@ -46,22 +46,6 @@ namespace AzurePlayground.Database {
             users.Property(u => u.PasswordResetTokenHash).HasMaxLength(20);
 
             var userEvents = modelBuilder.Entity<Security.UserEvent>().ToTable("UserEvents", "Security").HasKey(e => e.Id);
-        }
-
-        internal int BaseSaveChanges() {
-            return base.SaveChanges();
-        }
-
-        public override int SaveChanges() {
-            foreach (var entity in Security.UserEventType.GetValues()) {
-                var entry = Entry(entity);
-
-                if (entry.State == EntityState.Added) {
-                    entry.State = EntityState.Unchanged;
-                }
-            }
-
-            return base.SaveChanges();
         }
 
         public void FixEfProviderServicesProblem() {

@@ -19,19 +19,18 @@ namespace AzurePlayground.Commands.Security {
 
             using (var context = _playgroundContextFactory.GetContext()) {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
-                int activationCode;
 
                 // Any error that occurs gets the same message to prevent leaking information
                 if (user == null
                     || user.IsActive
-                    || !int.TryParse(parameter.ActivationCode, out activationCode) || user.ActivationCode != activationCode) {
+                    || !int.TryParse(parameter.ActivationCode, out int activationCode) || user.ActivationCode != activationCode) {
 
                     result.AddError(p => p.ActivationCode, "This activation code is invalid");
 
                     if (user != null) {
                         user.UserEvents.Add(new UserEvent() {
                             Date = DateTime.UtcNow,
-                            UserEventType = UserEventType.FailedActivation
+                            UserEventType_Id = UserEventType.FailedActivation.Id
                         });
                     }
                 }
@@ -40,7 +39,7 @@ namespace AzurePlayground.Commands.Security {
                     user.ActivationCode = null;
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType = UserEventType.Activated
+                        UserEventType_Id = UserEventType.Activated.Id
                     });
                 }
 

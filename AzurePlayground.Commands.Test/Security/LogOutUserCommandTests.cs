@@ -29,7 +29,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.LoggedOut);
+            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.LoggedOut.Id);
         }
 
         [TestMethod]

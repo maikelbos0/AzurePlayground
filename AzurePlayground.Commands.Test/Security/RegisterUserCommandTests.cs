@@ -33,7 +33,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors.Should().BeEmpty();
             user.Should().NotBeNull();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType.Should().Be(UserEventType.Registered);
+            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.Registered.Id);
         }
 
         [TestMethod]

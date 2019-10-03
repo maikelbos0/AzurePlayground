@@ -33,7 +33,7 @@ namespace AzurePlayground.Commands.Security {
 
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType = UserEventType.PasswordResetRequested
+                        UserEventType_Id = UserEventType.PasswordResetRequested.Id
                     });
 
                     SendPasswordResetEmail(user, token);

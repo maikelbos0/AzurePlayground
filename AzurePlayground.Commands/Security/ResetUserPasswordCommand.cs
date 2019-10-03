@@ -61,13 +61,13 @@ namespace AzurePlayground.Commands.Security {
 
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType = UserEventType.PasswordReset
+                        UserEventType_Id = UserEventType.PasswordReset.Id
                     });
                 }
                 else {
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType = UserEventType.FailedPasswordReset
+                        UserEventType_Id = UserEventType.FailedPasswordReset.Id
                     });
                 }
 

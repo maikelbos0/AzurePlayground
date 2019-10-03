@@ -29,7 +29,7 @@ namespace AzurePlayground.Commands.Security {
 
             user.UserEvents.Add(new UserEvent() {
                 Date = DateTime.UtcNow,
-                UserEventType = UserEventType.Registered
+                UserEventType_Id = UserEventType.Registered.Id
             });
 
             if (!parameter.Password.Equals(parameter.ConfirmPassword, StringComparison.Ordinal)) {
