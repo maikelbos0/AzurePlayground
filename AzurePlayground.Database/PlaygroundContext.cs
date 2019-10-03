@@ -27,10 +27,6 @@ namespace AzurePlayground.Database {
 
         public IDbSet<Security.UserEventType> UserEventTypes { get; set; }
 
-        internal int BaseSaveChanges() {
-            return base.SaveChanges();
-        }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
@@ -38,7 +34,7 @@ namespace AzurePlayground.Database {
 
             userEventTypes.HasMany(t => t.UserEvents).WithRequired(e => e.UserEventType);
             userEventTypes.Property(t => t.Name).IsRequired();
-            
+
             var users = modelBuilder.Entity<Security.User>().ToTable("Users", "Security").HasKey(u => u.Id);
 
             users.HasMany(u => u.UserEvents).WithRequired(e => e.User);
@@ -50,6 +46,10 @@ namespace AzurePlayground.Database {
             users.Property(u => u.PasswordResetTokenHash).HasMaxLength(20);
 
             var userEvents = modelBuilder.Entity<Security.UserEvent>().ToTable("UserEvents", "Security").HasKey(e => e.Id);
+        }
+
+        internal int BaseSaveChanges() {
+            return base.SaveChanges();
         }
 
         public override int SaveChanges() {
