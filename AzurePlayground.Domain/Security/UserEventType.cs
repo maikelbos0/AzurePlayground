@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 
 namespace AzurePlayground.Domain.Security {
-    [Table("UserEventTypes", Schema = "Security")]
     public class UserEventType {
         private static IReadOnlyList<UserEventType> _values;
 
@@ -42,9 +39,7 @@ namespace AzurePlayground.Domain.Security {
             Name = name;
         }
 
-        [Key]
         public byte Id { get; private set; }
-        [Required]
         public string Name { get; private set; }
     }
 }

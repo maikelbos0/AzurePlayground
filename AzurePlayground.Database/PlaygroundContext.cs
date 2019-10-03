@@ -31,6 +31,15 @@ namespace AzurePlayground.Database {
             return base.SaveChanges();
         }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder) {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Security.UserEventType>()
+                .ToTable("UserEventTypes", "Security")
+                .HasKey(t => t.Id)
+                .Property(t => t.Name).IsRequired();
+        }
+
         public override int SaveChanges() {
             foreach (var entity in Security.UserEventType.GetValues()) {
                 var entry = Entry(entity);
