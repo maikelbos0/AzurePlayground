@@ -5,11 +5,10 @@ using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AzurePlayground.Commands.Test.Security {
     [TestClass]
-    public class RequestUserPasswordResetCommandTests {
+    public class ForgotUserPasswordCommandTests {
         private readonly byte[] _passwordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 };
         private readonly int _passwordHashIterations = 1000;
         private readonly byte[] _passwordSalt = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -22,9 +21,9 @@ namespace AzurePlayground.Commands.Test.Security {
         };
 
         [TestMethod]
-        public void RequestUserPasswordResetCommand_Sends_Email() {
-            var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserPasswordResetRequest() {
+        public void ForgotUserPasswordCommand_Sends_Email() {
+            var command = new ForgotUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserForgotPassword() {
                 Email = "test@test.com"
             };
 
@@ -44,8 +43,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void RequestUserPasswordResetCommand_Succeeds() {
-            var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ForgotUserPasswordCommand_Succeeds() {
+            var command = new ForgotUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
@@ -53,7 +52,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordSalt = _passwordSalt,
                 IsActive = true
             };
-            var model = new UserPasswordResetRequest() {
+            var model = new UserForgotPassword() {
                 Email = "test@test.com"
             };
 
@@ -69,9 +68,9 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void RequestUserPasswordResetCommand_Does_Nothing_For_Nonexistent_User() {
-            var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserPasswordResetRequest() {
+        public void ForgotUserPasswordCommand_Does_Nothing_For_Nonexistent_User() {
+            var command = new ForgotUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var model = new UserForgotPassword() {
                 Email = "test@test.com"
             };
 
@@ -82,8 +81,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void RequestUserPasswordResetCommand_Does_Nothing_For_Inactive_User() {
-            var command = new RequestUserPasswordResetCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ForgotUserPasswordCommand_Does_Nothing_For_Inactive_User() {
+            var command = new ForgotUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
                 PasswordHash = _passwordHash,
@@ -91,7 +90,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordSalt = _passwordSalt,
                 IsActive = false
             };
-            var model = new UserPasswordResetRequest() {
+            var model = new UserForgotPassword() {
                 Email = "test@test.com"
             };
 

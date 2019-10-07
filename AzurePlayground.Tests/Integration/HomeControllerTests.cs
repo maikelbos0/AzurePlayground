@@ -75,7 +75,7 @@ namespace AzurePlayground.Tests.Integration {
             });
 
             // Request password reset
-            var forgotPasswordResult = (ViewResult)GetController().ForgotPassword(new UserPasswordResetRequest() {
+            var forgotPasswordResult = (ViewResult)GetController().ForgotPassword(new UserForgotPassword() {
                 Email = "test@test.com"
             });
 

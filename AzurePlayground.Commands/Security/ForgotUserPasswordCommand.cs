@@ -9,15 +9,15 @@ using System.Linq;
 
 namespace AzurePlayground.Commands.Security {
     [Injectable]
-    public class RequestUserPasswordResetCommand : BaseUserCommand, IRequestUserPasswordResetCommand {
+    public class ForgotUserPasswordCommand : BaseUserCommand, IForgotUserPasswordCommand {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         private readonly int _expirationInSeconds = 3600;
 
-        public RequestUserPasswordResetCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
+        public ForgotUserPasswordCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
             _playgroundContextFactory = playgroundContextFactory;
         }
-        public CommandResult<UserPasswordResetRequest> Execute(UserPasswordResetRequest parameter) {
-            var result = new CommandResult<UserPasswordResetRequest>();
+        public CommandResult<UserForgotPassword> Execute(UserForgotPassword parameter) {
+            var result = new CommandResult<UserForgotPassword>();
 
             using (var context = _playgroundContextFactory.GetContext()) {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));

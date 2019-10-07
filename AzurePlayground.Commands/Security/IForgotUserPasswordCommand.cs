@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.Models.Security;
 
 namespace AzurePlayground.Commands.Security {
-    public interface IRequestUserPasswordResetCommand : ICommand<UserPasswordResetRequest> {
+    public interface IForgotUserPasswordCommand : ICommand<UserForgotPassword> {
     }
 }

@@ -45,7 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\UserChangePassword.cs" />
     <Compile Include="Security\UserPasswordReset.cs" />
-    <Compile Include="Security\UserPasswordResetRequest.cs" />
+    <Compile Include="Security\UserForgotPassword.cs" />
     <Compile Include="Security\UserSendActivation.cs" />
     <Compile Include="Security\UserActivation.cs" />
     <Compile Include="Security\UserLogIn.cs" />

@@ -14,7 +14,7 @@ namespace AzurePlayground.Controllers {
         private readonly ILogInUserCommand _logInUserCommand;
         private readonly ILogOutUserCommand _logOutUserCommand;
         private readonly IChangeUserPasswordCommand _changeUserPasswordCommand;
-        private readonly IRequestUserPasswordResetCommand _requestUserPasswordResetCommand;
+        private readonly IForgotUserPasswordCommand _requestUserPasswordResetCommand;
         private readonly IResetUserPasswordCommand _resetUserPasswordCommand;
 
         public HomeController(IAuthenticationProvider authenticationProvider,
@@ -24,7 +24,7 @@ namespace AzurePlayground.Controllers {
             ILogInUserCommand logInUserCommand,
             ILogOutUserCommand logOutUserCommand,
             IChangeUserPasswordCommand changeUserPasswordCommand,
-            IRequestUserPasswordResetCommand requestUserPasswordResetCommand,
+            IForgotUserPasswordCommand requestUserPasswordResetCommand,
             IResetUserPasswordCommand resetUserPasswordCommand) {
 
             _authenticationProvider = authenticationProvider;
@@ -185,12 +185,12 @@ namespace AzurePlayground.Controllers {
         [Route("ForgotPassword")]
         [HttpGet]
         public ActionResult ForgotPassword() {
-            return View(new UserPasswordResetRequest());
+            return View(new UserForgotPassword());
         }
 
         [Route("ForgotPassword")]
         [HttpPost]
-        public ActionResult ForgotPassword(UserPasswordResetRequest model) {
+        public ActionResult ForgotPassword(UserForgotPassword model) {
             if (ModelState.IsValid) {
                 ModelState.Merge(_requestUserPasswordResetCommand.Execute(model));
             }

@@ -4,7 +4,6 @@ using AzurePlayground.Models.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace AzurePlayground.Commands.Test.Security {
