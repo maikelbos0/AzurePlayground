@@ -27,10 +27,7 @@ namespace AzurePlayground.Commands.Security {
                     && user.PasswordHash.SequenceEqual(GetPasswordHash(parameter.Password, user.PasswordSalt, user.PasswordHashIterations))) {
 
                     // If we log in, the password reset is not needed anymore and leaving it is a security risk
-                    user.PasswordResetTokenSalt = null;
-                    user.PasswordResetTokenHash = null;
-                    user.PasswordResetTokenHashIterations = null;
-                    user.PasswordResetTokenExpiryDate = null;
+                    user.PasswordResetToken = Password.None;
 
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,

@@ -32,11 +32,11 @@ namespace AzurePlayground.Commands.Security {
                     throw new InvalidOperationException($"Attempted to reset password with missing token for user '{parameter.Email}'");
                 }
 
-                if (user.PasswordResetTokenExpiryDate == null || user.PasswordResetTokenHash == null || user.PasswordResetTokenHashIterations == null || user.PasswordResetTokenSalt == null) {
+                if (user.PasswordResetToken == Password.None) {
                     result.AddError(p => p.PasswordResetToken, "The password reset link has expired; please request a new one");
                 }
 
-                if (user.PasswordResetTokenExpiryDate < DateTime.UtcNow) {
+                if (user.PasswordResetToken.ExpiryDate < DateTime.UtcNow) {
                     result.AddError(p => p.PasswordResetToken, "The password reset link has expired; please request a new one");
                 }
 
@@ -45,15 +45,13 @@ namespace AzurePlayground.Commands.Security {
                 }
 
                 if (result.Success) {
-                    if (!user.PasswordResetTokenHash.SequenceEqual(GetPasswordHash(parameter.PasswordResetToken, user.PasswordResetTokenSalt, user.PasswordResetTokenHashIterations.Value))) {
+                    // TODO: move password validation to Password class
+                    if (!user.PasswordResetToken.Hash.SequenceEqual(GetPasswordHash(parameter.PasswordResetToken, user.PasswordResetToken.Salt, user.PasswordResetToken.HashIterations))) {
                         // Since the token comes in a url, the user normally is not responsible for the error and we should not use the command result for feedback
                         throw new InvalidOperationException($"Attempted to reset password with incorrect token for user '{parameter.Email}'");
                     }
 
-                    user.PasswordResetTokenSalt = null;
-                    user.PasswordResetTokenHash = null;
-                    user.PasswordResetTokenHashIterations = null;
-                    user.PasswordResetTokenExpiryDate = null;
+                    user.PasswordResetToken = Password.None;
 
                     user.PasswordSalt = GetNewPasswordSalt();
                     user.PasswordHashIterations = _passwordHashIterations;

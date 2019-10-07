@@ -61,10 +61,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var result = command.Execute(model);
 
             result.Success.Should().BeTrue();
-            user.PasswordResetTokenSalt.Should().NotBeNull();
-            user.PasswordResetTokenHash.Should().NotBeNull();
-            user.PasswordResetTokenHashIterations.Should().NotBeNull();
-            user.PasswordResetTokenExpiryDate.Should().NotBeNull();
+            user.PasswordResetToken.Should().NotBe(Password.None);
         }
 
         [TestMethod]
@@ -100,10 +97,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             result.Success.Should().BeTrue();
             _mailClient.SentMessages.Should().BeEmpty();
-            user.PasswordResetTokenSalt.Should().BeNull();
-            user.PasswordResetTokenHash.Should().BeNull();
-            user.PasswordResetTokenHashIterations.Should().BeNull();
-            user.PasswordResetTokenExpiryDate.Should().BeNull();
+            user.PasswordResetToken.Should().Be(Password.None);
         }
     }
 }
