@@ -53,6 +53,7 @@
     <Compile Include="Security\User.cs" />
     <Compile Include="Security\UserEvent.cs" />
     <Compile Include="Security\UserEventType.cs" />
+    <Compile Include="ValueObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

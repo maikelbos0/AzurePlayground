@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace AzurePlayground.Domain.Security {
-    public class Password {
+    public class Password : ValueObject<Password> {
         protected const int _hashIterations = 1000;
 
         public static Password None => new Password();
@@ -44,42 +44,19 @@ namespace AzurePlayground.Domain.Security {
             }
         }
 
-        // TODO make general lift to base class for value objects
-        public override bool Equals(object obj) {
-            var password = obj as Password;
+        protected override IEnumerable<object> GetEqualityComponents() {
+            yield return Salt.Length;
+            foreach (var s in Salt) {
+                yield return s;
+            }
 
-            if (ReferenceEquals(password, null))
-                return false;
+            yield return Hash.Length;
+            foreach (var s in Hash) {
+                yield return s;
+            }
 
-            return Salt.SequenceEqual(password.Salt)
-                && Hash.SequenceEqual(password.Hash)
-                && HashIterations.Equals(password.HashIterations)
-                && Equals(ExpiryDate, password.ExpiryDate);
-        }
-
-        // TODO make general lift to base class for value objects
-        public override int GetHashCode() {
-            var hashCode = Salt.GetHashCode();
-
-            hashCode = 23 * hashCode + Hash.GetHashCode();
-            hashCode = 23 * hashCode + HashIterations.GetHashCode();
-            hashCode = 23 * hashCode + ExpiryDate.GetHashCode();
-
-            return hashCode;
-        }
-
-        public static bool operator ==(Password a, Password b) {
-            if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
-                return true;
-
-            if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
-                return false;
-
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(Password a, Password b) {
-            return !(a == b);
+            yield return HashIterations;
+            yield return ExpiryDate;
         }
     }
 }
