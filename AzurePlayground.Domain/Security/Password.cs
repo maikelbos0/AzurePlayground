@@ -1,29 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace AzurePlayground.Domain.Security {
     public class Password : ValueObject<Password> {
-        protected const int _hashIterations = 1000;
-
-        public static Password None => new Password();
+        private const int _hashIterations = 1000;
 
         public byte[] Salt { get; private set; }
         public byte[] Hash { get; private set; }
         public int? HashIterations { get; private set; }
-        public DateTime? ExpiryDate { get; private set; }
 
-        private Password() {
+        protected Password() {
         }
 
         public Password(string password) : this() {
             Salt = GetNewSalt();
             HashIterations = _hashIterations;
             Hash = GetHash(password);
-        }
-
-        public Password(string password, DateTime expiryDate) : this(password) {
-            ExpiryDate = expiryDate;
         }
 
         private byte[] GetNewSalt() {
@@ -66,7 +58,6 @@ namespace AzurePlayground.Domain.Security {
             }
 
             yield return HashIterations;
-            yield return ExpiryDate;
         }
     }
 }

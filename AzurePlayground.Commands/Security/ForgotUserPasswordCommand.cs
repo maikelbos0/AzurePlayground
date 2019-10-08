@@ -26,7 +26,7 @@ namespace AzurePlayground.Commands.Security {
                 if (user != null && user.IsActive) {
                     var token = GetNewPasswordResetToken();
 
-                    user.PasswordResetToken = new Password(token, DateTime.UtcNow.AddSeconds(_expirationInSeconds));
+                    user.PasswordResetToken = new TemporaryPassword(token, DateTime.UtcNow.AddSeconds(_expirationInSeconds));
 
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,

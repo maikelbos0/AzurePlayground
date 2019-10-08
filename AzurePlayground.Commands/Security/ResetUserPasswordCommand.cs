@@ -32,7 +32,7 @@ namespace AzurePlayground.Commands.Security {
                     throw new InvalidOperationException($"Attempted to reset password with missing token for user '{parameter.Email}'");
                 }
 
-                if (user.PasswordResetToken == Password.None) {
+                if (user.PasswordResetToken == TemporaryPassword.None) {
                     result.AddError(p => p.PasswordResetToken, "The password reset link has expired; please request a new one");
                 }
 
@@ -51,7 +51,7 @@ namespace AzurePlayground.Commands.Security {
                         throw new InvalidOperationException($"Attempted to reset password with incorrect token for user '{parameter.Email}'");
                     }
 
-                    user.PasswordResetToken = Password.None;
+                    user.PasswordResetToken = TemporaryPassword.None;
 
                     user.PasswordSalt = GetNewPasswordSalt();
                     user.PasswordHashIterations = _passwordHashIterations;

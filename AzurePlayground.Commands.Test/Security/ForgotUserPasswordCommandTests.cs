@@ -61,7 +61,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var result = command.Execute(model);
 
             result.Success.Should().BeTrue();
-            user.PasswordResetToken.Should().NotBe(Password.None);
+            user.PasswordResetToken.Should().NotBe(TemporaryPassword.None);
         }
 
         [TestMethod]
@@ -97,7 +97,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             result.Success.Should().BeTrue();
             _mailClient.SentMessages.Should().BeEmpty();
-            user.PasswordResetToken.Should().Be(Password.None);
+            user.PasswordResetToken.Should().Be(TemporaryPassword.None);
         }
     }
 }

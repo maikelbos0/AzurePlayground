@@ -32,7 +32,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true,
-                PasswordResetToken = new Password("test", DateTime.UtcNow.AddSeconds(3600))
+                PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(3600))
             };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
@@ -63,7 +63,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true,
-                PasswordResetToken = new Password("test", DateTime.UtcNow.AddSeconds(3600))
+                PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(3600))
             };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
@@ -94,7 +94,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true,
-                PasswordResetToken = new Password("test", DateTime.UtcNow.AddSeconds(-60))
+                PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(-60))
             };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
@@ -200,7 +200,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true,
-                PasswordResetToken = new Password("test", DateTime.UtcNow.AddSeconds(3600))
+                PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(3600))
             };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
@@ -229,7 +229,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true,
-                PasswordResetToken = new Password("test", DateTime.UtcNow.AddSeconds(3600))
+                PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(3600))
             };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",

@@ -42,6 +42,8 @@ namespace AzurePlayground.Database {
             users.Property(u => u.Email).IsRequired().HasMaxLength(255);
             users.Property(u => u.PasswordSalt).IsRequired().HasMaxLength(20);
             users.Property(u => u.PasswordHash).IsRequired().HasMaxLength(20);
+            users.Property(u => u.PasswordHashIterations).IsRequired();
+            //users.Ignore(u => u.Password.ExpiryDate); // Expiry date only applies to I SHOULD REFACTOR THIS THEN
             users.Property(u => u.PasswordResetToken.Salt).HasMaxLength(20);
             users.Property(u => u.PasswordResetToken.Hash).HasMaxLength(20);
 

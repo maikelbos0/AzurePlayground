@@ -55,7 +55,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 PasswordHashIterations = _passwordHashIterations,
                 PasswordSalt = _passwordSalt,
                 IsActive = true,
-                PasswordResetToken = new Password("test", new DateTime())
+                PasswordResetToken = new TemporaryPassword("test", new DateTime())
             };
             var model = new UserLogIn() {
                 Email = "test@test.com",
@@ -66,7 +66,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             command.Execute(model);
 
-            user.PasswordResetToken.Should().Be(Password.None);
+            user.PasswordResetToken.Should().Be(TemporaryPassword.None);
         }
 
         [TestMethod]
