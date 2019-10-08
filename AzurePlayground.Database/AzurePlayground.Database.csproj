@@ -90,6 +90,10 @@
     <Compile Include="Migrations\201910031159467_FluentMapping-1.Designer.cs">
       <DependentUpon>201910031159467_FluentMapping-1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910081536373_PasswordResetToken-FieldNames.cs" />
+    <Compile Include="Migrations\201910081536373_PasswordResetToken-FieldNames.Designer.cs">
+      <DependentUpon>201910081536373_PasswordResetToken-FieldNames.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PlaygroundContext.cs" />
     <Compile Include="PlaygroundContextFactory.cs" />
@@ -139,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910031159467_FluentMapping-1.resx">
       <DependentUpon>201910031159467_FluentMapping-1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910081536373_PasswordResetToken-FieldNames.resx">
+      <DependentUpon>201910081536373_PasswordResetToken-FieldNames.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

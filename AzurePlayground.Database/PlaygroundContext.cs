@@ -42,10 +42,8 @@ namespace AzurePlayground.Database {
             users.Property(u => u.Email).IsRequired().HasMaxLength(255);
             users.Property(u => u.PasswordSalt).IsRequired().HasMaxLength(20);
             users.Property(u => u.PasswordHash).IsRequired().HasMaxLength(20);
-            users.Property(u => u.PasswordResetToken.Salt).HasColumnName("PasswordResetTokenSalt").HasMaxLength(20);
-            users.Property(u => u.PasswordResetToken.Hash).HasColumnName("PasswordResetTokenHash").HasMaxLength(20);
-            users.Property(u => u.PasswordResetToken.HashIterations).HasColumnName("PasswordResetTokenHashIterations").IsOptional();
-            users.Property(u => u.PasswordResetToken.ExpiryDate).HasColumnName("PasswordResetTokenExpiryDate");
+            users.Property(u => u.PasswordResetToken.Salt).HasMaxLength(20);
+            users.Property(u => u.PasswordResetToken.Hash).HasMaxLength(20);
 
             var userEvents = modelBuilder.Entity<Security.UserEvent>().ToTable("UserEvents", "Security").HasKey(e => e.Id);
         }

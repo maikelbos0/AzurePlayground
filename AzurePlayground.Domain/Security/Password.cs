@@ -8,9 +8,9 @@ namespace AzurePlayground.Domain.Security {
 
         public static Password None => new Password();
 
-        public byte[] Salt { get; private set; } = new byte[0];
-        public byte[] Hash { get; private set; } = new byte[0];
-        public int HashIterations { get; private set; }
+        public byte[] Salt { get; private set; }
+        public byte[] Hash { get; private set; }
+        public int? HashIterations { get; private set; }
         public DateTime? ExpiryDate { get; private set; }
 
         private Password() {
@@ -36,8 +36,8 @@ namespace AzurePlayground.Domain.Security {
             }
         }
 
-        protected byte[] GetHash(string password) {
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, Salt, HashIterations)) {
+        private byte[] GetHash(string password) {
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, Salt, HashIterations.Value)) {
 
                 // Return 20 bytes because after that it repeats
                 return pbkdf2.GetBytes(20);
@@ -45,14 +45,24 @@ namespace AzurePlayground.Domain.Security {
         }
 
         protected override IEnumerable<object> GetEqualityComponents() {
-            yield return Salt.Length;
-            foreach (var s in Salt) {
-                yield return s;
+            if (Salt == null) {
+                yield return 0;
+            }
+            else {
+                yield return Salt.Length;
+                foreach (var s in Salt) {
+                    yield return s;
+                }
             }
 
-            yield return Hash.Length;
-            foreach (var s in Hash) {
-                yield return s;
+            if (Hash == null) {
+                yield return 0;
+            }
+            else {
+                yield return Hash.Length;
+                foreach (var s in Hash) {
+                    yield return s;
+                }
             }
 
             yield return HashIterations;
