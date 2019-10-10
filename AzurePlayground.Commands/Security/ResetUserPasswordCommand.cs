@@ -27,16 +27,7 @@ namespace AzurePlayground.Commands.Security {
                     throw new InvalidOperationException($"Attempted to reset password for {(user == null ? "non-existent" : "inactive")} user '{parameter.Email}'");
                 }
 
-                if (parameter.PasswordResetToken == null) {
-                    // Since the token comes in a url, the user normally is not responsible for the error and we should not use the command result for feedback
-                    throw new InvalidOperationException($"Attempted to reset password with missing token for user '{parameter.Email}'");
-                }
-
-                if (user.PasswordResetToken == TemporaryPassword.None) {
-                    result.AddError(p => p.PasswordResetToken, "The password reset link has expired; please request a new one");
-                }
-
-                if (user.PasswordResetToken.ExpiryDate < DateTime.UtcNow) {
+                if (!user.PasswordResetToken.Verify(parameter.PasswordResetToken)) {
                     result.AddError(p => p.PasswordResetToken, "The password reset link has expired; please request a new one");
                 }
 
@@ -45,11 +36,6 @@ namespace AzurePlayground.Commands.Security {
                 }
 
                 if (result.Success) {
-                    if (!user.PasswordResetToken.Verify(parameter.PasswordResetToken)) {
-                        // Since the token comes in a url, the user normally is not responsible for the error and we should not use the command result for feedback
-                        throw new InvalidOperationException($"Attempted to reset password with incorrect token for user '{parameter.Email}'");
-                    }
-
                     user.PasswordResetToken = TemporaryPassword.None;
                     user.Password = new Password(parameter.NewPassword);
 

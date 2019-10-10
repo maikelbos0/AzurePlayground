@@ -48,7 +48,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 Email = "test@test.com",
                 Password = new Password("test"),
                 IsActive = true,
-                PasswordResetToken = new TemporaryPassword("test", new DateTime())
+                PasswordResetToken = new TemporaryPassword("test")
             };
             var model = new UserLogIn() {
                 Email = "test@test.com",

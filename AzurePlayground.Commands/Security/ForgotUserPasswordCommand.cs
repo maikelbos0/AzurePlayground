@@ -11,8 +11,7 @@ namespace AzurePlayground.Commands.Security {
     [Injectable]
     public class ForgotUserPasswordCommand : BaseUserCommand, IForgotUserPasswordCommand {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
-        private readonly int _expirationInSeconds = 3600;
-
+        
         public ForgotUserPasswordCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
             _playgroundContextFactory = playgroundContextFactory;
         }
@@ -26,7 +25,7 @@ namespace AzurePlayground.Commands.Security {
                 if (user != null && user.IsActive) {
                     var token = GetNewPasswordResetToken();
 
-                    user.PasswordResetToken = new TemporaryPassword(token, DateTime.UtcNow.AddSeconds(_expirationInSeconds));
+                    user.PasswordResetToken = new TemporaryPassword(token);
 
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,

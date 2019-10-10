@@ -64,9 +64,9 @@ namespace AzurePlayground.Domain.Tests.Security {
         private Password CreatePassword(byte[] salt, byte[] hash, int iterations) {
             var password = (Password)Activator.CreateInstance(typeof(Password), true);
 
-            typeof(Password).GetProperty("Salt").SetValue(password, salt);
-            typeof(Password).GetProperty("Hash").SetValue(password, hash);
-            typeof(Password).GetProperty("HashIterations").SetValue(password, iterations);
+            typeof(Password).GetProperty(nameof(Password.Salt)).SetValue(password, salt);
+            typeof(Password).GetProperty(nameof(Password.Hash)).SetValue(password, hash);
+            typeof(Password).GetProperty(nameof(Password.HashIterations)).SetValue(password, iterations);
 
             return password;
         }

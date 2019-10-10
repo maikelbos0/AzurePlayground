@@ -61,7 +61,7 @@ namespace AzurePlayground.Domain.Security {
             yield return HashIterations;
         }
 
-        public bool Verify(string password) {
+        public virtual bool Verify(string password) {
             if (Hash == null || Hash.Length == 0) {
                 return false;
             }
