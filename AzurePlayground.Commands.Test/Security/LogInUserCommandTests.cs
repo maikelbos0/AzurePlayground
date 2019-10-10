@@ -11,9 +11,6 @@ using System.Linq;
 namespace AzurePlayground.Commands.Test.Security {
     [TestClass]
     public class LogInUserCommandTests {
-        private readonly byte[] _passwordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 };
-        private readonly int _passwordHashIterations = 1000;
-        private readonly byte[] _passwordSalt = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
@@ -27,9 +24,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true
             };
             var model = new UserLogIn() {
@@ -51,9 +46,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true,
                 PasswordResetToken = new TemporaryPassword("test", new DateTime())
             };
@@ -89,9 +82,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt
+                Password = new Password("test")
             };
             var model = new UserLogIn() {
                 Email = "test@test.com",
@@ -114,9 +105,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true
             };
             var model = new UserLogIn() {

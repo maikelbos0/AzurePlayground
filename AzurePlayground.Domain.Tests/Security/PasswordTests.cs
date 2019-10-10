@@ -47,6 +47,20 @@ namespace AzurePlayground.Domain.Tests.Security {
             pass1.Should().NotBe(pass2);
         }
 
+        [TestMethod]
+        public void Password_Verify_Correct_Password_Returns_True() {
+            var pass = new Password("theRightPass1");
+
+            pass.Verify("theRightPass1").Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void Password_Verify_Wrong_Password_Returns_False() {
+            var pass = new Password("theRightPass1");
+
+            pass.Verify("theWrongPass1").Should().BeFalse();
+        }
+
         private Password CreatePassword(byte[] salt, byte[] hash, int iterations) {
             var password = (Password)Activator.CreateInstance(typeof(Password), true);
 

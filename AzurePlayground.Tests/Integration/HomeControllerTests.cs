@@ -108,9 +108,7 @@ namespace AzurePlayground.Tests.Integration {
             // Set up
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
-                PasswordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 },
-                PasswordHashIterations = 1000,
-                PasswordSalt = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                Password = new Password("test"),
                 IsActive = true
             });
             _authenticationProvider.Identity = "test@test.com";
@@ -144,9 +142,7 @@ namespace AzurePlayground.Tests.Integration {
             // Set up
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
-                PasswordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 },
-                PasswordHashIterations = 1000,
-                PasswordSalt = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                Password = new Password("test"),
                 IsActive = true
             });
 

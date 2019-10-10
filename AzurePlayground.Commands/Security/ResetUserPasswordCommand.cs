@@ -45,17 +45,13 @@ namespace AzurePlayground.Commands.Security {
                 }
 
                 if (result.Success) {
-                    // TODO: move password validation to Password class
-                    if (!user.PasswordResetToken.Hash.SequenceEqual(GetPasswordHash(parameter.PasswordResetToken, user.PasswordResetToken.Salt, user.PasswordResetToken.HashIterations.Value))) {
+                    if (!user.PasswordResetToken.Verify(parameter.PasswordResetToken)) {
                         // Since the token comes in a url, the user normally is not responsible for the error and we should not use the command result for feedback
                         throw new InvalidOperationException($"Attempted to reset password with incorrect token for user '{parameter.Email}'");
                     }
 
                     user.PasswordResetToken = TemporaryPassword.None;
-
-                    user.PasswordSalt = GetNewPasswordSalt();
-                    user.PasswordHashIterations = _passwordHashIterations;
-                    user.PasswordHash = GetPasswordHash(parameter.NewPassword, user.PasswordSalt, user.PasswordHashIterations);
+                    user.Password = new Password(parameter.NewPassword);
 
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,

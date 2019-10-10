@@ -11,7 +11,6 @@ namespace AzurePlayground.Commands.Security {
         private readonly IMailClient _mailClient;
         private readonly IAppSettings _appSettings;
         private readonly char[] _tokenCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
-        protected readonly int _passwordHashIterations = 1000;
 
         public BaseUserCommand(IMailClient mailClient, IAppSettings appSettings) {
             _mailClient = mailClient;
@@ -46,16 +45,6 @@ namespace AzurePlayground.Commands.Security {
             return new Random().Next(10000, int.MaxValue);
         }
 
-        protected byte[] GetNewPasswordSalt() {
-            using (var rng = new RNGCryptoServiceProvider()) {
-                byte[] salt = new byte[20];
-
-                rng.GetBytes(salt);
-
-                return salt;
-            }
-        }
-
         protected string GetNewPasswordResetToken() {
             using (var rng = new RNGCryptoServiceProvider()) {
                 // Establish a maximum based on the amount of characters to prevent bias
@@ -74,14 +63,6 @@ namespace AzurePlayground.Commands.Security {
                 }
 
                 return tokenBuilder.ToString();
-            }
-        }
-
-        protected byte[] GetPasswordHash(string password, byte[] salt, int iterations) {
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations)) {
-
-                // Return 20 bytes because after that it repeats
-                return pbkdf2.GetBytes(20);
             }
         }
     }

@@ -9,9 +9,6 @@ using System.Collections.Generic;
 namespace AzurePlayground.Commands.Test.Security {
     [TestClass]
     public class ForgotUserPasswordCommandTests {
-        private readonly byte[] _passwordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 };
-        private readonly int _passwordHashIterations = 1000;
-        private readonly byte[] _passwordSalt = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
@@ -29,9 +26,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true
             });
 
@@ -47,9 +42,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ForgotUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true
             };
             var model = new UserForgotPassword() {
@@ -82,9 +75,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ForgotUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = false
             };
             var model = new UserForgotPassword() {

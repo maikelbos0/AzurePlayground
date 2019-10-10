@@ -7,14 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace AzurePlayground.Commands.Test.Security {
     [TestClass]
     public class ChangeUserPasswordCommandTests {
-        private readonly byte[] _passwordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 };
-        private readonly int _passwordHashIterations = 1000;
-        private readonly byte[] _passwordSalt = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
@@ -28,9 +24,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ChangeUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true
             };
             var model = new UserChangePassword() {
@@ -47,10 +41,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.PasswordChanged.Id);
-
-            using (var pbkdf2 = new Rfc2898DeriveBytes("test2", user.PasswordSalt, user.PasswordHashIterations)) {
-                user.PasswordHash.Should().BeEquivalentTo(pbkdf2.GetBytes(20), options => options.WithStrictOrdering());
-            }
+            user.Password.Verify("test2").Should().BeTrue();
         }
 
         [TestMethod]
@@ -75,9 +66,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ChangeUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = false
             };
             var model = new UserChangePassword() {
@@ -94,8 +83,7 @@ namespace AzurePlayground.Commands.Test.Security {
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change password for inactive user 'test@test.com'");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.Password.Verify("test").Should().BeTrue();
         }
 
         [TestMethod]
@@ -103,9 +91,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ChangeUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true
             };
             var model = new UserChangePassword() {
@@ -124,8 +110,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Message.Should().Be("Invalid password");
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordChange.Id);
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.Password.Verify("test").Should().BeTrue();
         }
 
         [TestMethod]
@@ -133,9 +118,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ChangeUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true
             };
             var model = new UserChangePassword() {
@@ -154,8 +137,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Message.Should().Be("New password and confirm new password must match");
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordChange.Id);
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.Password.Verify("test").Should().BeTrue();
         }
     }
 }

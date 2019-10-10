@@ -7,14 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace AzurePlayground.Commands.Test.Security {
     [TestClass]
     public class ResetUserPasswordCommandTests {
-        private readonly byte[] _passwordHash = new byte[] { 248, 212, 57, 28, 32, 158, 38, 248, 82, 175, 53, 217, 161, 238, 108, 226, 48, 123, 118, 173 };
-        private readonly int _passwordHashIterations = 1000;
-        private readonly byte[] _passwordSalt = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
@@ -28,9 +24,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true,
                 PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(3600))
             };
@@ -48,10 +42,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.PasswordReset.Id);
-
-            using (var pbkdf2 = new Rfc2898DeriveBytes("test2", user.PasswordSalt, user.PasswordHashIterations)) {
-                user.PasswordHash.Should().BeEquivalentTo(pbkdf2.GetBytes(20), options => options.WithStrictOrdering());
-            }
+            user.Password.Verify("test2").Should().BeTrue();
         }
 
         [TestMethod]
@@ -59,9 +50,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true,
                 PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(3600))
             };
@@ -79,8 +68,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmNewPassword");
             result.Errors[0].Message.Should().Be("New password and confirm new password must match");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
         }
@@ -90,9 +78,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true,
                 PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(-60))
             };
@@ -110,8 +96,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
             result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
         }
@@ -121,9 +106,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true
             };
             var model = new UserPasswordReset() {
@@ -140,8 +123,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
             result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
         }
@@ -151,9 +133,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = false
             };
             var model = new UserPasswordReset() {
@@ -170,8 +150,7 @@ namespace AzurePlayground.Commands.Test.Security {
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for inactive user 'test@test.com'");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.Password.Verify("test").Should().BeTrue();
         }
 
         [TestMethod]
@@ -196,9 +175,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true,
                 PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(3600))
             };
@@ -216,8 +193,7 @@ namespace AzurePlayground.Commands.Test.Security {
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password with missing token for user 'test@test.com'");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.Password.Verify("test").Should().BeTrue();
         }
 
         [TestMethod]
@@ -225,9 +201,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                PasswordHash = _passwordHash,
-                PasswordHashIterations = _passwordHashIterations,
-                PasswordSalt = _passwordSalt,
+                Password = new Password("test"),
                 IsActive = true,
                 PasswordResetToken = new TemporaryPassword("test", DateTime.UtcNow.AddSeconds(3600))
             };
@@ -245,8 +219,7 @@ namespace AzurePlayground.Commands.Test.Security {
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password with incorrect token for user 'test@test.com'");
-            user.PasswordHash.Should().BeEquivalentTo(_passwordHash, options => options.WithStrictOrdering());
-            user.PasswordSalt.Should().BeEquivalentTo(_passwordSalt, options => options.WithStrictOrdering());
+            user.Password.Verify("test").Should().BeTrue();
         }
     }
 }

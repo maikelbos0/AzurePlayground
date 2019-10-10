@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace AzurePlayground.Domain.Security {
@@ -58,6 +59,14 @@ namespace AzurePlayground.Domain.Security {
             }
 
             yield return HashIterations;
+        }
+
+        public bool Verify(string password) {
+            if (Hash == null || Hash.Length == 0) {
+                return false;
+            }
+            
+            return Hash.SequenceEqual(GetHash(password));
         }
     }
 }

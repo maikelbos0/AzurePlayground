@@ -20,12 +20,9 @@ namespace AzurePlayground.Commands.Security {
             var result = new CommandResult<UserRegistration>();
             var user = new User() {
                 Email = parameter.Email,
-                PasswordSalt = GetNewPasswordSalt(),
-                PasswordHashIterations = _passwordHashIterations,
+                Password = new Password(parameter.Password),
                 ActivationCode = GetNewActivationCode()
             };
-
-            user.PasswordHash = GetPasswordHash(parameter.Password, user.PasswordSalt, user.PasswordHashIterations);
 
             user.UserEvents.Add(new UserEvent() {
                 Date = DateTime.UtcNow,

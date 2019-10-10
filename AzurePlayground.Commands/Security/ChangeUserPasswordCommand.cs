@@ -31,14 +31,12 @@ namespace AzurePlayground.Commands.Security {
                     result.AddError(p => p.ConfirmNewPassword, "New password and confirm new password must match");
                 }
 
-                if (!user.PasswordHash.SequenceEqual(GetPasswordHash(parameter.CurrentPassword, user.PasswordSalt, user.PasswordHashIterations))) {
+                if (!user.Password.Verify(parameter.CurrentPassword)) {
                     result.AddError(p => p.CurrentPassword, "Invalid password");
                 }
 
                 if (result.Success) {
-                    user.PasswordSalt = GetNewPasswordSalt();
-                    user.PasswordHashIterations = _passwordHashIterations;
-                    user.PasswordHash = GetPasswordHash(parameter.NewPassword, user.PasswordSalt, user.PasswordHashIterations);
+                    user.Password = new Password(parameter.NewPassword);
 
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
