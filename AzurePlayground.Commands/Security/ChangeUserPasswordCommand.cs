@@ -40,13 +40,13 @@ namespace AzurePlayground.Commands.Security {
 
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType_Id = UserEventType.PasswordChanged.Id
+                        Type = UserEventType.PasswordChanged
                     });
                 }
                 else {
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType_Id = UserEventType.FailedPasswordChange.Id
+                        Type = UserEventType.FailedPasswordChange
                     });
                 }
 

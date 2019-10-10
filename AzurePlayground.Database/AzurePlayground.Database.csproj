@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReferenceEntities\BaseReferenceEntity.cs" />
     <Compile Include="IPlaygroundContext.cs" />
     <Compile Include="IPlaygroundContextFactory.cs" />
     <Compile Include="Migrations\201908271811511_Users.cs" />
@@ -102,6 +103,8 @@
     <Compile Include="PlaygroundContext.cs" />
     <Compile Include="PlaygroundContextFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReferenceEntities\ReferenceEntityExtensions.cs" />
+    <Compile Include="ReferenceEntities\UserEventTypeEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AzurePlayground.Domain\AzurePlayground.Domain.csproj">

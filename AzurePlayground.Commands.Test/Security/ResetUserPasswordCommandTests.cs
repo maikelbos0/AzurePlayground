@@ -41,7 +41,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.PasswordReset.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.PasswordReset);
             user.Password.Verify("test2").Should().BeTrue();
         }
 
@@ -70,7 +70,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Message.Should().Be("New password and confirm new password must match");
             user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedPasswordReset);
         }
 
         [TestMethod]
@@ -99,7 +99,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
             user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedPasswordReset);
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
             user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedPasswordReset);
         }
 
         [TestMethod]
@@ -154,7 +154,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
             user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordReset.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedPasswordReset);
         }
 
         [TestMethod]

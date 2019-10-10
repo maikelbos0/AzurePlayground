@@ -40,7 +40,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.PasswordChanged.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.PasswordChanged);
             user.Password.Verify("test2").Should().BeTrue();
         }
 
@@ -109,7 +109,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Expression.ToString().Should().Be("p => p.CurrentPassword");
             result.Errors[0].Message.Should().Be("Invalid password");
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordChange.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedPasswordChange);
             user.Password.Verify("test").Should().BeTrue();
         }
 
@@ -136,7 +136,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmNewPassword");
             result.Errors[0].Message.Should().Be("New password and confirm new password must match");
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedPasswordChange.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedPasswordChange);
             user.Password.Verify("test").Should().BeTrue();
         }
     }

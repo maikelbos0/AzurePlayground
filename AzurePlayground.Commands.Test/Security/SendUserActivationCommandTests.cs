@@ -56,7 +56,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Success.Should().BeTrue();
             user.ActivationCode.Should().NotBe(999999);
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.ActivationCodeSent.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.ActivationCodeSent);
         }
 
         [TestMethod]

@@ -1,4 +1,5 @@
 ﻿using AzurePlayground.Database.Migrations;
+using AzurePlayground.Database.ReferenceEntities;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -25,14 +26,12 @@ namespace AzurePlayground.Database {
 
         public IDbSet<Security.User> Users { get; set; }
 
-        public IDbSet<Security.UserEventType> UserEventTypes { get; set; }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
-            var userEventTypes = modelBuilder.Entity<Security.UserEventType>().ToTable("UserEventTypes", "Security").HasKey(t => t.Id);
+            var userEventTypes = modelBuilder.Entity<UserEventTypeEntity>().ToTable("UserEventTypes", "Security").HasKey(t => t.Id);
 
-            userEventTypes.HasMany(t => t.UserEvents).WithRequired(e => e.UserEventType).HasForeignKey(e => e.UserEventType_Id);
+            userEventTypes.HasMany(t => t.UserEvents).WithRequired().HasForeignKey(e => e.Type);
             userEventTypes.Property(t => t.Name).IsRequired();
 
             var users = modelBuilder.Entity<Security.User>().ToTable("Users", "Security").HasKey(u => u.Id);
@@ -47,6 +46,8 @@ namespace AzurePlayground.Database {
             users.Property(u => u.PasswordResetToken.Hash).HasMaxLength(20);
 
             var userEvents = modelBuilder.Entity<Security.UserEvent>().ToTable("UserEvents", "Security").HasKey(e => e.Id);
+
+            userEvents.Property(e => e.Type).HasColumnName("UserEventType_Id");
         }
 
         public void FixEfProviderServicesProblem() {

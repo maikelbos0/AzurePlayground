@@ -1,5 +1,6 @@
 namespace AzurePlayground.Database.Migrations {
-    using Security = AzurePlayground.Domain.Security;
+    using AzurePlayground.Database.ReferenceEntities;
+    using AzurePlayground.Domain.Security;
     using System.Data.Entity.Migrations;
 
     public sealed class Configuration : DbMigrationsConfiguration<PlaygroundContext> {
@@ -8,8 +9,8 @@ namespace AzurePlayground.Database.Migrations {
         }
 
         private void SeedUserEventTypes(PlaygroundContext context) {
-            foreach (var entity in Security.UserEventType.GetValues()) {
-                context.UserEventTypes.AddOrUpdate(entity);
+            foreach (var entity in ReferenceEntityExtensions.GetValues<UserEventType, UserEventTypeEntity>()) {
+                context.Set<UserEventTypeEntity>().AddOrUpdate(entity);
             }
 
             context.SaveChanges();

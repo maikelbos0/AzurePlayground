@@ -27,7 +27,7 @@ namespace AzurePlayground.Commands.Security {
                     user.ActivationCode = GetNewActivationCode();
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType_Id = UserEventType.ActivationCodeSent.Id
+                        Type = UserEventType.ActivationCodeSent
                     });
 
                     context.SaveChanges();

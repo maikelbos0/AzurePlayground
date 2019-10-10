@@ -31,7 +31,7 @@ namespace AzurePlayground.Commands.Test.Security {
             user.IsActive.Should().BeTrue();
             user.ActivationCode.Should().BeNull();
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.Activated.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.Activated);
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
             result.Errors[0].Message.Should().Be("This activation code is invalid");
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedActivation.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedActivation);
         }
 
         [TestMethod]
@@ -102,7 +102,7 @@ namespace AzurePlayground.Commands.Test.Security {
             user.IsActive.Should().BeFalse();
             user.ActivationCode.Should().Be(999999);
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().UserEventType_Id.Should().Be(UserEventType.FailedActivation.Id);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedActivation);
         }
     }
 }

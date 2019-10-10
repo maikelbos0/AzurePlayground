@@ -22,7 +22,7 @@ namespace AzurePlayground.Commands.Security {
                 if (user != null && user.IsActive) {
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType_Id = UserEventType.LoggedOut.Id
+                        Type = UserEventType.LoggedOut
                     });
 
                     context.SaveChanges();

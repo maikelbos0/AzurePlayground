@@ -31,7 +31,7 @@ namespace AzurePlayground.Commands.Security {
 
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType_Id = UserEventType.LoggedIn.Id
+                        Type = UserEventType.LoggedIn
                     });
                 }
                 else {
@@ -40,7 +40,7 @@ namespace AzurePlayground.Commands.Security {
                     if (user != null) {
                         user.UserEvents.Add(new UserEvent() {
                             Date = DateTime.UtcNow,
-                            UserEventType_Id = UserEventType.FailedLogIn.Id
+                            Type = UserEventType.FailedLogIn
                         });
                     }
                 }

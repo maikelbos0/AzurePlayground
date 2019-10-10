@@ -30,7 +30,7 @@ namespace AzurePlayground.Commands.Security {
                     if (user != null) {
                         user.UserEvents.Add(new UserEvent() {
                             Date = DateTime.UtcNow,
-                            UserEventType_Id = UserEventType.FailedActivation.Id
+                            Type = UserEventType.FailedActivation
                         });
                     }
                 }
@@ -39,7 +39,7 @@ namespace AzurePlayground.Commands.Security {
                     user.ActivationCode = null;
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
-                        UserEventType_Id = UserEventType.Activated.Id
+                        Type = UserEventType.Activated
                     });
                 }
 

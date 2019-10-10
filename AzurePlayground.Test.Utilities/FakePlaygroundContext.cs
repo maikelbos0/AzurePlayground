@@ -5,7 +5,6 @@ using System.Data.Entity;
 namespace AzurePlayground.Test.Utilities {
     public class FakePlaygroundContext : IPlaygroundContext {
         public IDbSet<Security.User> Users { get; set; } = new FakeDbSet<Security.User>();
-        public IDbSet<Security.UserEventType> UserEventTypes { get; set; } = new FakeDbSet<Security.UserEventType>();
 
         public void Dispose() {
             SaveChanges();
