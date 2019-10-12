@@ -31,6 +31,7 @@
                         <div class="dropdown-menu site-dropdown-menu" aria-labelledby="navbar-login-dropdown">
                             @Html.ActionLink("Logged in", "LoggedIn", "Home", null, new { @class = "dropdown-item site-dropdown-item" })
                             @Html.ActionLink("Change password", "ChangePassword", "Home", null, new { @class = "dropdown-item site-dropdown-item" })
+                            @Html.ActionLink("Deactivate account", "Deactivate", "Home", null, new { @class = "dropdown-item site-dropdown-item" })
                             <div class="dropdown-divider site-dropdown-divider"></div>
 
                             @using (Html.BeginForm("LogOut", "Home", FormMethod.Post, new { @class = "html-only d-inline" })) {

@@ -138,7 +138,7 @@ namespace AzurePlayground.Tests.Integration {
         }
 
         [TestMethod]
-        public void HomeController_FailedLogIn_To_LogIn_Succeeds() {
+        public void HomeController_FailedLogIn_To_LogIn_To_Deactivate_Succeeds() {
             // Set up
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
@@ -163,6 +163,15 @@ namespace AzurePlayground.Tests.Integration {
 
             logInResult.Should().BeOfType<RedirectToRouteResult>();
             _authenticationProvider.Identity.Should().Be("test@test.com");
+
+            // Deactivate
+            var deactivateResult = GetController().Deactivate(new UserDeactivation() {
+                Password = "test"
+            });
+
+            deactivateResult.Should().BeOfType<RedirectToRouteResult>();
+            _authenticationProvider.Identity.Should().BeNull();
+            _playgroundContextFactory.Context.Users.Single().IsActive.Should().BeFalse();
         }
     }
 }

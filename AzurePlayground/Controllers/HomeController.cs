@@ -16,6 +16,7 @@ namespace AzurePlayground.Controllers {
         private readonly IChangeUserPasswordCommand _changeUserPasswordCommand;
         private readonly IForgotUserPasswordCommand _requestUserPasswordResetCommand;
         private readonly IResetUserPasswordCommand _resetUserPasswordCommand;
+        private readonly IDeactivateUserCommand _deactivateUserCommand;
 
         public HomeController(IAuthenticationProvider authenticationProvider,
             IRegisterUserCommand registerUserCommand, 
@@ -25,7 +26,8 @@ namespace AzurePlayground.Controllers {
             ILogOutUserCommand logOutUserCommand,
             IChangeUserPasswordCommand changeUserPasswordCommand,
             IForgotUserPasswordCommand requestUserPasswordResetCommand,
-            IResetUserPasswordCommand resetUserPasswordCommand) {
+            IResetUserPasswordCommand resetUserPasswordCommand,
+            IDeactivateUserCommand deactivateUserCommand) {
 
             _authenticationProvider = authenticationProvider;
             _registerUserCommand = registerUserCommand;
@@ -36,6 +38,7 @@ namespace AzurePlayground.Controllers {
             _changeUserPasswordCommand = changeUserPasswordCommand;
             _requestUserPasswordResetCommand = requestUserPasswordResetCommand;
             _resetUserPasswordCommand = resetUserPasswordCommand;
+            _deactivateUserCommand = deactivateUserCommand;
         }
 
         [Route("~/")]
@@ -161,12 +164,14 @@ namespace AzurePlayground.Controllers {
 
         [Route("ChangePassword")]
         [HttpGet]
+        [Authorize]
         public ActionResult ChangePassword() {
             return View(new UserChangePassword());
         }
 
         [Route("ChangePassword")]
         [HttpPost]
+        [Authorize]
         public ActionResult ChangePassword(UserChangePassword model) {
             if (ModelState.IsValid) {
                 model.Email = _authenticationProvider.GetIdentity();
@@ -223,6 +228,32 @@ namespace AzurePlayground.Controllers {
 
             if (ModelState.IsValid) {
                 return View("PasswordReset");
+            }
+            else {
+                return View(model);
+            }
+        }
+
+        [Route("Deactivate")]
+        [HttpGet]
+        [Authorize]
+        public ActionResult Deactivate() {
+            return View(new UserDeactivation());
+        }
+
+        [Route("Deactivate")]
+        [HttpPost]
+        [Authorize]
+        public ActionResult Deactivate(UserDeactivation model) {
+            if (ModelState.IsValid) {
+                model.Email = _authenticationProvider.GetIdentity();
+
+                ModelState.Merge(_deactivateUserCommand.Execute(model));
+            }
+
+            if (ModelState.IsValid) {
+                _authenticationProvider.SignOut();
+                return RedirectToAction("Index");
             }
             else {
                 return View(model);

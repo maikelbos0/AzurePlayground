@@ -21,13 +21,23 @@ namespace AzurePlayground.Commands.Security {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
                 if (user != null && user.IsActive) {
-                    user.IsActive = false;
-                    user.UserEvents.Add(new UserEvent() {
-                        Date = DateTime.UtcNow,
-                        Type = UserEventType.Deactivated
-                    });
+                    if (!user.Password.Verify(parameter.Password)) {
+                        result.AddError(p => p.Password, "Invalid password");
 
-                    context.SaveChanges();
+                        user.UserEvents.Add(new UserEvent() {
+                            Date = DateTime.UtcNow,
+                            Type = UserEventType.FailedDeactivation
+                        });
+                    }
+                    else {
+                        user.IsActive = false;
+                        user.UserEvents.Add(new UserEvent() {
+                            Date = DateTime.UtcNow,
+                            Type = UserEventType.Deactivated
+                        });
+
+                        context.SaveChanges();
+                    }
                 }
                 else {
                     // Since there is no user input, the user is not responsible for errors and we should not use the command result for feedback

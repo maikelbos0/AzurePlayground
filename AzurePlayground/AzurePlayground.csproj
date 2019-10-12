@@ -253,6 +253,7 @@
     <Content Include="Views\Home\PasswordResetSent.cshtml" />
     <Content Include="Views\Home\PasswordReset.cshtml" />
     <Content Include="Views\Home\ResetPassword.cshtml" />
+    <Content Include="Views\Home\Deactivate.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
