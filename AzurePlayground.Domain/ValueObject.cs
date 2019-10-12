@@ -3,7 +3,11 @@ using System.Linq;
 
 namespace AzurePlayground.Domain {
     public abstract class ValueObject<T> where T : ValueObject<T> {
-        // Care must be made to only return only value objects as equality components to prevent it using only reference equality
+        /// <summary>
+        /// An enumerable of items to compare the value object to another
+        /// </summary>
+        /// <returns>An enumerable of the items that must be equal</returns>
+        /// <remarks>Care must be made to only return only value objects as equality components to prevent it using only reference equality</remarks>
         protected abstract IEnumerable<object> GetEqualityComponents();
 
         public override bool Equals(object obj) {

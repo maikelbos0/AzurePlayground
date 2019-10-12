@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace AzurePlayground.Domain.Security {
-    public class User {
-        public int Id { get; set; }
+    public class User : Entity {
         public string Email { get; set; }
         public Password Password { get; set; }
         public int? ActivationCode { get; set; }
