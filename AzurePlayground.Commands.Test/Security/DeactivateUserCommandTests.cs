@@ -39,25 +39,17 @@ namespace AzurePlayground.Commands.Test.Security {
             var model = new UserDeactivation() {
                 Email = "test@test.com"
             };
+
             Action commandAction = () => {
                 var result = command.Execute(model);
             };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                IsActive = false
-            });
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate out non-existent user 'test@test.com'");
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate non-existent user 'test@test.com'");
         }
 
         [TestMethod]
         public void DeactivateUserCommand_Throws_Exception_For_Inactive_User() {
             var command = new DeactivateUserCommand(_playgroundContextFactory);
-            var user = new User() {
-                Email = "test@test.com",
-                IsActive = true
-            };
             var model = new UserDeactivation() {
                 Email = "test@test.com"
             };
@@ -71,7 +63,7 @@ namespace AzurePlayground.Commands.Test.Security {
                 IsActive = false
             });
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate out inactive user 'test@test.com'");
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
         }
     }
 }
