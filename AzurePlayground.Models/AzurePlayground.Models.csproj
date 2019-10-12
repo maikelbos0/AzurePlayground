@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\UserChangePassword.cs" />
+    <Compile Include="Security\UserDeactivation.cs" />
     <Compile Include="Security\UserPasswordReset.cs" />
     <Compile Include="Security\UserForgotPassword.cs" />
     <Compile Include="Security\UserSendActivation.cs" />

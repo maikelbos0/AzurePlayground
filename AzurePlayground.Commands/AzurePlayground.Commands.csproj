@@ -55,8 +55,10 @@
     <Compile Include="Security\ActivateUserCommand.cs" />
     <Compile Include="Security\BaseUserCommand.cs" />
     <Compile Include="Security\ChangeUserPasswordCommand.cs" />
+    <Compile Include="Security\DeactivateUserCommand.cs" />
     <Compile Include="Security\IChangeUserPasswordCommand.cs" />
     <Compile Include="Security\IActivateUserCommand.cs" />
+    <Compile Include="Security\IDeactivateUserCommand.cs" />
     <Compile Include="Security\ILogOutUserCommand.cs" />
     <Compile Include="Security\IRegisterUserCommand.cs" />
     <Compile Include="Security\IForgotUserPasswordCommand.cs" />

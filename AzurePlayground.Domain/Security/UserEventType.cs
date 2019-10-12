@@ -11,6 +11,7 @@
         FailedPasswordChange = 9,
         PasswordResetRequested = 10,
         PasswordReset = 11,
-        FailedPasswordReset = 12
+        FailedPasswordReset = 12,
+        Deactivated = 13
     }
 }
