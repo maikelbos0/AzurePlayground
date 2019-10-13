@@ -48,61 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201910131335270_Users-UserStatus.cs" />
-    <Compile Include="Migrations\201910131335270_Users-UserStatus.Designer.cs">
-      <DependentUpon>201910131335270_Users-UserStatus.cs</DependentUpon>
+    <Compile Include="Migrations\201910131342367_Security.cs" />
+    <Compile Include="Migrations\201910131342367_Security.Designer.cs">
+      <DependentUpon>201910131342367_Security.cs</DependentUpon>
     </Compile>
     <Compile Include="ReferenceEntities\BaseReferenceEntity.cs" />
     <Compile Include="IPlaygroundContext.cs" />
     <Compile Include="IPlaygroundContextFactory.cs" />
-    <Compile Include="Migrations\201908271811511_Users.cs" />
-    <Compile Include="Migrations\201908271811511_Users.Designer.cs">
-      <DependentUpon>201908271811511_Users.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908281820577_users-name.cs" />
-    <Compile Include="Migrations\201908281820577_users-name.Designer.cs">
-      <DependentUpon>201908281820577_users-name.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909011042132_Users-Login.cs" />
-    <Compile Include="Migrations\201909011042132_Users-Login.Designer.cs">
-      <DependentUpon>201909011042132_Users-Login.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909011210150_Users-RemoveName.cs" />
-    <Compile Include="Migrations\201909011210150_Users-RemoveName.Designer.cs">
-      <DependentUpon>201909011210150_Users-RemoveName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909061654502_Users-Activationcode.cs" />
-    <Compile Include="Migrations\201909061654502_Users-Activationcode.Designer.cs">
-      <DependentUpon>201909061654502_Users-Activationcode.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909071811254_Users-IsActive.cs" />
-    <Compile Include="Migrations\201909071811254_Users-IsActive.Designer.cs">
-      <DependentUpon>201909071811254_Users-IsActive.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909211418281_Users-PasswordReset.cs" />
-    <Compile Include="Migrations\201909211418281_Users-PasswordReset.Designer.cs">
-      <DependentUpon>201909211418281_Users-PasswordReset.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909221256039_UserEventType-Byte.cs" />
-    <Compile Include="Migrations\201909221256039_UserEventType-Byte.Designer.cs">
-      <DependentUpon>201909221256039_UserEventType-Byte.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910021828289_UserEventTypes.cs" />
-    <Compile Include="Migrations\201910021828289_UserEventTypes.Designer.cs">
-      <DependentUpon>201910021828289_UserEventTypes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910031159467_FluentMapping-1.cs" />
-    <Compile Include="Migrations\201910031159467_FluentMapping-1.Designer.cs">
-      <DependentUpon>201910031159467_FluentMapping-1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910081536373_PasswordResetToken-FieldNames.cs" />
-    <Compile Include="Migrations\201910081536373_PasswordResetToken-FieldNames.Designer.cs">
-      <DependentUpon>201910081536373_PasswordResetToken-FieldNames.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910090953575_Password-FieldNames.cs" />
-    <Compile Include="Migrations\201910090953575_Password-FieldNames.Designer.cs">
-      <DependentUpon>201910090953575_Password-FieldNames.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PlaygroundContext.cs" />
     <Compile Include="PlaygroundContextFactory.cs" />
@@ -126,44 +78,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201908271811511_Users.resx">
-      <DependentUpon>201908271811511_Users.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908281820577_users-name.resx">
-      <DependentUpon>201908281820577_users-name.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909011042132_Users-Login.resx">
-      <DependentUpon>201909011042132_Users-Login.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909011210150_Users-RemoveName.resx">
-      <DependentUpon>201909011210150_Users-RemoveName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909061654502_Users-Activationcode.resx">
-      <DependentUpon>201909061654502_Users-Activationcode.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909071811254_Users-IsActive.resx">
-      <DependentUpon>201909071811254_Users-IsActive.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909211418281_Users-PasswordReset.resx">
-      <DependentUpon>201909211418281_Users-PasswordReset.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909221256039_UserEventType-Byte.resx">
-      <DependentUpon>201909221256039_UserEventType-Byte.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910021828289_UserEventTypes.resx">
-      <DependentUpon>201910021828289_UserEventTypes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910031159467_FluentMapping-1.resx">
-      <DependentUpon>201910031159467_FluentMapping-1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910081536373_PasswordResetToken-FieldNames.resx">
-      <DependentUpon>201910081536373_PasswordResetToken-FieldNames.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910090953575_Password-FieldNames.resx">
-      <DependentUpon>201910090953575_Password-FieldNames.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910131335270_Users-UserStatus.resx">
-      <DependentUpon>201910131335270_Users-UserStatus.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910131342367_Security.resx">
+      <DependentUpon>201910131342367_Security.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

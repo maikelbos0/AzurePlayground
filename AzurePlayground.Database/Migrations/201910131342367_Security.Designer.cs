@@ -7,13 +7,13 @@ namespace AzurePlayground.Database.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class PasswordFieldNames : IMigrationMetadata
+    public sealed partial class Security : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(PasswordFieldNames));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Security));
         
         string IMigrationMetadata.Id
         {
-            get { return "201910090953575_Password-FieldNames"; }
+            get { return "201910131342367_Security"; }
         }
         
         string IMigrationMetadata.Source
