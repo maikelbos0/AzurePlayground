@@ -50,27 +50,27 @@
   <ItemGroup>
     <Compile Include="CommandError.cs" />
     <Compile Include="CommandResult.cs" />
-    <Compile Include="ICommand.cs" />
+    <Compile Include="ICommandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\ActivateUserCommand.cs" />
-    <Compile Include="Security\BaseUserCommand.cs" />
-    <Compile Include="Security\ChangeUserPasswordCommand.cs" />
-    <Compile Include="Security\DeactivateUserCommand.cs" />
-    <Compile Include="Security\IChangeUserPasswordCommand.cs" />
-    <Compile Include="Security\IActivateUserCommand.cs" />
-    <Compile Include="Security\IDeactivateUserCommand.cs" />
-    <Compile Include="Security\ILogOutUserCommand.cs" />
-    <Compile Include="Security\IRegisterUserCommand.cs" />
-    <Compile Include="Security\IForgotUserPasswordCommand.cs" />
-    <Compile Include="Security\IResetUserPasswordCommand.cs" />
-    <Compile Include="Security\ISendUserActivationCommand.cs" />
-    <Compile Include="Security\ILogInUserCommand.cs" />
-    <Compile Include="Security\LogOutUserCommand.cs" />
-    <Compile Include="Security\RegisterUserCommand.cs" />
-    <Compile Include="Security\ForgotUserPasswordCommand.cs" />
-    <Compile Include="Security\ResetUserPasswordCommand.cs" />
-    <Compile Include="Security\SendUserActivationCommand.cs" />
-    <Compile Include="Security\LogInUserCommand.cs" />
+    <Compile Include="Security\ActivateUserCommandHandler.cs" />
+    <Compile Include="Security\BaseUserCommandHandler.cs" />
+    <Compile Include="Security\ChangeUserPasswordCommandHandler.cs" />
+    <Compile Include="Security\DeactivateUserCommandHandler.cs" />
+    <Compile Include="Security\IChangeUserPasswordCommandHandler.cs" />
+    <Compile Include="Security\IActivateUserCommandHandler.cs" />
+    <Compile Include="Security\IDeactivateUserCommandHandler.cs" />
+    <Compile Include="Security\ILogOutUserCommandHandler.cs" />
+    <Compile Include="Security\IRegisterUserCommandHandler.cs" />
+    <Compile Include="Security\IForgotUserPasswordCommandHandler.cs" />
+    <Compile Include="Security\IResetUserPasswordCommandHandler.cs" />
+    <Compile Include="Security\ISendUserActivationCommandHandler.cs" />
+    <Compile Include="Security\ILogInUserCommandHandler.cs" />
+    <Compile Include="Security\LogOutUserCommandHandler.cs" />
+    <Compile Include="Security\RegisterUserCommandHandler.cs" />
+    <Compile Include="Security\ForgotUserPasswordCommandHandler.cs" />
+    <Compile Include="Security\ResetUserPasswordCommandHandler.cs" />
+    <Compile Include="Security\SendUserActivationCommandHandler.cs" />
+    <Compile Include="Security\LogInUserCommandHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

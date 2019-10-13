@@ -9,10 +9,10 @@ using AzurePlayground.Utilities.Mail;
 
 namespace AzurePlayground.Commands.Security {
     [Injectable]
-    public class SendUserActivationCommand : BaseUserCommand, ISendUserActivationCommand {
+    public class SendUserActivationCommandHandler : BaseUserCommandHandler, ISendUserActivationCommandHandler {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
 
-        public SendUserActivationCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
+        public SendUserActivationCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
             _playgroundContextFactory = playgroundContextFactory;
         }
 

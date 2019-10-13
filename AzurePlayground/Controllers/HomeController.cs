@@ -8,26 +8,26 @@ namespace AzurePlayground.Controllers {
     [RoutePrefix("Home")]
     public class HomeController : Controller {
         private readonly IAuthenticationProvider _authenticationProvider;
-        private readonly IRegisterUserCommand _registerUserCommand;
-        private readonly IActivateUserCommand _activateUserCommand;
-        private readonly ISendUserActivationCommand _sendUserActivationCommand;
-        private readonly ILogInUserCommand _logInUserCommand;
-        private readonly ILogOutUserCommand _logOutUserCommand;
-        private readonly IChangeUserPasswordCommand _changeUserPasswordCommand;
-        private readonly IForgotUserPasswordCommand _requestUserPasswordResetCommand;
-        private readonly IResetUserPasswordCommand _resetUserPasswordCommand;
-        private readonly IDeactivateUserCommand _deactivateUserCommand;
+        private readonly IRegisterUserCommandHandler _registerUserCommand;
+        private readonly IActivateUserCommandHandler _activateUserCommand;
+        private readonly ISendUserActivationCommandHandler _sendUserActivationCommand;
+        private readonly ILogInUserCommandHandler _logInUserCommand;
+        private readonly ILogOutUserCommandHandler _logOutUserCommand;
+        private readonly IChangeUserPasswordCommandHandler _changeUserPasswordCommand;
+        private readonly IForgotUserPasswordCommandHandler _requestUserPasswordResetCommand;
+        private readonly IResetUserPasswordCommandHandler _resetUserPasswordCommand;
+        private readonly IDeactivateUserCommandHandler _deactivateUserCommand;
 
         public HomeController(IAuthenticationProvider authenticationProvider,
-            IRegisterUserCommand registerUserCommand, 
-            IActivateUserCommand activateUserCommand, 
-            ISendUserActivationCommand sendUserActivationCommand, 
-            ILogInUserCommand logInUserCommand,
-            ILogOutUserCommand logOutUserCommand,
-            IChangeUserPasswordCommand changeUserPasswordCommand,
-            IForgotUserPasswordCommand requestUserPasswordResetCommand,
-            IResetUserPasswordCommand resetUserPasswordCommand,
-            IDeactivateUserCommand deactivateUserCommand) {
+            IRegisterUserCommandHandler registerUserCommand, 
+            IActivateUserCommandHandler activateUserCommand, 
+            ISendUserActivationCommandHandler sendUserActivationCommand, 
+            ILogInUserCommandHandler logInUserCommand,
+            ILogOutUserCommandHandler logOutUserCommand,
+            IChangeUserPasswordCommandHandler changeUserPasswordCommand,
+            IForgotUserPasswordCommandHandler requestUserPasswordResetCommand,
+            IResetUserPasswordCommandHandler resetUserPasswordCommand,
+            IDeactivateUserCommandHandler deactivateUserCommand) {
 
             _authenticationProvider = authenticationProvider;
             _registerUserCommand = registerUserCommand;

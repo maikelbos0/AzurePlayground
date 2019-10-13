@@ -7,12 +7,12 @@ using System.Security.Cryptography;
 using System.Text;
 
 namespace AzurePlayground.Commands.Security {
-    public class BaseUserCommand {
+    public abstract class BaseUserCommandHandler {
         private readonly IMailClient _mailClient;
         private readonly IAppSettings _appSettings;
         private readonly char[] _tokenCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
 
-        public BaseUserCommand(IMailClient mailClient, IAppSettings appSettings) {
+        public BaseUserCommandHandler(IMailClient mailClient, IAppSettings appSettings) {
             _mailClient = mailClient;
             _appSettings = appSettings;
         }

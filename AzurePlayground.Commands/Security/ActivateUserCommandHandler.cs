@@ -7,10 +7,10 @@ using System.Linq;
 
 namespace AzurePlayground.Commands.Security {
     [Injectable]
-    public class ActivateUserCommand : IActivateUserCommand {
+    public class ActivateUserCommandHandler : IActivateUserCommandHandler {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
 
-        public ActivateUserCommand(IPlaygroundContextFactory playgroundContextFactory) {
+        public ActivateUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory) {
             _playgroundContextFactory = playgroundContextFactory;
         }
 

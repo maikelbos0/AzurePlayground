@@ -1,6 +1,6 @@
 ﻿
 namespace AzurePlayground.Commands {
-    public interface ICommand<TParameter> {
+    public interface ICommandHandler<TParameter> {
         CommandResult<TParameter> Execute(TParameter parameter);
     }
 }

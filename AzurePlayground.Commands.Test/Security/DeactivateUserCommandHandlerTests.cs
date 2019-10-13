@@ -9,12 +9,12 @@ using System.Linq;
 
 namespace AzurePlayground.Commands.Test.Security {
     [TestClass]
-    public class DeactivateUserCommandTests {
+    public class DeactivateUserCommandHandlerTests {
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
 
         [TestMethod]
-        public void DeactivateUserCommand_Succeeds() {
-            var command = new DeactivateUserCommand(_playgroundContextFactory);
+        public void DeactivateUserCommandHandler_Succeeds() {
+            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -27,7 +27,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().BeEmpty();
             user.Status.Should().Be(UserStatus.Inactive);
@@ -36,8 +36,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void DeactivateUserCommand_Fails_For_Wrong_Password() {
-            var command = new DeactivateUserCommand(_playgroundContextFactory);
+        public void DeactivateUserCommandHandler_Fails_For_Wrong_Password() {
+            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -50,7 +50,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Password");
@@ -61,30 +61,30 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void DeactivateUserCommand_Throws_Exception_For_Nonexistent_User() {
-            var command = new DeactivateUserCommand(_playgroundContextFactory);
+        public void DeactivateUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
+            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
             var model = new UserDeactivation() {
                 Email = "test@test.com",
                 Password = "test"
             };
 
             Action commandAction = () => {
-                var result = command.Execute(model);
+                var result = handler.Execute(model);
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate non-existent user 'test@test.com'");
         }
 
         [TestMethod]
-        public void DeactivateUserCommand_Throws_Exception_For_Inactive_User() {
-            var command = new DeactivateUserCommand(_playgroundContextFactory);
+        public void DeactivateUserCommandHandler_Throws_Exception_For_Inactive_User() {
+            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
             var model = new UserDeactivation() {
                 Email = "test@test.com",
                 Password = "test"
             };
 
             Action commandAction = () => {
-                var result = command.Execute(model);
+                var result = handler.Execute(model);
             };
 
             _playgroundContextFactory.Context.Users.Add(new User() {
@@ -96,15 +96,15 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void DeactivateUserCommand_Throws_Exception_For_New_User() {
-            var command = new DeactivateUserCommand(_playgroundContextFactory);
+        public void DeactivateUserCommandHandler_Throws_Exception_For_New_User() {
+            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
             var model = new UserDeactivation() {
                 Email = "test@test.com",
                 Password = "test"
             };
 
             Action commandAction = () => {
-                var result = command.Execute(model);
+                var result = handler.Execute(model);
             };
 
             _playgroundContextFactory.Context.Users.Add(new User() {

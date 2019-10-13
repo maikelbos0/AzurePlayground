@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace AzurePlayground.Commands.Test.Security {
     [TestClass]
-    public class ResetUserPasswordCommandTests {
+    public class ResetUserPasswordCommandHandlerTests {
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
@@ -20,8 +20,8 @@ namespace AzurePlayground.Commands.Test.Security {
         };
 
         [TestMethod]
-        public void ResetUserPasswordCommand_Succeeds() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ResetUserPasswordCommandHandler_Succeeds() {
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -37,7 +37,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
@@ -46,8 +46,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ResetUserPasswordCommand_Fails_For_Unmatched_New_Password() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ResetUserPasswordCommandHandler_Fails_For_Unmatched_New_Password() {
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -63,7 +63,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmNewPassword");
@@ -74,8 +74,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ResetUserPasswordCommand_Fails_For_Expired_Token() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ResetUserPasswordCommandHandler_Fails_For_Expired_Token() {
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -92,7 +92,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
@@ -103,8 +103,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ResetUserPasswordCommand_Fails_When_Already_Reset() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ResetUserPasswordCommandHandler_Fails_When_Already_Reset() {
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -119,7 +119,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
@@ -130,8 +130,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ResetUserPasswordCommand_Fails_For_Incorrect_Token() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ResetUserPasswordCommandHandler_Fails_For_Incorrect_Token() {
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -147,7 +147,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
@@ -158,8 +158,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ResetUserPasswordCommand_Throws_Exception_For_Inactive_User() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ResetUserPasswordCommandHandler_Throws_Exception_For_Inactive_User() {
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -175,7 +175,7 @@ namespace AzurePlayground.Commands.Test.Security {
             _playgroundContextFactory.Context.Users.Add(user);
 
             Action commandAction = () => {
-                var result = command.Execute(model);
+                var result = handler.Execute(model);
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for inactive user 'test@test.com'");
@@ -183,8 +183,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ResetUserPasswordCommand_Throws_Exception_For_New_User() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ResetUserPasswordCommandHandler_Throws_Exception_For_New_User() {
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -200,7 +200,7 @@ namespace AzurePlayground.Commands.Test.Security {
             _playgroundContextFactory.Context.Users.Add(user);
 
             Action commandAction = () => {
-                var result = command.Execute(model);
+                var result = handler.Execute(model);
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for inactive user 'test@test.com'");
@@ -208,8 +208,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ResetUserPasswordCommand_Throws_Exception_For_Nonexistent_User() {
-            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+        public void ResetUserPasswordCommandHandler_Throws_Exception_For_Nonexistent_User() {
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
                 PasswordResetToken = null,
@@ -218,7 +218,7 @@ namespace AzurePlayground.Commands.Test.Security {
             };
 
             Action commandAction = () => {
-                var result = command.Execute(model);
+                var result = handler.Execute(model);
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for non-existent user 'test@test.com'");

@@ -8,12 +8,12 @@ using System.Linq;
 
 namespace AzurePlayground.Commands.Test.Security {
     [TestClass]
-    public class ActivateUserCommandTests {
+    public class ActivateUserCommandHandlerTests {
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
 
         [TestMethod]
-        public void ActivateUserCommand_Succeeds() {
-            var command = new ActivateUserCommand(_playgroundContextFactory);
+        public void ActivateUserCommandHandler_Succeeds() {
+            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 ActivationCode = 999999,
@@ -26,7 +26,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().BeEmpty();
             user.Status.Should().Be(UserStatus.Active);
@@ -36,8 +36,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ActivateUserCommand_Fails_For_Nonexistent_User() {
-            var command = new ActivateUserCommand(_playgroundContextFactory);
+        public void ActivateUserCommandHandler_Fails_For_Nonexistent_User() {
+            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "other@test.com",
                 ActivationCode = 999999,
@@ -50,7 +50,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
@@ -60,8 +60,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ActivateUserCommand_Fails_For_Active_User() {
-            var command = new ActivateUserCommand(_playgroundContextFactory);
+        public void ActivateUserCommandHandler_Fails_For_Active_User() {
+            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 ActivationCode = 999999,
@@ -74,7 +74,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
@@ -84,8 +84,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ActivateUserCommand_Fails_For_Inactive_User() {
-            var command = new ActivateUserCommand(_playgroundContextFactory);
+        public void ActivateUserCommandHandler_Fails_For_Inactive_User() {
+            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 ActivationCode = 999999,
@@ -98,7 +98,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
@@ -109,8 +109,8 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
-        public void ActivateUserCommand_Fails_For_Wrong_Code() {
-            var command = new ActivateUserCommand(_playgroundContextFactory);
+        public void ActivateUserCommandHandler_Fails_For_Wrong_Code() {
+            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 ActivationCode = 999999,
@@ -123,7 +123,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = command.Execute(model);
+            var result = handler.Execute(model);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");

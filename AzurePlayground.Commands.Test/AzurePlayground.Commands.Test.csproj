@@ -63,15 +63,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\ActivateUserCommandTests.cs" />
-    <Compile Include="Security\ChangeUserPasswordCommandTests.cs" />
-    <Compile Include="Security\DeactivateUserCommandTests.cs" />
-    <Compile Include="Security\LogInUserCommandTests.cs" />
-    <Compile Include="Security\LogOutUserCommandTests.cs" />
-    <Compile Include="Security\RegisterUserCommandTests.cs" />
-    <Compile Include="Security\ForgotUserPasswordCommandTests.cs" />
-    <Compile Include="Security\ResetUserPasswordCommandTests.cs" />
-    <Compile Include="Security\SendUserActivationCommandTests.cs" />
+    <Compile Include="Security\ActivateUserCommandHandlerTests.cs" />
+    <Compile Include="Security\ChangeUserPasswordCommandHandlerTests.cs" />
+    <Compile Include="Security\DeactivateUserCommandHandlerTests.cs" />
+    <Compile Include="Security\LogInUserCommandHandlerTests.cs" />
+    <Compile Include="Security\LogOutUserCommandHandlerTests.cs" />
+    <Compile Include="Security\RegisterUserCommandHandlerTests.cs" />
+    <Compile Include="Security\ForgotUserPasswordCommandHandlerTests.cs" />
+    <Compile Include="Security\ResetUserPasswordCommandHandlerTests.cs" />
+    <Compile Include="Security\SendUserActivationCommandHandlerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AzurePlayground.Commands\AzurePlayground.Commands.csproj">

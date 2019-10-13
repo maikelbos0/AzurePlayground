@@ -9,10 +9,10 @@ using System.Linq;
 
 namespace AzurePlayground.Commands.Security {
     [Injectable]
-    public class ResetUserPasswordCommand : BaseUserCommand, IResetUserPasswordCommand {
+    public class ResetUserPasswordCommandHandler : BaseUserCommandHandler, IResetUserPasswordCommandHandler {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
 
-        public ResetUserPasswordCommand(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
+        public ResetUserPasswordCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
             _playgroundContextFactory = playgroundContextFactory;
         }
 
