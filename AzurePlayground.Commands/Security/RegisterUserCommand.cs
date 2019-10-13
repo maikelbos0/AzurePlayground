@@ -21,6 +21,7 @@ namespace AzurePlayground.Commands.Security {
             var user = new User() {
                 Email = parameter.Email,
                 Password = new Password(parameter.Password),
+                Status = UserStatus.New,
                 ActivationCode = GetNewActivationCode()
             };
 

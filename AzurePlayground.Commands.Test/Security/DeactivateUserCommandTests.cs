@@ -18,7 +18,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserDeactivation() {
                 Email = "test@test.com",
@@ -30,7 +30,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var result = command.Execute(model);
 
             result.Errors.Should().BeEmpty();
-            user.IsActive.Should().BeFalse();
+            user.Status.Should().Be(UserStatus.Inactive);
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().Type.Should().Be(UserEventType.Deactivated);
         }
@@ -41,7 +41,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserDeactivation() {
                 Email = "test@test.com",
@@ -55,9 +55,9 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Password");
             result.Errors[0].Message.Should().Be("Invalid password");
+            user.Status.Should().Be(UserStatus.Active);
             user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedDeactivation);
-            user.Password.Verify("test").Should().BeTrue();
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedDeactivation);            
         }
 
         [TestMethod]
@@ -89,7 +89,27 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
-                IsActive = false
+                Status = UserStatus.Inactive
+            });
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
+        }
+
+        [TestMethod]
+        public void DeactivateUserCommand_Throws_Exception_For_New_User() {
+            var command = new DeactivateUserCommand(_playgroundContextFactory);
+            var model = new UserDeactivation() {
+                Email = "test@test.com",
+                Password = "test"
+            };
+
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                Status = UserStatus.New
             });
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");

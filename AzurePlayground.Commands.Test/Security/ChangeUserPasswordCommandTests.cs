@@ -25,7 +25,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserChangePassword() {
                 Email = "test@test.com",
@@ -67,7 +67,32 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = false
+                Status = UserStatus.Inactive
+            };
+            var model = new UserChangePassword() {
+                Email = "test@test.com",
+                CurrentPassword = "test",
+                NewPassword = "test2",
+                ConfirmNewPassword = "test2"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
+
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change password for inactive user 'test@test.com'");
+            user.Password.Verify("test").Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void ChangeUserPasswordCommand_Throws_Exception_For_New_User() {
+            var command = new ChangeUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                Password = new Password("test"),
+                Status = UserStatus.New
             };
             var model = new UserChangePassword() {
                 Email = "test@test.com",
@@ -92,7 +117,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserChangePassword() {
                 Email = "test@test.com",
@@ -119,7 +144,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserChangePassword() {
                 Email = "test@test.com",

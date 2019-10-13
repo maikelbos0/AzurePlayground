@@ -23,7 +23,7 @@ namespace AzurePlayground.Commands.Security {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
                 // Don't return errors to prevent leaking information
-                if (user != null && !user.IsActive) {
+                if (user != null && user.Status == UserStatus.New) {
                     user.ActivationCode = GetNewActivationCode();
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,

@@ -19,7 +19,7 @@ namespace AzurePlayground.Commands.Security {
             using (var context = _playgroundContextFactory.GetContext()) {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
-                if (user != null && user.IsActive) {
+                if (user != null && user.Status == UserStatus.Active) {
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,
                         Type = UserEventType.LoggedOut

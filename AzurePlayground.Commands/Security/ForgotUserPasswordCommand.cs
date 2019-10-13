@@ -22,7 +22,7 @@ namespace AzurePlayground.Commands.Security {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
                 // There is no error reporting to prevent information leaking
-                if (user != null && user.IsActive) {
+                if (user != null && user.Status == UserStatus.Active) {
                     var token = GetNewPasswordResetToken();
 
                     user.PasswordResetToken = new TemporaryPassword(token);

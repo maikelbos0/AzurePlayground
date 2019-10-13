@@ -25,7 +25,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserLogIn() {
                 Email = "test@test.com",
@@ -47,7 +47,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true,
+                Status = UserStatus.Active,
                 PasswordResetToken = new TemporaryPassword("test")
             };
             var model = new UserLogIn() {
@@ -82,7 +82,32 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                Password = new Password("test")
+                Password = new Password("test"),
+                Status = UserStatus.Inactive
+            };
+            var model = new UserLogIn() {
+                Email = "test@test.com",
+                Password = "test"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
+            result.Errors[0].Message.Should().Be("Invalid email or password");
+            user.UserEvents.Should().HaveCount(1);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedLogIn);
+        }
+
+        [TestMethod]
+        public void LogInUserCommand_Fails_For_New_User() {
+            var command = new LogInUserCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                Password = new Password("test"),
+                Status = UserStatus.New
             };
             var model = new UserLogIn() {
                 Email = "test@test.com",
@@ -106,7 +131,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserLogIn() {
                 Email = "test@test.com",

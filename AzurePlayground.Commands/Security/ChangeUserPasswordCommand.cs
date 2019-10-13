@@ -22,7 +22,7 @@ namespace AzurePlayground.Commands.Security {
             using (var context = _playgroundContextFactory.GetContext()) {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
-                if (user == null || !user.IsActive) {
+                if (user == null || user.Status != UserStatus.Active) {
                     // Since there is no user input for email, the user is not responsible for these errors and we should not use the command result for feedback
                     throw new InvalidOperationException($"Attempted to change password for {(user == null ? "non-existent" : "inactive")} user '{parameter.Email}'");
                 }

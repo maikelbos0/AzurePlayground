@@ -34,6 +34,11 @@ namespace AzurePlayground.Database {
             userEventTypes.HasMany(t => t.UserEvents).WithRequired().HasForeignKey(e => e.Type);
             userEventTypes.Property(t => t.Name).IsRequired();
 
+            var userStatus = modelBuilder.Entity<UserStatusEntity>().ToTable("UserStatus", "Security").HasKey(s => s.Id);
+
+            userStatus.HasMany(t => t.Users).WithRequired().HasForeignKey(u => u.Status);
+            userStatus.Property(t => t.Name).IsRequired();
+            
             var users = modelBuilder.Entity<Security.User>().ToTable("Users", "Security").HasKey(u => u.Id);
 
             users.HasMany(u => u.UserEvents).WithRequired(e => e.User);
@@ -44,6 +49,7 @@ namespace AzurePlayground.Database {
             users.Property(u => u.Password.HashIterations).IsRequired();
             users.Property(u => u.PasswordResetToken.Salt).HasMaxLength(20);
             users.Property(u => u.PasswordResetToken.Hash).HasMaxLength(20);
+            users.Property(u => u.Status).HasColumnName("UserStatus_Id");
 
             var userEvents = modelBuilder.Entity<Security.UserEvent>().ToTable("UserEvents", "Security").HasKey(e => e.Id);
 

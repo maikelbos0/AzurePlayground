@@ -23,7 +23,7 @@ namespace AzurePlayground.Commands.Security {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
                 if (user != null 
-                    && user.IsActive
+                    && user.Status == UserStatus.Active
                     && user.Password.Verify(parameter.Password)) {
 
                     // If we log in, the password reset is not needed anymore and leaving it is a security risk

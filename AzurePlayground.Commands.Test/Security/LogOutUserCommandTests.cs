@@ -17,7 +17,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new LogOutUserCommand(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserLogOut() {
                 Email = "test@test.com"
@@ -33,6 +33,24 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
+        public void LogOutUserCommand_Throws_Exception_For_New_User() {
+            var command = new LogOutUserCommand(_playgroundContextFactory);
+            var model = new UserLogOut() {
+                Email = "test@test.com"
+            };
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            _playgroundContextFactory.Context.Users.Add(new User() {
+                Email = "test@test.com",
+                Status = UserStatus.New
+            });
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out inactive user 'test@test.com'");
+        }
+
+        [TestMethod]
         public void LogOutUserCommand_Throws_Exception_For_Inactive_User() {
             var command = new LogOutUserCommand(_playgroundContextFactory);
             var model = new UserLogOut() {
@@ -44,7 +62,7 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
-                IsActive = false
+                Status = UserStatus.Inactive
             });
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out inactive user 'test@test.com'");

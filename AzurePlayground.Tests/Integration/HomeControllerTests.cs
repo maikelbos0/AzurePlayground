@@ -71,7 +71,7 @@ namespace AzurePlayground.Tests.Integration {
             // Set up
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
-                IsActive = true
+                Status = UserStatus.Active
             });
 
             // Request password reset
@@ -109,7 +109,7 @@ namespace AzurePlayground.Tests.Integration {
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             });
             _authenticationProvider.Identity = "test@test.com";
 
@@ -143,7 +143,7 @@ namespace AzurePlayground.Tests.Integration {
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             });
 
             // Failed log in
@@ -171,7 +171,7 @@ namespace AzurePlayground.Tests.Integration {
 
             deactivateResult.Should().BeOfType<RedirectToRouteResult>();
             _authenticationProvider.Identity.Should().BeNull();
-            _playgroundContextFactory.Context.Users.Single().IsActive.Should().BeFalse();
+            _playgroundContextFactory.Context.Users.Single().Status.Should().Be(UserStatus.Inactive);
         }
     }
 }

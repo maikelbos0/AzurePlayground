@@ -27,7 +27,8 @@ namespace AzurePlayground.Commands.Test.Security {
 
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
-                ActivationCode = 999999
+                ActivationCode = 999999,
+                Status = UserStatus.New
             });
 
             var result = command.Execute(model);
@@ -43,7 +44,8 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                ActivationCode = 999999
+                ActivationCode = 999999,
+                Status = UserStatus.New
             };
             var model = new UserSendActivation() {
                 Email = "test@test.com"
@@ -65,7 +67,29 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 ActivationCode = null,
-                IsActive = true
+                Status = UserStatus.Active
+            };
+            var model = new UserSendActivation() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
+
+            var result = command.Execute(model);
+
+            result.Success.Should().BeTrue();
+            user.ActivationCode.Should().BeNull();
+            user.UserEvents.Should().BeEmpty();
+            _mailClient.SentMessages.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void SendUserActivationCommand_Does_Nothing_For_Inactive_User() {
+            var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                ActivationCode = null,
+                Status = UserStatus.Inactive
             };
             var model = new UserSendActivation() {
                 Email = "test@test.com"
@@ -86,7 +110,8 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new SendUserActivationCommand(_playgroundContextFactory, _mailClient, _appSettings);
             var user = new User() {
                 Email = "test@test.com",
-                ActivationCode = 999999
+                ActivationCode = 999999,
+                Status = UserStatus.New
             };
             var model = new UserSendActivation() {
                 Email = "other@test.com"

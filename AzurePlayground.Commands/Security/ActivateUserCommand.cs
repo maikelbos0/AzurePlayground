@@ -22,7 +22,7 @@ namespace AzurePlayground.Commands.Security {
 
                 // Any error that occurs gets the same message to prevent leaking information
                 if (user == null
-                    || user.IsActive
+                    || user.Status != UserStatus.New
                     || !int.TryParse(parameter.ActivationCode, out int activationCode) || user.ActivationCode != activationCode) {
 
                     result.AddError(p => p.ActivationCode, "This activation code is invalid");
@@ -35,7 +35,7 @@ namespace AzurePlayground.Commands.Security {
                     }
                 }
                 else {
-                    user.IsActive = true;
+                    user.Status = UserStatus.Active;
                     user.ActivationCode = null;
                     user.UserEvents.Add(new UserEvent() {
                         Date = DateTime.UtcNow,

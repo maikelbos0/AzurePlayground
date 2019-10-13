@@ -25,7 +25,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true,
+                Status = UserStatus.Active,
                 PasswordResetToken = new TemporaryPassword("test")
             };
             var model = new UserPasswordReset() {
@@ -51,7 +51,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true,
+                Status = UserStatus.Active,
                 PasswordResetToken = new TemporaryPassword("test")
             };
             var model = new UserPasswordReset() {
@@ -79,7 +79,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true,
+                Status = UserStatus.Active,
                 PasswordResetToken = new TemporaryPassword("test")
             };
             typeof(TemporaryPassword).GetProperty(nameof(TemporaryPassword.ExpiryDate)).SetValue(user.PasswordResetToken, DateTime.UtcNow.AddSeconds(-60));
@@ -108,7 +108,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",
@@ -135,7 +135,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true,
+                Status = UserStatus.Active,
                 PasswordResetToken = new TemporaryPassword("test")
             };
             var model = new UserPasswordReset() {
@@ -163,7 +163,32 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = false
+                Status = UserStatus.Inactive
+            };
+            var model = new UserPasswordReset() {
+                Email = "test@test.com",
+                PasswordResetToken = null,
+                NewPassword = "test2",
+                ConfirmNewPassword = "test2"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
+
+            Action commandAction = () => {
+                var result = command.Execute(model);
+            };
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for inactive user 'test@test.com'");
+            user.Password.Verify("test").Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void ResetUserPasswordCommand_Throws_Exception_For_New_User() {
+            var command = new ResetUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                Password = new Password("test"),
+                Status = UserStatus.New
             };
             var model = new UserPasswordReset() {
                 Email = "test@test.com",

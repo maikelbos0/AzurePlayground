@@ -13,6 +13,10 @@ namespace AzurePlayground.Database.Migrations {
                 context.Set<UserEventTypeEntity>().AddOrUpdate(entity);
             }
 
+            foreach (var entity in ReferenceEntityExtensions.GetValues<UserStatus, UserStatusEntity>()) {
+                context.Set<UserStatusEntity>().AddOrUpdate(entity);
+            }
+
             context.SaveChanges();
         }
     }

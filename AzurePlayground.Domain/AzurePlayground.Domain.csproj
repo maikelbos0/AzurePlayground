@@ -55,6 +55,7 @@
     <Compile Include="Security\User.cs" />
     <Compile Include="Security\UserEvent.cs" />
     <Compile Include="Security\UserEventType.cs" />
+    <Compile Include="Security\UserStatus.cs" />
     <Compile Include="ValueObject.cs" />
   </ItemGroup>
   <ItemGroup>

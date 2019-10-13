@@ -16,7 +16,8 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ActivateUserCommand(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
-                ActivationCode = 999999
+                ActivationCode = 999999,
+                Status = UserStatus.New
             };
             var model = new UserActivation() {
                 Email = "test@test.com",
@@ -28,7 +29,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var result = command.Execute(model);
 
             result.Errors.Should().BeEmpty();
-            user.IsActive.Should().BeTrue();
+            user.Status.Should().Be(UserStatus.Active);
             user.ActivationCode.Should().BeNull();
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().Type.Should().Be(UserEventType.Activated);
@@ -39,7 +40,8 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ActivateUserCommand(_playgroundContextFactory);
             var user = new User() {
                 Email = "other@test.com",
-                ActivationCode = 999999
+                ActivationCode = 999999,
+                Status = UserStatus.New
             };
             var model = new UserActivation() {
                 Email = "test@test.com",
@@ -53,7 +55,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
             result.Errors[0].Message.Should().Be("This activation code is invalid");
-            user.IsActive.Should().BeFalse();
+            user.Status.Should().Be(UserStatus.New);
             user.ActivationCode.Should().Be(999999);
         }
 
@@ -62,7 +64,8 @@ namespace AzurePlayground.Commands.Test.Security {
             var command = new ActivateUserCommand(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
-                IsActive = true
+                ActivationCode = 999999,
+                Status = UserStatus.Active
             };
             var model = new UserActivation() {
                 Email = "test@test.com",
@@ -81,11 +84,37 @@ namespace AzurePlayground.Commands.Test.Security {
         }
 
         [TestMethod]
+        public void ActivateUserCommand_Fails_For_Inactive_User() {
+            var command = new ActivateUserCommand(_playgroundContextFactory);
+            var user = new User() {
+                Email = "test@test.com",
+                ActivationCode = 999999,
+                Status = UserStatus.Inactive
+            };
+            var model = new UserActivation() {
+                Email = "test@test.com",
+                ActivationCode = "999999"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
+
+            var result = command.Execute(model);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
+            result.Errors[0].Message.Should().Be("This activation code is invalid");
+            user.Status.Should().Be(UserStatus.Inactive);
+            user.UserEvents.Should().HaveCount(1);
+            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedActivation);
+        }
+
+        [TestMethod]
         public void ActivateUserCommand_Fails_For_Wrong_Code() {
             var command = new ActivateUserCommand(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
-                ActivationCode = 999999
+                ActivationCode = 999999,
+                Status = UserStatus.New
             };
             var model = new UserActivation() {
                 Email = "test@test.com",
@@ -99,7 +128,7 @@ namespace AzurePlayground.Commands.Test.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ActivationCode");
             result.Errors[0].Message.Should().Be("This activation code is invalid");
-            user.IsActive.Should().BeFalse();
+            user.Status.Should().Be(UserStatus.New);
             user.ActivationCode.Should().Be(999999);
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().Type.Should().Be(UserEventType.FailedActivation);

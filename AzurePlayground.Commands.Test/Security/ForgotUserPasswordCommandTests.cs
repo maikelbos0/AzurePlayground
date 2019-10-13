@@ -27,7 +27,7 @@ namespace AzurePlayground.Commands.Test.Security {
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             });
 
             command.Execute(model);
@@ -43,7 +43,7 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = true
+                Status = UserStatus.Active
             };
             var model = new UserForgotPassword() {
                 Email = "test@test.com"
@@ -76,7 +76,28 @@ namespace AzurePlayground.Commands.Test.Security {
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
-                IsActive = false
+                Status = UserStatus.Inactive
+            };
+            var model = new UserForgotPassword() {
+                Email = "test@test.com"
+            };
+
+            _playgroundContextFactory.Context.Users.Add(user);
+
+            var result = command.Execute(model);
+
+            result.Success.Should().BeTrue();
+            _mailClient.SentMessages.Should().BeEmpty();
+            user.PasswordResetToken.Should().Be(TemporaryPassword.None);
+        }
+
+        [TestMethod]
+        public void ForgotUserPasswordCommand_Does_Nothing_For_New_User() {
+            var command = new ForgotUserPasswordCommand(_playgroundContextFactory, _mailClient, _appSettings);
+            var user = new User() {
+                Email = "test@test.com",
+                Password = new Password("test"),
+                Status = UserStatus.New
             };
             var model = new UserForgotPassword() {
                 Email = "test@test.com"
