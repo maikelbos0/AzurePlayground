@@ -262,9 +262,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AzurePlayground.Commands\AzurePlayground.Commands.csproj">
+    <ProjectReference Include="..\AzurePlayground.CommandHandlers\AzurePlayground.CommandHandlers.csproj">
       <Project>{af5556d3-a4cb-4519-8fd6-3f7478656709}</Project>
-      <Name>AzurePlayground.Commands</Name>
+      <Name>AzurePlayground.CommandHandlers</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Models\AzurePlayground.Models.csproj">
       <Project>{fe4c0d69-d134-4f3a-b19e-0be8e3cb6fc2}</Project>

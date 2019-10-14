@@ -1,4 +1,4 @@
-﻿using AzurePlayground.Commands.Security;
+﻿using AzurePlayground.CommandHandlers.Security;
 using AzurePlayground.Extensions;
 using AzurePlayground.Models.Security;
 using AzurePlayground.Providers;
