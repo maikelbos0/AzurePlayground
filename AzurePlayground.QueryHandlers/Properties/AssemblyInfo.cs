@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AzurePlayground.Queries")]
+[assembly: AssemblyTitle("AzurePlayground.QueryHandlers")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright © Maikel Bos 2019")]
+[assembly: AssemblyCopyright("Copyright © 2019 Maikel Bos")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("176178a9-63e6-4665-a1ce-ebb8ce87bc7c")]
+[assembly: Guid("02a56af1-a009-4273-b801-8a5f7c98e84f")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -1,6 +1,7 @@
-﻿
+﻿using AzurePlayground.Commands;
+
 namespace AzurePlayground.CommandHandlers {
-    public interface ICommandHandler<TParameter> {
-        CommandResult<TParameter> Execute(TParameter parameter);
+    public interface ICommandHandler<TCommand> { // where TCommand : ICommand {
+        CommandResult<TCommand> Execute(TCommand command);
     }
 }

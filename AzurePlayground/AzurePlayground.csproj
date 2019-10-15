@@ -266,13 +266,21 @@
       <Project>{af5556d3-a4cb-4519-8fd6-3f7478656709}</Project>
       <Name>AzurePlayground.CommandHandlers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.Commands\AzurePlayground.Commands.csproj">
+      <Project>{f38be491-8e58-49b6-9bcc-4d97d52a4d55}</Project>
+      <Name>AzurePlayground.Commands</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Models\AzurePlayground.Models.csproj">
       <Project>{fe4c0d69-d134-4f3a-b19e-0be8e3cb6fc2}</Project>
       <Name>AzurePlayground.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Queries\AzurePlayground.Queries.csproj">
-      <Project>{02a56af1-a009-4273-b801-8a5f7c98e84f}</Project>
+      <Project>{176178a9-63e6-4665-a1ce-ebb8ce87bc7c}</Project>
       <Name>AzurePlayground.Queries</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.QueryHandlers\AzurePlayground.QueryHandlers.csproj">
+      <Project>{02a56af1-a009-4273-b801-8a5f7c98e84f}</Project>
+      <Name>AzurePlayground.QueryHandlers</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Utilities\AzurePlayground.Utilities.csproj">
       <Project>{d4e722c8-0cd3-47c9-a479-ca3fa83fa225}</Project>

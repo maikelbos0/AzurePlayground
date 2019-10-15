@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AzurePlayground.Queries")]
+[assembly: AssemblyTitle("AzurePlayground.Commands")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("176178a9-63e6-4665-a1ce-ebb8ce87bc7c")]
+[assembly: Guid("f38be491-8e58-49b6-9bcc-4d97d52a4d55")]
 
 // Version information for an assembly consists of the following four values:
 //
