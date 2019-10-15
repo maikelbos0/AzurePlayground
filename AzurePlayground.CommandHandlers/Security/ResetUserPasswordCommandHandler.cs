@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
@@ -16,8 +16,8 @@ namespace AzurePlayground.CommandHandlers.Security {
             _playgroundContextFactory = playgroundContextFactory;
         }
 
-        public CommandResult<UserPasswordReset> Execute(UserPasswordReset parameter) {
-            var result = new CommandResult<UserPasswordReset>();
+        public CommandResult<ResetUserPasswordCommand> Execute(ResetUserPasswordCommand parameter) {
+            var result = new CommandResult<ResetUserPasswordCommand>();
 
             using (var context = _playgroundContextFactory.GetContext()) {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));

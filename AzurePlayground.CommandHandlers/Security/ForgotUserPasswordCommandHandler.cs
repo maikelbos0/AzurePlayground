@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
@@ -15,8 +15,8 @@ namespace AzurePlayground.CommandHandlers.Security {
         public ForgotUserPasswordCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
             _playgroundContextFactory = playgroundContextFactory;
         }
-        public CommandResult<UserForgotPassword> Execute(UserForgotPassword parameter) {
-            var result = new CommandResult<UserForgotPassword>();
+        public CommandResult<ForgotUserPasswordCommand> Execute(ForgotUserPasswordCommand parameter) {
+            var result = new CommandResult<ForgotUserPasswordCommand>();
 
             using (var context = _playgroundContextFactory.GetContext()) {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));

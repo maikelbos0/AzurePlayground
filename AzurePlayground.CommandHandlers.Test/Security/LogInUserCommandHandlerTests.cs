@@ -1,10 +1,9 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,14 +26,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.Active
             };
-            var model = new UserLogIn() {
-                Email = "test@test.com",
-                Password = "test"
-            };
+            var command = new LogInUserCommand("test@test.com", "test");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
@@ -50,14 +46,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Status = UserStatus.Active,
                 PasswordResetToken = new TemporaryPassword("test")
             };
-            var model = new UserLogIn() {
-                Email = "test@test.com",
-                Password = "test"
-            };
+            var command = new LogInUserCommand("test@test.com", "test");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            handler.Execute(model);
+            handler.Execute(command);
 
             user.PasswordResetToken.Should().Be(TemporaryPassword.None);
         }
@@ -65,12 +58,9 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Nonexistent_User() {
             var handler = new LogInUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserLogIn() {
-                Email = "other@test.com",
-                Password = "test"
-            };
+            var command = new LogInUserCommand("other@test.com", "test");
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
@@ -85,14 +75,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.Inactive
             };
-            var model = new UserLogIn() {
-                Email = "test@test.com",
-                Password = "test"
-            };
+            var command = new LogInUserCommand("test@test.com", "test");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
@@ -109,14 +96,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.New
             };
-            var model = new UserLogIn() {
-                Email = "test@test.com",
-                Password = "test"
-            };
+            var command = new LogInUserCommand("test@test.com", "test");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
@@ -133,14 +117,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.Active
             };
-            var model = new UserLogIn() {
-                Email = "test@test.com",
-                Password = "wrong"
-            };
+            var command = new LogInUserCommand("test@test.com", "wrong");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");

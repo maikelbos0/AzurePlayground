@@ -2,12 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace AzurePlayground.Models.Security {
-    public class UserChangePassword {
+    public class ResetUserPasswordModel {
         public string Email { get; set; }
 
-        [DisplayName("Current password")]
-        [Required(ErrorMessage = "Current password is required")]
-        public string CurrentPassword { get; set; }
+        public string PasswordResetToken { get; set; }
 
         [DisplayName("New password")]
         [Required(ErrorMessage = "New password is required")]

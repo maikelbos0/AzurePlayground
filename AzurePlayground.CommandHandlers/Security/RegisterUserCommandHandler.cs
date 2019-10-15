@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
@@ -16,8 +16,8 @@ namespace AzurePlayground.CommandHandlers.Security {
             _playgroundContextFactory = playgroundContextFactory;
         }
 
-        public CommandResult<UserRegistration> Execute(UserRegistration parameter) {
-            var result = new CommandResult<UserRegistration>();
+        public CommandResult<RegisterUserCommand> Execute(RegisterUserCommand parameter) {
+            var result = new CommandResult<RegisterUserCommand>();
             var user = new User() {
                 Email = parameter.Email,
                 Password = new Password(parameter.Password),

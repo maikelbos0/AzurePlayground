@@ -1,5 +1,5 @@
 ﻿namespace AzurePlayground.Models.Security {
-    public class UserLogOut {
+    public class LogOutUserModel {
         public string Email { get; set; }
     }
 }

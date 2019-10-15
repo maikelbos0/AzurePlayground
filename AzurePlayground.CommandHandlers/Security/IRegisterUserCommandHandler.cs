@@ -1,6 +1,6 @@
-﻿using AzurePlayground.Models.Security;
+﻿using AzurePlayground.Commands.Security;
 
 namespace AzurePlayground.CommandHandlers.Security {
-    public interface IRegisterUserCommandHandler : ICommandHandler<UserRegistration> {
+    public interface IRegisterUserCommandHandler : ICommandHandler<RegisterUserCommand> {
     }
 }

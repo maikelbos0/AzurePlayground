@@ -43,6 +43,15 @@
   <ItemGroup>
     <Compile Include="ICommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\ActivateUserCommand.cs" />
+    <Compile Include="Security\ChangeUserPasswordCommand.cs" />
+    <Compile Include="Security\DeactivateUserCommand.cs" />
+    <Compile Include="Security\ForgotUserPasswordCommand.cs" />
+    <Compile Include="Security\LogInUserCommand.cs" />
+    <Compile Include="Security\LogOutUserCommand.cs" />
+    <Compile Include="Security\RegisterUserCommand.cs" />
+    <Compile Include="Security\ResetUserPasswordCommand.cs" />
+    <Compile Include="Security\SendUserActivationCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

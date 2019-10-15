@@ -1,6 +1,6 @@
-﻿using AzurePlayground.Models.Security;
+﻿using AzurePlayground.Commands.Security;
 
 namespace AzurePlayground.CommandHandlers.Security {
-    public interface IResetUserPasswordCommandHandler : ICommandHandler<UserPasswordReset> {
+    public interface IResetUserPasswordCommandHandler : ICommandHandler<ResetUserPasswordCommand> {
     }
 }

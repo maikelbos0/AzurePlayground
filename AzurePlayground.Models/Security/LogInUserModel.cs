@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace AzurePlayground.Models.Security {
-    public class UserRegistration {
+    public class LogInUserModel {
         [DisplayName("Email address")]
         [Required(ErrorMessage = "Email address is required")]
         [EmailAddress(ErrorMessage = "This email address is invalid")]
@@ -11,9 +11,5 @@ namespace AzurePlayground.Models.Security {
         [DisplayName("Password")]
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
-
-        [DisplayName("Confirm password")]
-        [Required(ErrorMessage = "Confirm password is required")]
-        public string ConfirmPassword { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,9 +21,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void SendUserActivationCommandHandler_Sends_Email() {
             var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserSendActivation() {
-                Email = "test@test.com"
-            };
+            var command = new SendUserActivationCommand("test@test.com");
 
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com",
@@ -31,7 +29,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Status = UserStatus.New
             });
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Success.Should().BeTrue();
             _mailClient.SentMessages.Should().HaveCount(1);
@@ -47,13 +45,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 ActivationCode = 999999,
                 Status = UserStatus.New
             };
-            var model = new UserSendActivation() {
-                Email = "test@test.com"
-            };
+            var command = new SendUserActivationCommand("test@test.com");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Success.Should().BeTrue();
             user.ActivationCode.Should().NotBe(999999);
@@ -69,13 +65,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 ActivationCode = null,
                 Status = UserStatus.Active
             };
-            var model = new UserSendActivation() {
-                Email = "test@test.com"
-            };
+            var command = new SendUserActivationCommand("other@test.com");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Success.Should().BeTrue();
             user.ActivationCode.Should().BeNull();
@@ -91,13 +85,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 ActivationCode = null,
                 Status = UserStatus.Inactive
             };
-            var model = new UserSendActivation() {
-                Email = "test@test.com"
-            };
+            var command = new SendUserActivationCommand("other@test.com");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Success.Should().BeTrue();
             user.ActivationCode.Should().BeNull();
@@ -113,13 +105,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 ActivationCode = 999999,
                 Status = UserStatus.New
             };
-            var model = new UserSendActivation() {
-                Email = "other@test.com"
-            };
+            var command = new SendUserActivationCommand("other@test.com");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Success.Should().BeTrue();
             user.ActivationCode.Should().Be(999999);

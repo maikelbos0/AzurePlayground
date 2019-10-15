@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Container;
 using System;
 using System.Linq;
@@ -14,8 +14,8 @@ namespace AzurePlayground.CommandHandlers.Security {
             _playgroundContextFactory = playgroundContextFactory;
         }
 
-        public CommandResult<UserActivation> Execute(UserActivation parameter) {
-            var result = new CommandResult<UserActivation>();
+        public CommandResult<ActivateUserCommand> Execute(ActivateUserCommand parameter) {
+            var result = new CommandResult<ActivateUserCommand>();
 
             using (var context = _playgroundContextFactory.GetContext()) {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));

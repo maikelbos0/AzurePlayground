@@ -2,14 +2,18 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace AzurePlayground.Models.Security {
-    public class UserActivation {
+    public class RegisterUserModel {
         [DisplayName("Email address")]
         [Required(ErrorMessage = "Email address is required")]
         [EmailAddress(ErrorMessage = "This email address is invalid")]
         public string Email { get; set; }
 
-        [DisplayName("Activation code")]
-        [Required(ErrorMessage = "Activation code is required")]
-        public string ActivationCode { get; set; }
+        [DisplayName("Password")]
+        [Required(ErrorMessage = "Password is required")]
+        public string Password { get; set; }
+
+        [DisplayName("Confirm password")]
+        [Required(ErrorMessage = "Confirm password is required")]
+        public string ConfirmPassword { get; set; }
     }
 }

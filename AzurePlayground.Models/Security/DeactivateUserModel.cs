@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace AzurePlayground.Models.Security {
-    public class UserDeactivation {
+    public class DeactivateUserModel {
         public string Email { get; set; }
 
         [DisplayName("Password")]

@@ -63,17 +63,9 @@
       <Project>{e157b9c5-042f-4dc3-b2e2-a721eca67cdc}</Project>
       <Name>AzurePlayground.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AzurePlayground.Models\AzurePlayground.Models.csproj">
-      <Project>{fe4c0d69-d134-4f3a-b19e-0be8e3cb6fc2}</Project>
-      <Name>AzurePlayground.Models</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Queries\AzurePlayground.Queries.csproj">
       <Project>{176178a9-63e6-4665-a1ce-ebb8ce87bc7c}</Project>
       <Name>AzurePlayground.Queries</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AzurePlayground.Utilities\AzurePlayground.Utilities.csproj">
-      <Project>{d4e722c8-0cd3-47c9-a479-ca3fa83fa225}</Project>
-      <Name>AzurePlayground.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

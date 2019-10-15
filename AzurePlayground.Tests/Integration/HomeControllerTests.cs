@@ -41,7 +41,7 @@ namespace AzurePlayground.Tests.Integration {
         [TestMethod]
         public void HomeController_Registration_Activation_To_LogIn_Succeeds() {
             // Registration
-            var registrationResult = (ViewResult)GetController().Register(new UserRegistration() {
+            var registrationResult = (ViewResult)GetController().Register(new RegisterUserModel() {
                 Email = "test@test.com",
                 Password = "test",
                 ConfirmPassword = "test"
@@ -57,7 +57,7 @@ namespace AzurePlayground.Tests.Integration {
             activationResult.ViewName.Should().Be("Activated");
 
             // Log in
-            var logInResult = GetController().LogIn(new UserLogIn() {
+            var logInResult = GetController().LogIn(new LogInUserModel() {
                 Email = "test@test.com",
                 Password = "test"
             });
@@ -75,7 +75,7 @@ namespace AzurePlayground.Tests.Integration {
             });
 
             // Request password reset
-            var forgotPasswordResult = (ViewResult)GetController().ForgotPassword(new UserForgotPassword() {
+            var forgotPasswordResult = (ViewResult)GetController().ForgotPassword(new ForgotUserPasswordModel() {
                 Email = "test@test.com"
             });
 
@@ -84,7 +84,7 @@ namespace AzurePlayground.Tests.Integration {
 
             // Reset password
             var token = Regex.Match(_mailClient.SentMessages.Last().Body, "(?<=\\=)\\w+(?=\")").Value;
-            var resetResult = (ViewResult)GetController().ResetPassword(new UserPasswordReset() {
+            var resetResult = (ViewResult)GetController().ResetPassword(new ResetUserPasswordModel() {
                 Email = "test@test.com",
                 PasswordResetToken = token,
                 NewPassword = "test",
@@ -94,7 +94,7 @@ namespace AzurePlayground.Tests.Integration {
             resetResult.ViewName.Should().Be("PasswordReset");
 
             // Log in
-            var logInResult = GetController().LogIn(new UserLogIn() {
+            var logInResult = GetController().LogIn(new LogInUserModel() {
                 Email = "test@test.com",
                 Password = "test"
             });
@@ -114,7 +114,7 @@ namespace AzurePlayground.Tests.Integration {
             _authenticationProvider.Identity = "test@test.com";
 
             // Change password
-            var changePasswordResult = (ViewResult)GetController().ChangePassword(new UserChangePassword() {
+            var changePasswordResult = (ViewResult)GetController().ChangePassword(new ChangeUserPasswordModel() {
                 CurrentPassword = "test",
                 NewPassword = "hunter2",
                 ConfirmNewPassword = "hunter2"
@@ -128,7 +128,7 @@ namespace AzurePlayground.Tests.Integration {
             _authenticationProvider.Identity.Should().BeNull();
 
             // Log in
-            var logInResult = GetController().LogIn(new UserLogIn() {
+            var logInResult = GetController().LogIn(new LogInUserModel() {
                 Email = "test@test.com",
                 Password = "hunter2"
             });
@@ -147,7 +147,7 @@ namespace AzurePlayground.Tests.Integration {
             });
 
             // Failed log in
-            var failedLogInResult = GetController().LogIn(new UserLogIn() {
+            var failedLogInResult = GetController().LogIn(new LogInUserModel() {
                 Email = "test@test.com",
                 Password = "hunter2"
             });
@@ -156,7 +156,7 @@ namespace AzurePlayground.Tests.Integration {
             _authenticationProvider.Identity.Should().BeNull();
 
             // Log in
-            var logInResult = GetController().LogIn(new UserLogIn() {
+            var logInResult = GetController().LogIn(new LogInUserModel() {
                 Email = "test@test.com",
                 Password = "test"
             });
@@ -165,7 +165,7 @@ namespace AzurePlayground.Tests.Integration {
             _authenticationProvider.Identity.Should().Be("test@test.com");
 
             // Deactivate
-            var deactivateResult = GetController().Deactivate(new UserDeactivation() {
+            var deactivateResult = GetController().Deactivate(new DeactivateUserModel() {
                 Password = "test"
             });
 

@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Container;
 using System;
 using System.Linq;
@@ -13,8 +13,8 @@ namespace AzurePlayground.CommandHandlers.Security {
             _playgroundContextFactory = playgroundContextFactory;
         }
 
-        public CommandResult<UserLogOut> Execute(UserLogOut parameter) {
-            var result = new CommandResult<UserLogOut>();
+        public CommandResult<LogOutUserCommand> Execute(LogOutUserCommand parameter) {
+            var result = new CommandResult<LogOutUserCommand>();
 
             using (var context = _playgroundContextFactory.GetContext()) {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));

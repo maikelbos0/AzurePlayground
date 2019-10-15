@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,13 +19,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Email = "test@test.com",
                 Status = UserStatus.Active
             };
-            var model = new UserLogOut() {
-                Email = "test@test.com"
-            };
+            var command = new LogOutUserCommand("test@test.com");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Success.Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
@@ -35,11 +33,9 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void LogOutUserCommandHandler_Throws_Exception_For_New_User() {
             var handler = new LogOutUserCommandHandler(_playgroundContextFactory);
-            var model = new UserLogOut() {
-                Email = "test@test.com"
-            };
+            var command = new LogOutUserCommand("test@test.com");
             Action commandAction = () => {
-                var result = handler.Execute(model);
+                var result = handler.Execute(command);
             };
 
             _playgroundContextFactory.Context.Users.Add(new User() {
@@ -53,11 +49,9 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void LogOutUserCommandHandler_Throws_Exception_For_Inactive_User() {
             var handler = new LogOutUserCommandHandler(_playgroundContextFactory);
-            var model = new UserLogOut() {
-                Email = "test@test.com"
-            };
+            var command = new LogOutUserCommand("test@test.com");
             Action commandAction = () => {
-                var result = handler.Execute(model);
+                var result = handler.Execute(command);
             };
 
             _playgroundContextFactory.Context.Users.Add(new User() {
@@ -71,11 +65,9 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void LogOutUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
             var handler = new LogOutUserCommandHandler(_playgroundContextFactory);
-            var model = new UserLogOut() {
-                Email = "test@test.com"
-            };
+            var command = new LogOutUserCommand("test@test.com");
             Action commandAction = () => {
-                var result = handler.Execute(model);
+                var result = handler.Execute(command);
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out non-existent user 'test@test.com'");

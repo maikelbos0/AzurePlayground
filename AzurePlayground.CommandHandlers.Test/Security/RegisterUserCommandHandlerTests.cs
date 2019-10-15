@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,13 +21,9 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void RegisterUserCommandHandler_Succeeds() {
             var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserRegistration() {
-                Email = "test@test.com",
-                Password = "test",
-                ConfirmPassword = "test"
-            };
+            var command = new RegisterUserCommand("test@test.com", "test", "test");
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
             var user = _playgroundContextFactory.Context.Users.SingleOrDefault();
 
             result.Errors.Should().BeEmpty();
@@ -40,13 +36,9 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void RegisterUserCommandHandler_Fails_For_Unmatched_Password() {
             var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserRegistration() {
-                Email = "test@test.com",
-                Password = "test",
-                ConfirmPassword = "wrong"
-            };
+            var command = new RegisterUserCommand("test@test.com", "test", "wrong");
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmPassword");
@@ -56,17 +48,13 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void RegisterUserCommandHandler_Fails_For_Existing_Email() {
             var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserRegistration() {
-                Email = "test@test.com",
-                Password = "test",
-                ConfirmPassword = "test"
-            };
+            var command = new RegisterUserCommand("test@test.com", "test", "test");
 
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com"
             });
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
@@ -77,13 +65,9 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void RegisterUserCommandHandler_Sends_Email() {
             var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
-            var model = new UserRegistration() {
-                Email = "test@test.com",
-                Password = "test",
-                ConfirmPassword = "test"
-            };
+            var command = new RegisterUserCommand("test@test.com", "test", "test");
 
-            handler.Execute(model);
+            handler.Execute(command);
 
             _mailClient.SentMessages.Should().HaveCount(1);
             _mailClient.SentMessages[0].Subject.Should().Be("Please activate your account");

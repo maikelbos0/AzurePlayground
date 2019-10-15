@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Models.Security;
+using AzurePlayground.Commands.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,14 +20,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.Active
             };
-            var model = new UserDeactivation() {
-                Email = "test@test.com",
-                Password = "test"
-            };
+            var command = new DeactivateUserCommand("test@test.com", "test");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Errors.Should().BeEmpty();
             user.Status.Should().Be(UserStatus.Inactive);
@@ -43,14 +40,11 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.Active
             };
-            var model = new UserDeactivation() {
-                Email = "test@test.com",
-                Password = "wrong"
-            };
+            var command = new DeactivateUserCommand("test@test.com", "wrong");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(model);
+            var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Password");
@@ -63,13 +57,10 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void DeactivateUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
             var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
-            var model = new UserDeactivation() {
-                Email = "test@test.com",
-                Password = "test"
-            };
+            var command = new DeactivateUserCommand("test@test.com", "test");
 
             Action commandAction = () => {
-                var result = handler.Execute(model);
+                var result = handler.Execute(command);
             };
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate non-existent user 'test@test.com'");
@@ -78,13 +69,10 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void DeactivateUserCommandHandler_Throws_Exception_For_Inactive_User() {
             var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
-            var model = new UserDeactivation() {
-                Email = "test@test.com",
-                Password = "test"
-            };
+            var command = new DeactivateUserCommand("test@test.com", "test");
 
             Action commandAction = () => {
-                var result = handler.Execute(model);
+                var result = handler.Execute(command);
             };
 
             _playgroundContextFactory.Context.Users.Add(new User() {
@@ -98,13 +86,10 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void DeactivateUserCommandHandler_Throws_Exception_For_New_User() {
             var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
-            var model = new UserDeactivation() {
-                Email = "test@test.com",
-                Password = "test"
-            };
+            var command = new DeactivateUserCommand("test@test.com", "test");
 
             Action commandAction = () => {
-                var result = handler.Execute(model);
+                var result = handler.Execute(command);
             };
 
             _playgroundContextFactory.Context.Users.Add(new User() {

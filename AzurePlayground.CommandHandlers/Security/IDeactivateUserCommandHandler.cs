@@ -1,6 +1,6 @@
-﻿using AzurePlayground.Models.Security;
+﻿using AzurePlayground.Commands.Security;
 
 namespace AzurePlayground.CommandHandlers.Security {
-    public interface IDeactivateUserCommandHandler : ICommandHandler<UserDeactivation> {
+    public interface IDeactivateUserCommandHandler : ICommandHandler<DeactivateUserCommand> {
     }
 }
