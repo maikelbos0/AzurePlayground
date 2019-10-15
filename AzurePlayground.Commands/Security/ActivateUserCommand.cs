@@ -1,5 +1,5 @@
 ﻿namespace AzurePlayground.Commands.Security {
-    public class ActivateUserCommand {
+    public class ActivateUserCommand : ICommand {
         public string Email { get; }
         public string ActivationCode { get; }
 

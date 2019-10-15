@@ -1,19 +1,20 @@
-﻿using System;
+﻿using AzurePlayground.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace AzurePlayground.CommandHandlers {
-    public class CommandResult<TParameter> {
-        public List<CommandError<TParameter>> Errors { get; set; } = new List<CommandError<TParameter>>();
+    public class CommandResult<TCommand> where TCommand : ICommand {
+        public List<CommandError<TCommand>> Errors { get; set; } = new List<CommandError<TCommand>>();
         public bool Success {
             get {
                 return !Errors.Any();
             }
         }
 
-        public void AddError(Expression<Func<TParameter, object>> expression, string message) {
-            Errors.Add(new CommandError<TParameter>() {
+        public void AddError(Expression<Func<TCommand, object>> expression, string message) {
+            Errors.Add(new CommandError<TCommand>() {
                 Expression = expression,
                 Message = message
             });
