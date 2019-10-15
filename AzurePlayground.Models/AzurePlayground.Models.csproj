@@ -50,7 +50,6 @@
     <Compile Include="Security\SendUserActivationModel.cs" />
     <Compile Include="Security\ActivateUserModel.cs" />
     <Compile Include="Security\LogInUserModel.cs" />
-    <Compile Include="Security\LogOutUserModel.cs" />
     <Compile Include="Security\RegisterUserModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

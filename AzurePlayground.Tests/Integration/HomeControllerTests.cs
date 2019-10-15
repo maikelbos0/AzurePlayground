@@ -84,9 +84,7 @@ namespace AzurePlayground.Tests.Integration {
 
             // Reset password
             var token = Regex.Match(_mailClient.SentMessages.Last().Body, "(?<=\\=)\\w+(?=\")").Value;
-            var resetResult = (ViewResult)GetController().ResetPassword(new ResetUserPasswordModel() {
-                Email = "test@test.com",
-                PasswordResetToken = token,
+            var resetResult = (ViewResult)GetController().ResetPassword("test@test.com", token, new ResetUserPasswordModel() {
                 NewPassword = "test",
                 ConfirmNewPassword = "test"
             });

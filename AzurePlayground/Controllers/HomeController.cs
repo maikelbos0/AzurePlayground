@@ -209,20 +209,15 @@ namespace AzurePlayground.Controllers {
 
         [Route("ResetPassword")]
         [HttpGet]
-        public ActionResult ResetPassword(string token, string email) {
-            var model = new ResetUserPasswordModel() {
-                PasswordResetToken = token,
-                Email = email
-            };
-
-            return View(model);
+        public ActionResult ResetPassword() {
+            return View(new ResetUserPasswordModel());
         }
 
         [Route("ResetPassword")]
         [HttpPost]
-        public ActionResult ResetPassword(ResetUserPasswordModel model) {
+        public ActionResult ResetPassword(string email, string token , ResetUserPasswordModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_resetUserPasswordCommand.Execute(new ResetUserPasswordCommand( model.Email, model.PasswordResetToken, model.NewPassword, model.ConfirmNewPassword)));
+                ModelState.Merge(_resetUserPasswordCommand.Execute(new ResetUserPasswordCommand(email, token, model.NewPassword, model.ConfirmNewPassword)));
             }
 
             if (ModelState.IsValid) {
@@ -245,7 +240,7 @@ namespace AzurePlayground.Controllers {
         [Authorize]
         public ActionResult Deactivate(DeactivateUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_deactivateUserCommand.Execute( new DeactivateUserCommand(_authenticationProvider.GetIdentity(), model.Password)));
+                ModelState.Merge(_deactivateUserCommand.Execute(new DeactivateUserCommand(_authenticationProvider.GetIdentity(), model.Password)));
             }
 
             if (ModelState.IsValid) {

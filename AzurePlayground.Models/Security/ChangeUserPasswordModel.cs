@@ -3,8 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AzurePlayground.Models.Security {
     public class ChangeUserPasswordModel {
-        public string Email { get; set; }
-
         [DisplayName("Current password")]
         [Required(ErrorMessage = "Current password is required")]
         public string CurrentPassword { get; set; }

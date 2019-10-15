@@ -3,8 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AzurePlayground.Models.Security {
     public class ResetUserPasswordModel {
-        public string Email { get; set; }
-
+        // This property is used only for showing validation
+        // TODO figure out a cleaner way of having error messages without corresponding properties
+        // TODO probably use that way for "invalid username or password"
         public string PasswordResetToken { get; set; }
 
         [DisplayName("New password")]
