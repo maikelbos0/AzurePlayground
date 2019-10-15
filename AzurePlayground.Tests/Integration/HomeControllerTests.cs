@@ -2,7 +2,7 @@
 using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
 using AzurePlayground.Models.Security;
-using AzurePlayground.Providers;
+using AzurePlayground.Services;
 using AzurePlayground.Test.Utilities;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Mail;
@@ -17,7 +17,7 @@ using Unity;
 namespace AzurePlayground.Tests.Integration {
     [TestClass]
     public class HomeControllerTests {
-        private readonly FakeAuthenticationProvider _authenticationProvider = new FakeAuthenticationProvider();
+        private readonly FakeAuthenticationService _authenticationService = new FakeAuthenticationService();
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
@@ -28,7 +28,7 @@ namespace AzurePlayground.Tests.Integration {
 
         [TestInitialize]
         public void Initialize() {
-            UnityConfig.Container.RegisterInstance<IAuthenticationProvider>(_authenticationProvider);
+            UnityConfig.Container.RegisterInstance<IAuthenticationService>(_authenticationService);
             UnityConfig.Container.RegisterInstance<IPlaygroundContextFactory>(_playgroundContextFactory);
             UnityConfig.Container.RegisterInstance<IMailClient>(_mailClient);
             UnityConfig.Container.RegisterInstance<IAppSettings>(_appSettings);
@@ -63,7 +63,7 @@ namespace AzurePlayground.Tests.Integration {
             });
 
             logInResult.Should().BeOfType<RedirectToRouteResult>();
-            _authenticationProvider.Identity.Should().Be("test@test.com");
+            _authenticationService.Identity.Should().Be("test@test.com");
         }
 
         [TestMethod]
@@ -98,7 +98,7 @@ namespace AzurePlayground.Tests.Integration {
             });
 
             logInResult.Should().BeOfType<RedirectToRouteResult>();
-            _authenticationProvider.Identity.Should().Be("test@test.com");
+            _authenticationService.Identity.Should().Be("test@test.com");
         }
 
         [TestMethod]
@@ -109,7 +109,7 @@ namespace AzurePlayground.Tests.Integration {
                 Password = new Password("test"),
                 Status = UserStatus.Active
             });
-            _authenticationProvider.Identity = "test@test.com";
+            _authenticationService.Identity = "test@test.com";
 
             // Change password
             var changePasswordResult = (ViewResult)GetController().ChangePassword(new ChangeUserPasswordModel() {
@@ -123,7 +123,7 @@ namespace AzurePlayground.Tests.Integration {
             var logOutResult = GetController().LogOut();
 
             logOutResult.Should().BeOfType<RedirectToRouteResult>();
-            _authenticationProvider.Identity.Should().BeNull();
+            _authenticationService.Identity.Should().BeNull();
 
             // Log in
             var logInResult = GetController().LogIn(new LogInUserModel() {
@@ -132,7 +132,7 @@ namespace AzurePlayground.Tests.Integration {
             });
 
             logInResult.Should().BeOfType<RedirectToRouteResult>();
-            _authenticationProvider.Identity.Should().Be("test@test.com");
+            _authenticationService.Identity.Should().Be("test@test.com");
         }
 
         [TestMethod]
@@ -151,7 +151,7 @@ namespace AzurePlayground.Tests.Integration {
             });
 
             failedLogInResult.Should().BeOfType<ViewResult>();
-            _authenticationProvider.Identity.Should().BeNull();
+            _authenticationService.Identity.Should().BeNull();
 
             // Log in
             var logInResult = GetController().LogIn(new LogInUserModel() {
@@ -160,7 +160,7 @@ namespace AzurePlayground.Tests.Integration {
             });
 
             logInResult.Should().BeOfType<RedirectToRouteResult>();
-            _authenticationProvider.Identity.Should().Be("test@test.com");
+            _authenticationService.Identity.Should().Be("test@test.com");
 
             // Deactivate
             var deactivateResult = GetController().Deactivate(new DeactivateUserModel() {
@@ -168,7 +168,7 @@ namespace AzurePlayground.Tests.Integration {
             });
 
             deactivateResult.Should().BeOfType<RedirectToRouteResult>();
-            _authenticationProvider.Identity.Should().BeNull();
+            _authenticationService.Identity.Should().BeNull();
             _playgroundContextFactory.Context.Users.Single().Status.Should().Be(UserStatus.Inactive);
         }
     }

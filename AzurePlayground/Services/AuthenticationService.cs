@@ -2,9 +2,9 @@
 using System.Web;
 using System.Web.Security;
 
-namespace AzurePlayground.Providers {
+namespace AzurePlayground.Services {
     [Injectable]
-    public class AuthenticationProvider : IAuthenticationProvider {
+    public class AuthenticationService : IAuthenticationService {
         public string GetIdentity() {
             return HttpContext.Current.User.Identity.Name;
         }

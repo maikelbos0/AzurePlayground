@@ -1,5 +1,5 @@
-﻿namespace AzurePlayground.Providers {
-    public interface IAuthenticationProvider {
+﻿namespace AzurePlayground.Services {
+    public interface IAuthenticationService {
         string GetIdentity();
         void SignIn(string identity);
         void SignOut();

@@ -1,7 +1,7 @@
-﻿using AzurePlayground.Providers;
+﻿using AzurePlayground.Services;
 
 namespace AzurePlayground.Test.Utilities {
-    public class FakeAuthenticationProvider : IAuthenticationProvider {
+    public class FakeAuthenticationService : IAuthenticationService {
         public string Identity { get; set; }
 
         public string GetIdentity() {

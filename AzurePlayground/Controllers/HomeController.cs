@@ -2,13 +2,13 @@
 using AzurePlayground.Extensions;
 using AzurePlayground.Models.Security;
 using AzurePlayground.Commands.Security;
-using AzurePlayground.Providers;
+using AzurePlayground.Services;
 using System.Web.Mvc;
 
 namespace AzurePlayground.Controllers {
     [RoutePrefix("Home")]
     public class HomeController : Controller {
-        private readonly IAuthenticationProvider _authenticationProvider;
+        private readonly IAuthenticationService _authenticationService;
         private readonly IRegisterUserCommandHandler _registerUserCommand;
         private readonly IActivateUserCommandHandler _activateUserCommand;
         private readonly ISendUserActivationCommandHandler _sendUserActivationCommand;
@@ -19,7 +19,7 @@ namespace AzurePlayground.Controllers {
         private readonly IResetUserPasswordCommandHandler _resetUserPasswordCommand;
         private readonly IDeactivateUserCommandHandler _deactivateUserCommand;
 
-        public HomeController(IAuthenticationProvider authenticationProvider,
+        public HomeController(IAuthenticationService authenticationService,
             IRegisterUserCommandHandler registerUserCommand,
             IActivateUserCommandHandler activateUserCommand,
             ISendUserActivationCommandHandler sendUserActivationCommand,
@@ -30,7 +30,7 @@ namespace AzurePlayground.Controllers {
             IResetUserPasswordCommandHandler resetUserPasswordCommand,
             IDeactivateUserCommandHandler deactivateUserCommand) {
 
-            _authenticationProvider = authenticationProvider;
+            _authenticationService = authenticationService;
             _registerUserCommand = registerUserCommand;
             _activateUserCommand = activateUserCommand;
             _sendUserActivationCommand = sendUserActivationCommand;
@@ -139,7 +139,7 @@ namespace AzurePlayground.Controllers {
             }
 
             if (ModelState.IsValid) {
-                _authenticationProvider.SignIn(model.Email);
+                _authenticationService.SignIn(model.Email);
                 return RedirectToAction("LoggedIn");
             }
             else {
@@ -158,8 +158,8 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         [Authorize]
         public ActionResult LogOut() {
-            _logOutUserCommand.Execute(new LogOutUserCommand(_authenticationProvider.GetIdentity()));
-            _authenticationProvider.SignOut();
+            _logOutUserCommand.Execute(new LogOutUserCommand(_authenticationService.GetIdentity()));
+            _authenticationService.SignOut();
             return RedirectToAction("Index");
         }
 
@@ -175,7 +175,7 @@ namespace AzurePlayground.Controllers {
         [Authorize]
         public ActionResult ChangePassword(ChangeUserPasswordModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_changeUserPasswordCommand.Execute(new ChangeUserPasswordCommand(_authenticationProvider.GetIdentity(), model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword)));
+                ModelState.Merge(_changeUserPasswordCommand.Execute(new ChangeUserPasswordCommand(_authenticationService.GetIdentity(), model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword)));
             }
 
             if (ModelState.IsValid) {
@@ -240,11 +240,11 @@ namespace AzurePlayground.Controllers {
         [Authorize]
         public ActionResult Deactivate(DeactivateUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_deactivateUserCommand.Execute(new DeactivateUserCommand(_authenticationProvider.GetIdentity(), model.Password)));
+                ModelState.Merge(_deactivateUserCommand.Execute(new DeactivateUserCommand(_authenticationService.GetIdentity(), model.Password)));
             }
 
             if (ModelState.IsValid) {
-                _authenticationProvider.SignOut();
+                _authenticationService.SignOut();
                 return RedirectToAction("Index");
             }
             else {
