@@ -1,6 +1,7 @@
 ﻿using AzurePlayground.CommandHandlers;
 using AzurePlayground.Commands;
 using AzurePlayground.Queries;
+using AzurePlayground.QueryHandlers;
 using Unity;
 
 namespace AzurePlayground.Services {
@@ -18,7 +19,10 @@ namespace AzurePlayground.Services {
         }
 
         public TReturnValue Dispatch<TReturnValue>(IQuery<TReturnValue> query) {
-            throw new System.NotImplementedException();
+            var type = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TReturnValue));
+            dynamic handler = _container.Resolve(type);
+
+            return handler.Execute((dynamic)query);
         }
     }
 }
