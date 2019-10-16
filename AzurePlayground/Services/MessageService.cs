@@ -12,7 +12,9 @@ namespace AzurePlayground.Services {
         }
 
         public CommandResult<TCommand> Dispatch<TCommand>(TCommand command) where TCommand : ICommand {
-            throw new System.NotImplementedException();
+            var handler = _container.Resolve<ICommandHandler<TCommand>>();
+
+            return handler.Execute(command);
         }
 
         public TReturnValue Dispatch<TReturnValue>(IQuery<TReturnValue> query) {

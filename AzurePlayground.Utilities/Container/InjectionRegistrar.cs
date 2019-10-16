@@ -17,7 +17,7 @@ namespace AzurePlayground.Utilities.Container {
                 .Where(type => Attribute.IsDefined(type, typeof(InjectableAttribute)))
                 .Select(type => new {
                     Type = type,
-                    Interface = type.GetInterfaces().FirstOrDefault(i => i.Name == $"I{type.Name}")
+                    Interface = type.GetInterfaces().SingleOrDefault(i => i.Name == $"I{type.Name}") ?? type.GetInterfaces().SingleOrDefault()
                 })
                 .Where(type => type.Interface != null);
 

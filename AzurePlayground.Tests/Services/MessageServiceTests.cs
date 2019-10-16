@@ -24,12 +24,11 @@ namespace AzurePlayground.Tests.Services {
         }
 
         [Injectable]
-        public class TestQueryHander : IQueryHandler<TestQuery, bool> {
+        public class TestQueryHandler : IQueryHandler<TestQuery, bool> {
             public bool Execute(TestQuery query) {
                 return true;
             }
         }
-
 
         [TestMethod]
         public void MessageService_Dispatches_Command_To_CommandHandler() {
