@@ -104,6 +104,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AzurePlayground.CommandHandlers\AzurePlayground.CommandHandlers.csproj">
+      <Project>{af5556d3-a4cb-4519-8fd6-3f7478656709}</Project>
+      <Name>AzurePlayground.CommandHandlers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.Commands\AzurePlayground.Commands.csproj">
+      <Project>{f38be491-8e58-49b6-9bcc-4d97d52a4d55}</Project>
+      <Name>AzurePlayground.Commands</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Database\AzurePlayground.Database.csproj">
       <Project>{A6DE6643-8D01-4398-ABED-536D33860AB6}</Project>
       <Name>AzurePlayground.Database</Name>
@@ -115,6 +123,14 @@
     <ProjectReference Include="..\AzurePlayground.Models\AzurePlayground.Models.csproj">
       <Project>{fe4c0d69-d134-4f3a-b19e-0be8e3cb6fc2}</Project>
       <Name>AzurePlayground.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.Queries\AzurePlayground.Queries.csproj">
+      <Project>{176178a9-63e6-4665-a1ce-ebb8ce87bc7c}</Project>
+      <Name>AzurePlayground.Queries</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.QueryHandlers\AzurePlayground.QueryHandlers.csproj">
+      <Project>{02a56af1-a009-4273-b801-8a5f7c98e84f}</Project>
+      <Name>AzurePlayground.QueryHandlers</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Test.Utilities\AzurePlayground.Test.Utilities.csproj">
       <Project>{9c94c213-715e-4c3a-abe9-608337808bc1}</Project>

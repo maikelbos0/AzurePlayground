@@ -15,7 +15,7 @@ namespace AzurePlayground.Services {
             throw new System.NotImplementedException();
         }
 
-        public TReturnValue Dispatch<TQuery, TReturnValue>(TQuery query) where TQuery : IQuery<TReturnValue> {
+        public TReturnValue Dispatch<TReturnValue>(IQuery<TReturnValue> query) {
             throw new System.NotImplementedException();
         }
     }

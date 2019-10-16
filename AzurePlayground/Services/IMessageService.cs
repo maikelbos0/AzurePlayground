@@ -5,6 +5,6 @@ using AzurePlayground.Queries;
 namespace AzurePlayground.Services {
     public interface IMessageService {
         CommandResult<TCommand> Dispatch<TCommand>(TCommand command) where TCommand : ICommand;
-        TReturnValue Dispatch<TQuery, TReturnValue>(TQuery query) where TQuery: IQuery<TReturnValue>;
+        TReturnValue Dispatch<TReturnValue>(IQuery<TReturnValue> query);
     }
 }
