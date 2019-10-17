@@ -63,7 +63,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
+            result.Errors[0].Expression.Should().BeNull();
             result.Errors[0].Message.Should().Be("Invalid email or password");
         }
 
@@ -82,7 +82,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
+            result.Errors[0].Expression.Should().BeNull();
             result.Errors[0].Message.Should().Be("Invalid email or password");
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().Type.Should().Be(UserEventType.FailedLogIn);
@@ -103,7 +103,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
+            result.Errors[0].Expression.Should().BeNull();
             result.Errors[0].Message.Should().Be("Invalid email or password");
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().Type.Should().Be(UserEventType.FailedLogIn);
@@ -124,7 +124,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
+            result.Errors[0].Expression.Should().BeNull();
             result.Errors[0].Message.Should().Be("Invalid email or password");
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().Type.Should().Be(UserEventType.FailedLogIn);

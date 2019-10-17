@@ -80,7 +80,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
+            result.Errors[0].Expression.Should().BeNull();
             result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
             user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
@@ -102,7 +102,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
+            result.Errors[0].Expression.Should().BeNull();
             result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
             user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
@@ -125,7 +125,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             var result = handler.Execute(command);
 
             result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.PasswordResetToken");
+            result.Errors[0].Expression.Should().BeNull();
             result.Errors[0].Message.Should().Be("The password reset link has expired; please request a new one");
             user.Password.Verify("test").Should().BeTrue();
             user.UserEvents.Should().HaveCount(1);
