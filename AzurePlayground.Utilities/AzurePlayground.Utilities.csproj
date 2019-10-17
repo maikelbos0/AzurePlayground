@@ -97,12 +97,22 @@
     <Compile Include="Configuration\IAppSettings.cs" />
     <Compile Include="Container\InjectableAttribute.cs" />
     <Compile Include="Container\InjectionRegistrar.cs" />
+    <Compile Include="Mail\ActivationMailTemplate.cs" />
+    <Compile Include="Mail\ActivationMailTemplateParameters.cs" />
     <Compile Include="Mail\IMailClient.cs" />
     <Compile Include="Mail\MailClient.cs" />
     <Compile Include="Mail\MailMessage.cs" />
+    <Compile Include="Mail\IMailTemplate.cs" />
+    <Compile Include="Mail\PasswordResetMailTemplate.cs" />
+    <Compile Include="Mail\PasswordResetMailTemplateParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AzurePlayground.Resources\AzurePlayground.Resources.csproj">
+      <Project>{8f741709-e965-4a05-8d00-0858989603de}</Project>
+      <Name>AzurePlayground.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

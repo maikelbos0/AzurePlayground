@@ -5,6 +5,7 @@ using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using AzurePlayground.Utilities.Mail;
 
 namespace AzurePlayground.CommandHandlers.Test.Security {
     [TestClass]
@@ -19,7 +20,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Sends_Email() {
-            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var command = new ForgotUserPasswordCommand("test@test.com");
 
             _playgroundContextFactory.Context.Users.Add(new User() {
@@ -37,7 +38,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Succeeds() {
-            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -55,7 +56,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Does_Nothing_For_Nonexistent_User() {
-            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var command = new ForgotUserPasswordCommand("test@test.com");
 
             var result = handler.Execute(command);
@@ -66,7 +67,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Does_Nothing_For_Inactive_User() {
-            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -85,7 +86,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Does_Nothing_For_New_User() {
-            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ForgotUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),

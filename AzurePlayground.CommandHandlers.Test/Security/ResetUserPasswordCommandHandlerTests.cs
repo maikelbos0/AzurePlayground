@@ -1,27 +1,20 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
-using AzurePlayground.Domain.Security;
 using AzurePlayground.Commands.Security;
+using AzurePlayground.Domain.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Test.Security {
     [TestClass]
     public class ResetUserPasswordCommandHandlerTests {
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
-        private readonly FakeMailClient _mailClient = new FakeMailClient();
-        private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
-            Settings = new Dictionary<string, string>() {
-                { "Application.BaseUrl", "http://localhost" }
-            }
-        };
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Succeeds() {
-            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -42,7 +35,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Fails_For_Unmatched_New_Password() {
-            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -65,7 +58,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Fails_For_Expired_Token() {
-            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -89,7 +82,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Fails_When_Already_Reset() {
-            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -111,7 +104,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Fails_For_Incorrect_Token() {
-            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -134,7 +127,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Throws_Exception_For_Inactive_User() {
-            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -154,7 +147,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -174,7 +167,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new ResetUserPasswordCommandHandler(_playgroundContextFactory);
             var command = new ResetUserPasswordCommand("test@test.com", "test", "test2", "test2"); 
 
             Action commandAction = () => {

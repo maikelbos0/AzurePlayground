@@ -1,18 +1,16 @@
 ﻿using AzurePlayground.Commands.Security;
 using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
-using AzurePlayground.Utilities.Mail;
 using System;
 using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class ChangeUserPasswordCommandHandler : BaseUserCommandHandler, ICommandHandler<ChangeUserPasswordCommand> {
+    public class ChangeUserPasswordCommandHandler : ICommandHandler<ChangeUserPasswordCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
 
-        public ChangeUserPasswordCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
+        public ChangeUserPasswordCommandHandler(IPlaygroundContextFactory playgroundContextFactory) {
             _playgroundContextFactory = playgroundContextFactory;
         }
 

@@ -1,7 +1,6 @@
 ﻿using AzurePlayground.Commands.Security;
 using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
 using System;
@@ -11,9 +10,13 @@ namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
     public class RegisterUserCommandHandler : BaseUserCommandHandler, ICommandHandler<RegisterUserCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
+        private readonly IMailClient _mailClient;
+        private readonly IMailTemplate<ActivationMailTemplateParameters> _template;
 
-        public RegisterUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
+        public RegisterUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IMailTemplate<ActivationMailTemplateParameters> template) {
             _playgroundContextFactory = playgroundContextFactory;
+            _mailClient = mailClient;
+            _template = template;
         }
 
         public CommandResult<RegisterUserCommand> Execute(RegisterUserCommand parameter) {
@@ -39,11 +42,9 @@ namespace AzurePlayground.CommandHandlers.Security {
                 if (result.Success) {
                     context.Users.Add(user);
                     context.SaveChanges();
-                }
-            }
 
-            if (result.Success) {
-                SendActivationEmail(user);
+                    _mailClient.Send(_template.GetMessage(new ActivationMailTemplateParameters(user.Email, user.ActivationCode.Value), user.Email));
+                }
             }
 
             return result;

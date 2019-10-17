@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using AzurePlayground.Utilities.Mail;
 
 namespace AzurePlayground.CommandHandlers.Test.Security {
     [TestClass]
@@ -20,7 +21,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void SendUserActivationCommandHandler_Sends_Email() {
-            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new SendUserActivationCommand("test@test.com");
 
             _playgroundContextFactory.Context.Users.Add(new User() {
@@ -39,7 +40,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void SendUserActivationCommandHandler_Creates_New_Activation_Code() {
-            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
             var user = new User() {
                 Email = "test@test.com",
                 ActivationCode = 999999,
@@ -59,7 +60,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void SendUserActivationCommandHandler_Does_Nothing_For_Active_User() {
-            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
             var user = new User() {
                 Email = "test@test.com",
                 ActivationCode = null,
@@ -79,7 +80,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void SendUserActivationCommandHandler_Does_Nothing_For_Inactive_User() {
-            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
             var user = new User() {
                 Email = "test@test.com",
                 ActivationCode = null,
@@ -99,7 +100,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void SendUserActivationCommandHandler_Does_Nothing_For_Nonexistent_User() {
-            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new SendUserActivationCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
             var user = new User() {
                 Email = "test@test.com",
                 ActivationCode = 999999,

@@ -2,6 +2,7 @@
 using AzurePlayground.Domain.Security;
 using AzurePlayground.Commands.Security;
 using AzurePlayground.Test.Utilities;
+using AzurePlayground.Utilities.Mail;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void RegisterUserCommandHandler_Succeeds() {
-            var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new RegisterUserCommand("test@test.com", "test", "test");
 
             var result = handler.Execute(command);
@@ -35,7 +36,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void RegisterUserCommandHandler_Fails_For_Unmatched_Password() {
-            var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new RegisterUserCommand("test@test.com", "test", "wrong");
 
             var result = handler.Execute(command);
@@ -47,7 +48,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void RegisterUserCommandHandler_Fails_For_Existing_Email() {
-            var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new RegisterUserCommand("test@test.com", "test", "test");
 
             _playgroundContextFactory.Context.Users.Add(new User() {
@@ -64,7 +65,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void RegisterUserCommandHandler_Sends_Email() {
-            var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new RegisterUserCommand("test@test.com", "test", "test");
 
             handler.Execute(command);

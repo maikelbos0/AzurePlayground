@@ -1,7 +1,6 @@
 ﻿using AzurePlayground.Commands.Security;
 using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
 using System;
@@ -11,10 +10,15 @@ namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
     public class ForgotUserPasswordCommandHandler : BaseUserCommandHandler, ICommandHandler<ForgotUserPasswordCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
-        
-        public ForgotUserPasswordCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
+        private readonly IMailClient _mailClient;
+        private readonly IMailTemplate<PasswordResetMailTemplateParameters> _template;
+
+        public ForgotUserPasswordCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IMailTemplate<PasswordResetMailTemplateParameters> template) {
             _playgroundContextFactory = playgroundContextFactory;
+            _mailClient = mailClient;
+            _template = template;
         }
+
         public CommandResult<ForgotUserPasswordCommand> Execute(ForgotUserPasswordCommand parameter) {
             var result = new CommandResult<ForgotUserPasswordCommand>();
 
@@ -28,7 +32,7 @@ namespace AzurePlayground.CommandHandlers.Security {
                     user.PasswordResetToken = new TemporaryPassword(token);
                     user.AddEvent(UserEventType.PasswordResetRequested);
 
-                    SendPasswordResetEmail(user, token);
+                    _mailClient.Send(_template.GetMessage(new PasswordResetMailTemplateParameters(user.Email, token), user.Email));
                 }
 
                 context.SaveChanges();

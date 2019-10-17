@@ -1,18 +1,16 @@
 ﻿using AzurePlayground.Commands.Security;
 using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
-using AzurePlayground.Utilities.Mail;
 using System;
 using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class LogInUserCommandHandler : BaseUserCommandHandler, ICommandHandler<LogInUserCommand> {
+    public class LogInUserCommandHandler : ICommandHandler<LogInUserCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
-
-        public LogInUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {
+        
+        public LogInUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory) {
             _playgroundContextFactory = playgroundContextFactory;
         }
 

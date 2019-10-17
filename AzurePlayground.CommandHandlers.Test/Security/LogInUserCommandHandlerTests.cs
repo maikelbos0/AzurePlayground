@@ -4,23 +4,16 @@ using AzurePlayground.Domain.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Test.Security {
     [TestClass]
     public class LogInUserCommandHandlerTests {
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
-        private readonly FakeMailClient _mailClient = new FakeMailClient();
-        private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
-            Settings = new Dictionary<string, string>() {
-                { "Application.BaseUrl", "http://localhost" }
-            }
-        };
 
         [TestMethod]
         public void LogInUserCommandHandler_Succeeds() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -39,7 +32,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Resets_Password_Reset_Data() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -57,7 +50,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Nonexistent_User() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
             var command = new LogInUserCommand("other@test.com", "test");
 
             var result = handler.Execute(command);
@@ -69,7 +62,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Inactive_User() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -90,7 +83,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_New_User() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
@@ -111,7 +104,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Invalid_Password() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory, _mailClient, _appSettings);
+            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
             var user = new User() {
                 Email = "test@test.com",
                 Password = new Password("test"),
