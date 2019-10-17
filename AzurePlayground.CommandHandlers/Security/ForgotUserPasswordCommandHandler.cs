@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class ForgotUserPasswordCommandHandler : BaseUserCommandHandler, ICommandHandler<ForgotUserPasswordCommand> {
+    public class ForgotUserPasswordCommandHandler : ICommandHandler<ForgotUserPasswordCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         private readonly IMailClient _mailClient;
         private readonly IMailTemplate<PasswordResetMailTemplateParameters> _template;
@@ -26,13 +26,12 @@ namespace AzurePlayground.CommandHandlers.Security {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
                 // There is no error reporting to prevent information leaking
-                if (user != null && user.Status == UserStatus.Active) {
-                    var token = GetNewPasswordResetToken();
+                if (user != null) {
+                    var token = user.ForgotPassword();
 
-                    user.PasswordResetToken = new TemporaryPassword(token);
-                    user.AddEvent(UserEventType.PasswordResetRequested);
-
-                    _mailClient.Send(_template.GetMessage(new PasswordResetMailTemplateParameters(user.Email, token), user.Email));
+                    if (token != null) {
+                        _mailClient.Send(_template.GetMessage(new PasswordResetMailTemplateParameters(user.Email, token), user.Email));
+                    }
                 }
 
                 context.SaveChanges();
