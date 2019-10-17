@@ -19,6 +19,8 @@ namespace AzurePlayground.Domain.Security {
             });
         }
 
+        // TODO figure out a better way to separate validation from logic
+
         public bool LogIn(string password) {
             var isValid = Status == UserStatus.Active && Password.Verify(password);
 
