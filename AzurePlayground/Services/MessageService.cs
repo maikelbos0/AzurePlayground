@@ -2,9 +2,11 @@
 using AzurePlayground.Commands;
 using AzurePlayground.Queries;
 using AzurePlayground.QueryHandlers;
+using AzurePlayground.Utilities.Container;
 using Unity;
 
 namespace AzurePlayground.Services {
+    [Injectable]
     public class MessageService : IMessageService {
         private readonly IUnityContainer _container;
 

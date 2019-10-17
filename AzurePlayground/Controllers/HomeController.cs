@@ -1,5 +1,4 @@
-﻿using AzurePlayground.CommandHandlers.Security;
-using AzurePlayground.Extensions;
+﻿using AzurePlayground.Extensions;
 using AzurePlayground.Models.Security;
 using AzurePlayground.Commands.Security;
 using AzurePlayground.Services;
@@ -9,37 +8,11 @@ namespace AzurePlayground.Controllers {
     [RoutePrefix("Home")]
     public class HomeController : Controller {
         private readonly IAuthenticationService _authenticationService;
-        private readonly IRegisterUserCommandHandler _registerUserCommand;
-        private readonly IActivateUserCommandHandler _activateUserCommand;
-        private readonly ISendUserActivationCommandHandler _sendUserActivationCommand;
-        private readonly ILogInUserCommandHandler _logInUserCommand;
-        private readonly ILogOutUserCommandHandler _logOutUserCommand;
-        private readonly IChangeUserPasswordCommandHandler _changeUserPasswordCommand;
-        private readonly IForgotUserPasswordCommandHandler _requestUserPasswordResetCommand;
-        private readonly IResetUserPasswordCommandHandler _resetUserPasswordCommand;
-        private readonly IDeactivateUserCommandHandler _deactivateUserCommand;
+        private readonly IMessageService _messageService;
 
-        public HomeController(IAuthenticationService authenticationService,
-            IRegisterUserCommandHandler registerUserCommand,
-            IActivateUserCommandHandler activateUserCommand,
-            ISendUserActivationCommandHandler sendUserActivationCommand,
-            ILogInUserCommandHandler logInUserCommand,
-            ILogOutUserCommandHandler logOutUserCommand,
-            IChangeUserPasswordCommandHandler changeUserPasswordCommand,
-            IForgotUserPasswordCommandHandler requestUserPasswordResetCommand,
-            IResetUserPasswordCommandHandler resetUserPasswordCommand,
-            IDeactivateUserCommandHandler deactivateUserCommand) {
-
+        public HomeController(IAuthenticationService authenticationService, IMessageService messageService) {
             _authenticationService = authenticationService;
-            _registerUserCommand = registerUserCommand;
-            _activateUserCommand = activateUserCommand;
-            _sendUserActivationCommand = sendUserActivationCommand;
-            _logInUserCommand = logInUserCommand;
-            _logOutUserCommand = logOutUserCommand;
-            _changeUserPasswordCommand = changeUserPasswordCommand;
-            _requestUserPasswordResetCommand = requestUserPasswordResetCommand;
-            _resetUserPasswordCommand = resetUserPasswordCommand;
-            _deactivateUserCommand = deactivateUserCommand;
+            _messageService = messageService;
         }
 
         [Route("~/")]
@@ -60,7 +33,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult Register(RegisterUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_registerUserCommand.Execute(new RegisterUserCommand(model.Email, model.Password, model.ConfirmPassword)));
+                ModelState.Merge(_messageService.Dispatch(new RegisterUserCommand(model.Email, model.Password, model.ConfirmPassword)));
             }
 
             if (ModelState.IsValid) {
@@ -81,7 +54,7 @@ namespace AzurePlayground.Controllers {
 
             if (!string.IsNullOrWhiteSpace(model.ActivationCode)
                 && !string.IsNullOrWhiteSpace(model.Email)
-                && _activateUserCommand.Execute(new ActivateUserCommand(model.Email, model.ActivationCode)).Success) {
+                && _messageService.Dispatch(new ActivateUserCommand(model.Email, model.ActivationCode)).Success) {
 
                 return View("Activated");
             }
@@ -93,7 +66,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult Activate(ActivateUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_activateUserCommand.Execute(new ActivateUserCommand(model.Email, model.ActivationCode)));
+                ModelState.Merge(_messageService.Dispatch(new ActivateUserCommand(model.Email, model.ActivationCode)));
             }
 
             if (ModelState.IsValid) {
@@ -114,7 +87,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult SendActivation(SendUserActivationModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_sendUserActivationCommand.Execute(new SendUserActivationCommand(model.Email)));
+                ModelState.Merge(_messageService.Dispatch(new SendUserActivationCommand(model.Email)));
             }
 
             if (ModelState.IsValid) {
@@ -135,7 +108,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult LogIn(LogInUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_logInUserCommand.Execute(new LogInUserCommand(model.Email, model.Password)));
+                ModelState.Merge(_messageService.Dispatch(new LogInUserCommand(model.Email, model.Password)));
             }
 
             if (ModelState.IsValid) {
@@ -158,7 +131,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         [Authorize]
         public ActionResult LogOut() {
-            _logOutUserCommand.Execute(new LogOutUserCommand(_authenticationService.GetIdentity()));
+            _messageService.Dispatch(new LogOutUserCommand(_authenticationService.GetIdentity()));
             _authenticationService.SignOut();
             return RedirectToAction("Index");
         }
@@ -175,7 +148,7 @@ namespace AzurePlayground.Controllers {
         [Authorize]
         public ActionResult ChangePassword(ChangeUserPasswordModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_changeUserPasswordCommand.Execute(new ChangeUserPasswordCommand(_authenticationService.GetIdentity(), model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword)));
+                ModelState.Merge(_messageService.Dispatch(new ChangeUserPasswordCommand(_authenticationService.GetIdentity(), model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword)));
             }
 
             if (ModelState.IsValid) {
@@ -196,7 +169,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult ForgotPassword(ForgotUserPasswordModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_requestUserPasswordResetCommand.Execute(new ForgotUserPasswordCommand(model.Email)));
+                ModelState.Merge(_messageService.Dispatch(new ForgotUserPasswordCommand(model.Email)));
             }
 
             if (ModelState.IsValid) {
@@ -217,7 +190,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult ResetPassword(string email, string token , ResetUserPasswordModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_resetUserPasswordCommand.Execute(new ResetUserPasswordCommand(email, token, model.NewPassword, model.ConfirmNewPassword)));
+                ModelState.Merge(_messageService.Dispatch(new ResetUserPasswordCommand(email, token, model.NewPassword, model.ConfirmNewPassword)));
             }
 
             if (ModelState.IsValid) {
@@ -240,7 +213,7 @@ namespace AzurePlayground.Controllers {
         [Authorize]
         public ActionResult Deactivate(DeactivateUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_deactivateUserCommand.Execute(new DeactivateUserCommand(_authenticationService.GetIdentity(), model.Password)));
+                ModelState.Merge(_messageService.Dispatch(new DeactivateUserCommand(_authenticationService.GetIdentity(), model.Password)));
             }
 
             if (ModelState.IsValid) {

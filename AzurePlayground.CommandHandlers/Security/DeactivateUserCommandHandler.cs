@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class DeactivateUserCommandHandler : IDeactivateUserCommandHandler {
+    public class DeactivateUserCommandHandler : ICommandHandler<DeactivateUserCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
 
         public DeactivateUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory) {

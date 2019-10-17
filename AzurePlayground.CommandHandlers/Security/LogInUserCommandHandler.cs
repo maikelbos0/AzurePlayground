@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class LogInUserCommandHandler : BaseUserCommandHandler, ILogInUserCommandHandler {
+    public class LogInUserCommandHandler : BaseUserCommandHandler, ICommandHandler<LogInUserCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
 
         public LogInUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {

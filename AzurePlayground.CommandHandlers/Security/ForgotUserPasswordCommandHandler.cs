@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class ForgotUserPasswordCommandHandler : BaseUserCommandHandler, IForgotUserPasswordCommandHandler {
+    public class ForgotUserPasswordCommandHandler : BaseUserCommandHandler, ICommandHandler<ForgotUserPasswordCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         
         public ForgotUserPasswordCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IAppSettings appSettings) : base(mailClient, appSettings) {

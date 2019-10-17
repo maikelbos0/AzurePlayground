@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class LogOutUserCommandHandler : ILogOutUserCommandHandler {
+    public class LogOutUserCommandHandler : ICommandHandler<LogOutUserCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         public LogOutUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory) {
             _playgroundContextFactory = playgroundContextFactory;

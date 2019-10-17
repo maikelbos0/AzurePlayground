@@ -56,15 +56,6 @@
     <Compile Include="Security\BaseUserCommandHandler.cs" />
     <Compile Include="Security\ChangeUserPasswordCommandHandler.cs" />
     <Compile Include="Security\DeactivateUserCommandHandler.cs" />
-    <Compile Include="Security\IChangeUserPasswordCommandHandler.cs" />
-    <Compile Include="Security\IActivateUserCommandHandler.cs" />
-    <Compile Include="Security\IDeactivateUserCommandHandler.cs" />
-    <Compile Include="Security\ILogOutUserCommandHandler.cs" />
-    <Compile Include="Security\IRegisterUserCommandHandler.cs" />
-    <Compile Include="Security\IForgotUserPasswordCommandHandler.cs" />
-    <Compile Include="Security\IResetUserPasswordCommandHandler.cs" />
-    <Compile Include="Security\ISendUserActivationCommandHandler.cs" />
-    <Compile Include="Security\ILogInUserCommandHandler.cs" />
     <Compile Include="Security\LogOutUserCommandHandler.cs" />
     <Compile Include="Security\RegisterUserCommandHandler.cs" />
     <Compile Include="Security\ForgotUserPasswordCommandHandler.cs" />
