@@ -31,7 +31,7 @@ namespace AzurePlayground.CommandHandlers.Security {
                     user.AddEvent(UserEventType.LoggedIn);
                 }
                 else {
-                    result.AddError(p => p.Email, "Invalid email or password");
+                    result.AddError("Invalid email or password");
 
                     if (user != null) {
                         user.AddEvent(UserEventType.FailedLogIn);

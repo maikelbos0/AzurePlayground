@@ -33,7 +33,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult Register(RegisterUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_messageService.Dispatch(new RegisterUserCommand(model.Email, model.Password, model.ConfirmPassword)));
+                ModelState.Merge<RegisterUserModel, RegisterUserCommand>(_messageService.Dispatch(new RegisterUserCommand(model.Email, model.Password, model.ConfirmPassword)));
             }
 
             if (ModelState.IsValid) {
@@ -66,7 +66,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult Activate(ActivateUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_messageService.Dispatch(new ActivateUserCommand(model.Email, model.ActivationCode)));
+                ModelState.Merge<ActivateUserModel, ActivateUserCommand>(_messageService.Dispatch(new ActivateUserCommand(model.Email, model.ActivationCode)));
             }
 
             if (ModelState.IsValid) {
@@ -87,7 +87,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult SendActivation(SendUserActivationModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_messageService.Dispatch(new SendUserActivationCommand(model.Email)));
+                ModelState.Merge<SendUserActivationModel, SendUserActivationCommand>(_messageService.Dispatch(new SendUserActivationCommand(model.Email)));
             }
 
             if (ModelState.IsValid) {
@@ -108,7 +108,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult LogIn(LogInUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_messageService.Dispatch(new LogInUserCommand(model.Email, model.Password)));
+                ModelState.Merge<LogInUserModel, LogInUserCommand>(_messageService.Dispatch(new LogInUserCommand(model.Email, model.Password)));
             }
 
             if (ModelState.IsValid) {
@@ -148,7 +148,8 @@ namespace AzurePlayground.Controllers {
         [Authorize]
         public ActionResult ChangePassword(ChangeUserPasswordModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_messageService.Dispatch(new ChangeUserPasswordCommand(_authenticationService.GetIdentity(), model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword)));
+                ModelState.Merge<ChangeUserPasswordModel, ChangeUserPasswordCommand>(_messageService.Dispatch(new ChangeUserPasswordCommand(
+                    _authenticationService.GetIdentity(), model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword)));
             }
 
             if (ModelState.IsValid) {
@@ -169,7 +170,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult ForgotPassword(ForgotUserPasswordModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_messageService.Dispatch(new ForgotUserPasswordCommand(model.Email)));
+                ModelState.Merge<ForgotUserPasswordModel, ForgotUserPasswordCommand>(_messageService.Dispatch(new ForgotUserPasswordCommand(model.Email)));
             }
 
             if (ModelState.IsValid) {
@@ -188,9 +189,10 @@ namespace AzurePlayground.Controllers {
 
         [Route("ResetPassword")]
         [HttpPost]
-        public ActionResult ResetPassword(string email, string token , ResetUserPasswordModel model) {
+        public ActionResult ResetPassword(string email, string token, ResetUserPasswordModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_messageService.Dispatch(new ResetUserPasswordCommand(email, token, model.NewPassword, model.ConfirmNewPassword)));
+                ModelState.Merge<ResetUserPasswordModel, ResetUserPasswordCommand>(_messageService.Dispatch(new ResetUserPasswordCommand(
+                    email, token, model.NewPassword, model.ConfirmNewPassword)));
             }
 
             if (ModelState.IsValid) {
@@ -213,7 +215,8 @@ namespace AzurePlayground.Controllers {
         [Authorize]
         public ActionResult Deactivate(DeactivateUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge(_messageService.Dispatch(new DeactivateUserCommand(_authenticationService.GetIdentity(), model.Password)));
+                ModelState.Merge<DeactivateUserModel, DeactivateUserCommand>(_messageService.Dispatch(new DeactivateUserCommand(
+                    _authenticationService.GetIdentity(), model.Password)));
             }
 
             if (ModelState.IsValid) {

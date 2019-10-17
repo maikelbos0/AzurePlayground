@@ -53,3 +53,13 @@
     content: "*";
     font-weight: bold;
 }
+
+.site-validation-summary > ul {
+    margin: 0;
+    padding: 0;
+}
+
+.site-validation-summary > ul > li {
+    list-style: none;
+    margin-bottom: 0.5rem;
+}
