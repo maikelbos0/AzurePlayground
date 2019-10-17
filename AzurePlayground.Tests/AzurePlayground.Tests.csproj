@@ -105,7 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AzurePlayground.CommandHandlers\AzurePlayground.CommandHandlers.csproj">
-      <Project>{af5556d3-a4cb-4519-8fd6-3f7478656709}</Project>
+      <Project>{AF5556D3-A4CB-4519-8FD6-3F7478656709}</Project>
       <Name>AzurePlayground.CommandHandlers</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Commands\AzurePlayground.Commands.csproj">
@@ -129,7 +129,7 @@
       <Name>AzurePlayground.Queries</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.QueryHandlers\AzurePlayground.QueryHandlers.csproj">
-      <Project>{02a56af1-a009-4273-b801-8a5f7c98e84f}</Project>
+      <Project>{02A56AF1-A009-4273-B801-8A5F7C98E84F}</Project>
       <Name>AzurePlayground.QueryHandlers</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Test.Utilities\AzurePlayground.Test.Utilities.csproj">

@@ -67,6 +67,10 @@
       <Project>{176178a9-63e6-4665-a1ce-ebb8ce87bc7c}</Project>
       <Name>AzurePlayground.Queries</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.Utilities\AzurePlayground.Utilities.csproj">
+      <Project>{d4e722c8-0cd3-47c9-a479-ca3fa83fa225}</Project>
+      <Name>AzurePlayground.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
