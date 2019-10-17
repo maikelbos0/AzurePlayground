@@ -2,12 +2,10 @@
     public class RegisterUserCommand : ICommand {
         public string Email { get; }
         public string Password { get; }
-        public string ConfirmPassword { get; }
 
-        public RegisterUserCommand(string email, string password, string confirmPassword) {
+        public RegisterUserCommand(string email, string password) {
             Email = email;
             Password = password;
-            ConfirmPassword = confirmPassword;
         }
     }
 }

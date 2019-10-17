@@ -33,7 +33,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         public ActionResult Register(RegisterUserModel model) {
             if (ModelState.IsValid) {
-                ModelState.Merge<RegisterUserModel, RegisterUserCommand>(_messageService.Dispatch(new RegisterUserCommand(model.Email, model.Password, model.ConfirmPassword)));
+                ModelState.Merge<RegisterUserModel, RegisterUserCommand>(_messageService.Dispatch(new RegisterUserCommand(model.Email, model.Password)));
             }
 
             if (ModelState.IsValid) {
@@ -149,7 +149,7 @@ namespace AzurePlayground.Controllers {
         public ActionResult ChangePassword(ChangeUserPasswordModel model) {
             if (ModelState.IsValid) {
                 ModelState.Merge<ChangeUserPasswordModel, ChangeUserPasswordCommand>(_messageService.Dispatch(new ChangeUserPasswordCommand(
-                    _authenticationService.GetIdentity(), model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword)));
+                    _authenticationService.GetIdentity(), model.CurrentPassword, model.NewPassword)));
             }
 
             if (ModelState.IsValid) {
@@ -192,7 +192,7 @@ namespace AzurePlayground.Controllers {
         public ActionResult ResetPassword(string email, string token, ResetUserPasswordModel model) {
             if (ModelState.IsValid) {
                 ModelState.Merge<ResetUserPasswordModel, ResetUserPasswordCommand>(_messageService.Dispatch(new ResetUserPasswordCommand(
-                    email, token, model.NewPassword, model.ConfirmNewPassword)));
+                    email, token, model.NewPassword)));
             }
 
             if (ModelState.IsValid) {

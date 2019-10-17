@@ -25,10 +25,6 @@ namespace AzurePlayground.CommandHandlers.Security {
                     throw new InvalidOperationException($"Attempted to change password for {(user == null ? "non-existent" : "inactive")} user '{parameter.Email}'");
                 }
 
-                if (!parameter.NewPassword.Equals(parameter.ConfirmNewPassword, StringComparison.Ordinal)) {
-                    result.AddError(p => p.ConfirmNewPassword, "New password and confirm new password must match");
-                }
-
                 if (!user.Password.Verify(parameter.CurrentPassword)) {
                     result.AddError(p => p.CurrentPassword, "Invalid password");
                 }

@@ -22,7 +22,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void RegisterUserCommandHandler_Succeeds() {
             var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
-            var command = new RegisterUserCommand("test@test.com", "test", "test");
+            var command = new RegisterUserCommand("test@test.com", "test");
 
             var result = handler.Execute(command);
             var user = _playgroundContextFactory.Context.Users.SingleOrDefault();
@@ -35,21 +35,21 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         }
 
         [TestMethod]
-        public void RegisterUserCommandHandler_Fails_For_Unmatched_Password() {
+        public void RegisterUserCommandHandler_Sends_Email() {
             var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
-            var command = new RegisterUserCommand("test@test.com", "test", "wrong");
+            var command = new RegisterUserCommand("test@test.com", "test");
 
-            var result = handler.Execute(command);
+            handler.Execute(command);
 
-            result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmPassword");
-            result.Errors[0].Message.Should().Be("Password and confirm password must match");
+            _mailClient.SentMessages.Should().HaveCount(1);
+            _mailClient.SentMessages[0].Subject.Should().Be("Please activate your account");
+            _mailClient.SentMessages[0].To.Should().Be("test@test.com");
         }
 
         [TestMethod]
         public void RegisterUserCommandHandler_Fails_For_Existing_Email() {
             var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
-            var command = new RegisterUserCommand("test@test.com", "test", "test");
+            var command = new RegisterUserCommand("test@test.com", "test");
 
             _playgroundContextFactory.Context.Users.Add(new User() {
                 Email = "test@test.com"
@@ -60,19 +60,6 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.Email");
             result.Errors[0].Message.Should().Be("Email address already exists");
-        }
-
-
-        [TestMethod]
-        public void RegisterUserCommandHandler_Sends_Email() {
-            var handler = new RegisterUserCommandHandler(_playgroundContextFactory, _mailClient, new ActivationMailTemplate(_appSettings));
-            var command = new RegisterUserCommand("test@test.com", "test", "test");
-
-            handler.Execute(command);
-
-            _mailClient.SentMessages.Should().HaveCount(1);
-            _mailClient.SentMessages[0].Subject.Should().Be("Please activate your account");
-            _mailClient.SentMessages[0].To.Should().Be("test@test.com");
         }
     }
 }

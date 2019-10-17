@@ -20,7 +20,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.Active
             };
-            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2", "test2");
+            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
@@ -35,7 +35,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
         [TestMethod]
         public void ChangeUserPasswordCommandHandler_Throws_Exception_For_Nonexistent_User() {
             var handler = new ChangeUserPasswordCommandHandler(_playgroundContextFactory);
-            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2", "test2");
+            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
 
             Action commandAction = () => {
                 var result = handler.Execute(command);
@@ -52,7 +52,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.Inactive
             };
-            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2", "test2");
+            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
@@ -72,7 +72,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.New
             };
-            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2", "test2");
+            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
@@ -92,7 +92,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
                 Password = new Password("test"),
                 Status = UserStatus.Active
             };
-            var command = new ChangeUserPasswordCommand("test@test.com", "wrong", "test2", "test2");
+            var command = new ChangeUserPasswordCommand("test@test.com", "wrong", "test2");
 
             _playgroundContextFactory.Context.Users.Add(user);
 
@@ -101,28 +101,6 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("p => p.CurrentPassword");
             result.Errors[0].Message.Should().Be("Invalid password");
-            user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedPasswordChange);
-            user.Password.Verify("test").Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void ChangeUserPasswordCommandHandler_Fails_For_Unmatched_New_Password() {
-            var handler = new ChangeUserPasswordCommandHandler(_playgroundContextFactory);
-            var user = new User() {
-                Email = "test@test.com",
-                Password = new Password("test"),
-                Status = UserStatus.Active
-            };
-            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2", "wrong");
-
-            _playgroundContextFactory.Context.Users.Add(user);
-
-            var result = handler.Execute(command);
-
-            result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.ConfirmNewPassword");
-            result.Errors[0].Message.Should().Be("New password and confirm new password must match");
             user.UserEvents.Should().HaveCount(1);
             user.UserEvents.Single().Type.Should().Be(UserEventType.FailedPasswordChange);
             user.Password.Verify("test").Should().BeTrue();

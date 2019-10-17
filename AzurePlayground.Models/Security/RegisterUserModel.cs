@@ -14,6 +14,7 @@ namespace AzurePlayground.Models.Security {
 
         [DisplayName("Confirm password")]
         [Required(ErrorMessage = "Confirm password is required")]
+        [Compare("Password", ErrorMessage = "Password and confirm password must match")]
         public string ConfirmPassword { get; set; }
     }
 }

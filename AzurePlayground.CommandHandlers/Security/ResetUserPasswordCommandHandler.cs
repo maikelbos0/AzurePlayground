@@ -29,10 +29,6 @@ namespace AzurePlayground.CommandHandlers.Security {
                     result.AddError("The password reset link has expired; please request a new one");
                 }
 
-                if (!parameter.NewPassword.Equals(parameter.ConfirmNewPassword, StringComparison.Ordinal)) {
-                    result.AddError(p => p.ConfirmNewPassword, "New password and confirm new password must match");
-                }
-
                 if (result.Success) {
                     user.PasswordResetToken = TemporaryPassword.None;
                     user.Password = new Password(parameter.NewPassword);

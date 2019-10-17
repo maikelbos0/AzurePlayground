@@ -13,6 +13,7 @@ namespace AzurePlayground.Models.Security {
 
         [DisplayName("Confirm new password")]
         [Required(ErrorMessage = "Confirm new password is required")]
+        [Compare("NewPassword", ErrorMessage = "New password and confirm new password must match")]
         public string ConfirmNewPassword { get; set; }
     }
 }
