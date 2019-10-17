@@ -1,6 +1,6 @@
-﻿using AzurePlayground.Database;
+﻿using AzurePlayground.Commands.Security;
+using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
@@ -25,10 +25,7 @@ namespace AzurePlayground.CommandHandlers.Security {
                 ActivationCode = GetNewActivationCode()
             };
 
-            user.UserEvents.Add(new UserEvent() {
-                Date = DateTime.UtcNow,
-                Type = UserEventType.Registered
-            });
+            user.AddEvent(UserEventType.Registered);
 
             if (!parameter.Password.Equals(parameter.ConfirmPassword, StringComparison.Ordinal)) {
                 result.AddError(p => p.ConfirmPassword, "Password and confirm password must match");

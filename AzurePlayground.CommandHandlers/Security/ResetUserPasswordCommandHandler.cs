@@ -1,6 +1,6 @@
-﻿using AzurePlayground.Database;
+﻿using AzurePlayground.Commands.Security;
+using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
@@ -38,17 +38,10 @@ namespace AzurePlayground.CommandHandlers.Security {
                 if (result.Success) {
                     user.PasswordResetToken = TemporaryPassword.None;
                     user.Password = new Password(parameter.NewPassword);
-
-                    user.UserEvents.Add(new UserEvent() {
-                        Date = DateTime.UtcNow,
-                        Type = UserEventType.PasswordReset
-                    });
+                    user.AddEvent(UserEventType.PasswordReset);
                 }
                 else {
-                    user.UserEvents.Add(new UserEvent() {
-                        Date = DateTime.UtcNow,
-                        Type = UserEventType.FailedPasswordReset
-                    });
+                    user.AddEvent(UserEventType.FailedPasswordReset);
                 }
 
                 context.SaveChanges();

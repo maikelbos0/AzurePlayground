@@ -1,6 +1,6 @@
-﻿using AzurePlayground.Database;
+﻿using AzurePlayground.Commands.Security;
+using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
@@ -26,11 +26,7 @@ namespace AzurePlayground.CommandHandlers.Security {
                     var token = GetNewPasswordResetToken();
 
                     user.PasswordResetToken = new TemporaryPassword(token);
-
-                    user.UserEvents.Add(new UserEvent() {
-                        Date = DateTime.UtcNow,
-                        Type = UserEventType.PasswordResetRequested
-                    });
+                    user.AddEvent(UserEventType.PasswordResetRequested);
 
                     SendPasswordResetEmail(user, token);
                 }

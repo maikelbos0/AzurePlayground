@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AzurePlayground.Domain.Security {
     public class User : Entity {
@@ -7,6 +8,13 @@ namespace AzurePlayground.Domain.Security {
         public int? ActivationCode { get; set; }
         public Password Password { get; set; }
         public TemporaryPassword PasswordResetToken { get; set; } = TemporaryPassword.None;
-        public virtual ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
+        public ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
+
+        public void AddEvent(UserEventType userEventType) {            
+            UserEvents.Add(new UserEvent() {
+                Date = DateTime.UtcNow,
+                Type = userEventType
+            });
+        }
     }
 }

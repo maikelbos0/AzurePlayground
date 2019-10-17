@@ -1,6 +1,6 @@
-﻿using AzurePlayground.Database;
+﻿using AzurePlayground.Commands.Security;
+using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Container;
 using System;
 using System.Linq;
@@ -28,19 +28,13 @@ namespace AzurePlayground.CommandHandlers.Security {
                     result.AddError(p => p.ActivationCode, "This activation code is invalid");
 
                     if (user != null) {
-                        user.UserEvents.Add(new UserEvent() {
-                            Date = DateTime.UtcNow,
-                            Type = UserEventType.FailedActivation
-                        });
+                        user.AddEvent(UserEventType.FailedActivation);
                     }
                 }
                 else {
                     user.Status = UserStatus.Active;
                     user.ActivationCode = null;
-                    user.UserEvents.Add(new UserEvent() {
-                        Date = DateTime.UtcNow,
-                        Type = UserEventType.Activated
-                    });
+                    user.AddEvent(UserEventType.Activated);
                 }
 
                 context.SaveChanges();

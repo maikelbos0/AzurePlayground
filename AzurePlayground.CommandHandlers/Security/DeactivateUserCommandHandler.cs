@@ -1,6 +1,6 @@
-﻿using AzurePlayground.Database;
+﻿using AzurePlayground.Commands.Security;
+using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Container;
 using System;
 using System.Linq;
@@ -23,17 +23,11 @@ namespace AzurePlayground.CommandHandlers.Security {
                 if (user != null && user.Status == UserStatus.Active) {
                     if (user.Password.Verify(parameter.Password)) {
                         user.Status = UserStatus.Inactive;
-                        user.UserEvents.Add(new UserEvent() {
-                            Date = DateTime.UtcNow,
-                            Type = UserEventType.Deactivated
-                        });
+                        user.AddEvent(UserEventType.Deactivated);
                     }
                     else {
                         result.AddError(p => p.Password, "Invalid password");
-                        user.UserEvents.Add(new UserEvent() {
-                            Date = DateTime.UtcNow,
-                            Type = UserEventType.FailedDeactivation
-                        });
+                        user.AddEvent(UserEventType.FailedDeactivation);
                     }
 
                     context.SaveChanges();

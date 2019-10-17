@@ -1,6 +1,6 @@
-﻿using AzurePlayground.Database;
+﻿using AzurePlayground.Commands.Security;
+using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
@@ -28,20 +28,13 @@ namespace AzurePlayground.CommandHandlers.Security {
 
                     // If we log in, the password reset is not needed anymore and leaving it is a security risk
                     user.PasswordResetToken = TemporaryPassword.None;
-
-                    user.UserEvents.Add(new UserEvent() {
-                        Date = DateTime.UtcNow,
-                        Type = UserEventType.LoggedIn
-                    });
+                    user.AddEvent(UserEventType.LoggedIn);
                 }
                 else {
                     result.AddError(p => p.Email, "Invalid email or password");
 
                     if (user != null) {
-                        user.UserEvents.Add(new UserEvent() {
-                            Date = DateTime.UtcNow,
-                            Type = UserEventType.FailedLogIn
-                        });
+                        user.AddEvent(UserEventType.FailedLogIn);
                     }
                 }
 

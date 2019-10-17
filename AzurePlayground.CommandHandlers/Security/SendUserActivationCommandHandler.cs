@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using AzurePlayground.Commands.Security;
 using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
-using AzurePlayground.Commands.Security;
 using AzurePlayground.Utilities.Configuration;
 using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
+using System;
+using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
@@ -25,10 +25,7 @@ namespace AzurePlayground.CommandHandlers.Security {
                 // Don't return errors to prevent leaking information
                 if (user != null && user.Status == UserStatus.New) {
                     user.ActivationCode = GetNewActivationCode();
-                    user.UserEvents.Add(new UserEvent() {
-                        Date = DateTime.UtcNow,
-                        Type = UserEventType.ActivationCodeSent
-                    });
+                    user.AddEvent(UserEventType.ActivationCodeSent);
 
                     context.SaveChanges();
 
