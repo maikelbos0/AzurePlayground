@@ -1,5 +1,6 @@
 ﻿using AzurePlayground.Commands.Security;
 using AzurePlayground.Database;
+using AzurePlayground.Domain.Security;
 using AzurePlayground.Utilities.Container;
 using System;
 using System.Linq;
@@ -20,8 +21,16 @@ namespace AzurePlayground.CommandHandlers.Security {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
                 // Any error that occurs gets the same message to prevent leaking information
-                if (user == null || !int.TryParse(parameter.ActivationCode, out int activationCode) || !user.Activate(activationCode)) {
+                if (user == null 
+                    || !int.TryParse(parameter.ActivationCode, out int activationCode) 
+                    || user.Status != UserStatus.New 
+                    || user.ActivationCode != activationCode) {
+
+                    user?.ActivationFailed();
                     result.AddError(p => p.ActivationCode, "This activation code is invalid");
+                }
+                else {
+                    user.Activate();
                 }
 
                 context.SaveChanges();

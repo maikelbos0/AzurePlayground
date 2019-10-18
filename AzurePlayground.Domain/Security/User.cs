@@ -19,59 +19,46 @@ namespace AzurePlayground.Domain.Security {
             });
         }
 
-        // TODO figure out a better way to separate validation from logic
-
-        public bool LogIn(string password) {
-            var isValid = Status == UserStatus.Active && Password.Verify(password);
-
-            if (isValid) {
-                // If we log in, the password reset is not needed anymore and leaving it is a security risk
-                PasswordResetToken = TemporaryPassword.None;
-                AddEvent(UserEventType.LoggedIn);
-            }
-            else {
-                AddEvent(UserEventType.FailedLogIn);
-            }
-
-            return isValid;
+        public void LogIn() {
+            // If we log in, the password reset is not needed anymore and leaving it is a security risk
+            PasswordResetToken = TemporaryPassword.None;
+            AddEvent(UserEventType.LoggedIn);
         }
 
-        public bool LogOut() {
-            var isValid = Status == UserStatus.Active;
-
-            if (isValid) {
-                AddEvent(UserEventType.LoggedOut);
-            }
-
-            return isValid;
+        public void LogInFailed() {
+            AddEvent(UserEventType.FailedLogIn);
         }
 
-        public string ForgotPassword() {
-            if (Status == UserStatus.Active) {
-                var token = GetNewPasswordResetToken();
-
-                PasswordResetToken = new TemporaryPassword(token);
-                AddEvent(UserEventType.PasswordResetRequested);
-
-                return token;
-            }
-
-            return null;
+        public void LogOut() {
+            AddEvent(UserEventType.LoggedOut);
         }
 
-        public bool Activate(int activationCode) {
-            var isValid = Status == UserStatus.New && ActivationCode == activationCode;
-                        
-            if (isValid) {
-                Status = UserStatus.Active;
-                ActivationCode = null;
-                AddEvent(UserEventType.Activated);
-            }
-            else {
-                AddEvent(UserEventType.FailedActivation);
-            }
+        public string GeneratePasswordResetToken() {
+            var token = GetNewPasswordResetToken();
 
-            return isValid;
+            PasswordResetToken = new TemporaryPassword(token);
+            AddEvent(UserEventType.PasswordResetRequested);
+
+            return token;
+        }
+
+        public void Activate() {
+            Status = UserStatus.Active;
+            ActivationCode = null;
+            AddEvent(UserEventType.Activated);
+        }
+
+        public void ActivationFailed() {
+            AddEvent(UserEventType.FailedActivation);
+        }
+
+        public void ChangePassword(string password) {
+            Password = new Password(password);
+            AddEvent(UserEventType.PasswordChanged);
+        }
+
+        public void ChangePasswordFailed() {
+            AddEvent(UserEventType.FailedPasswordChange);
         }
 
         protected string GetNewPasswordResetToken() {

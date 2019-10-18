@@ -30,11 +30,10 @@ namespace AzurePlayground.CommandHandlers.Security {
                 }
 
                 if (result.Success) {
-                    user.Password = new Password(parameter.NewPassword);
-                    user.AddEvent(UserEventType.PasswordChanged);
+                    user.ChangePassword(parameter.NewPassword);
                 }
                 else {
-                    user.AddEvent(UserEventType.FailedPasswordChange);
+                    user.ChangePasswordFailed();
                 }
 
                 context.SaveChanges();

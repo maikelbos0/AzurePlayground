@@ -26,15 +26,12 @@ namespace AzurePlayground.CommandHandlers.Security {
                 var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
                 // There is no error reporting to prevent information leaking
-                if (user != null) {
-                    var token = user.ForgotPassword();
+                if (user != null && user.Status == UserStatus.Active) {
+                    var token = user.GeneratePasswordResetToken();
 
-                    if (token != null) {
-                        _mailClient.Send(_template.GetMessage(new PasswordResetMailTemplateParameters(user.Email, token), user.Email));
-                    }
+                    context.SaveChanges();
+                    _mailClient.Send(_template.GetMessage(new PasswordResetMailTemplateParameters(user.Email, token), user.Email));
                 }
-
-                context.SaveChanges();
             }
 
             return result;
