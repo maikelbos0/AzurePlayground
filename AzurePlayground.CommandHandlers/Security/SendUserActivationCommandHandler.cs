@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class SendUserActivationCommandHandler : BaseUserCommandHandler, ICommandHandler<SendUserActivationCommand> {
+    public class SendUserActivationCommandHandler : ICommandHandler<SendUserActivationCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         private readonly IMailClient _mailClient;
         private readonly IMailTemplate<ActivationMailTemplateParameters> _template;
@@ -27,8 +27,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
                 // Don't return errors to prevent leaking information
                 if (user != null && user.Status == UserStatus.New) {
-                    user.ActivationCode = GetNewActivationCode();
-                    user.AddEvent(UserEventType.ActivationCodeSent);
+                    user.GenerateActivationCode();
 
                     context.SaveChanges();
 

@@ -12,6 +12,17 @@ namespace AzurePlayground.Domain.Security {
         public TemporaryPassword PasswordResetToken { get; set; } = TemporaryPassword.None;
         public ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
 
+        public User() {
+        }
+
+        public User(string email, string password) : this() {
+            Email = email;
+            Password = new Password(password);
+            Status = UserStatus.New;
+            ActivationCode = GetNewActivationCode();
+            AddEvent(UserEventType.Registered);
+        }
+
         public void AddEvent(UserEventType userEventType) {
             UserEvents.Add(new UserEvent() {
                 Date = DateTime.UtcNow,
@@ -61,6 +72,30 @@ namespace AzurePlayground.Domain.Security {
             AddEvent(UserEventType.FailedPasswordChange);
         }
 
+        public void ResetPassword(string password) {
+            PasswordResetToken = TemporaryPassword.None;
+            Password = new Password(password);
+            AddEvent(UserEventType.PasswordReset);
+        }
+
+        public void ResetPasswordFailed() {
+            AddEvent(UserEventType.FailedPasswordReset);
+        }
+
+        public void GenerateActivationCode() {
+            ActivationCode = GetNewActivationCode();
+            AddEvent(UserEventType.ActivationCodeSent);
+        }
+
+        public void Deactivate() {
+            Status = UserStatus.Inactive;
+            AddEvent(UserEventType.Deactivated);
+        }
+
+        public void DeactivationFailed() {
+            AddEvent(UserEventType.FailedDeactivation);
+        }
+
         protected string GetNewPasswordResetToken() {
             using (var rng = new RNGCryptoServiceProvider()) {
                 // Establish a maximum based on the amount of characters to prevent bias
@@ -81,6 +116,10 @@ namespace AzurePlayground.Domain.Security {
 
                 return tokenBuilder.ToString();
             }
+        }
+
+        protected int GetNewActivationCode() {
+            return new Random().Next(10000, int.MaxValue);
         }
     }
 }

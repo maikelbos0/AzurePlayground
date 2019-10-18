@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class RegisterUserCommandHandler : BaseUserCommandHandler, ICommandHandler<RegisterUserCommand> {
+    public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand> {
         private readonly IPlaygroundContextFactory _playgroundContextFactory;
         private readonly IMailClient _mailClient;
         private readonly IMailTemplate<ActivationMailTemplateParameters> _template;
@@ -21,14 +21,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<RegisterUserCommand> Execute(RegisterUserCommand parameter) {
             var result = new CommandResult<RegisterUserCommand>();
-            var user = new User() {
-                Email = parameter.Email,
-                Password = new Password(parameter.Password),
-                Status = UserStatus.New,
-                ActivationCode = GetNewActivationCode()
-            };
-
-            user.AddEvent(UserEventType.Registered);
+            var user = new User(parameter.Email, parameter.Password);
 
             using (var context = _playgroundContextFactory.GetContext()) {
                 if (context.Users.Any(u => u.Email.Equals(user.Email, StringComparison.InvariantCultureIgnoreCase))) {

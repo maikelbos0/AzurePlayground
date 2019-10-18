@@ -22,12 +22,11 @@ namespace AzurePlayground.CommandHandlers.Security {
 
                 if (user != null && user.Status == UserStatus.Active) {
                     if (user.Password.Verify(parameter.Password)) {
-                        user.Status = UserStatus.Inactive;
-                        user.AddEvent(UserEventType.Deactivated);
+                        user.Deactivate();
                     }
                     else {
                         result.AddError(p => p.Password, "Invalid password");
-                        user.AddEvent(UserEventType.FailedDeactivation);
+                        user.DeactivationFailed();
                     }
 
                     context.SaveChanges();

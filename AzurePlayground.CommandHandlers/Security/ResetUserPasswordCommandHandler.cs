@@ -30,12 +30,10 @@ namespace AzurePlayground.CommandHandlers.Security {
                 }
 
                 if (result.Success) {
-                    user.PasswordResetToken = TemporaryPassword.None;
-                    user.Password = new Password(parameter.NewPassword);
-                    user.AddEvent(UserEventType.PasswordReset);
+                    user.ResetPassword(parameter.NewPassword);
                 }
                 else {
-                    user.AddEvent(UserEventType.FailedPasswordReset);
+                    user.ResetPasswordFailed();
                 }
 
                 context.SaveChanges();
