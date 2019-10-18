@@ -108,12 +108,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AzurePlayground.Resources\AzurePlayground.Resources.csproj">
-      <Project>{8f741709-e965-4a05-8d00-0858989603de}</Project>
-      <Name>AzurePlayground.Resources</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

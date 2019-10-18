@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Models", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Utilities", "AzurePlayground.Utilities\AzurePlayground.Utilities.csproj", "{D4E722C8-0CD3-47C9-A479-CA3FA83FA225}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Resources", "AzurePlayground.Resources\AzurePlayground.Resources.csproj", "{8F741709-E965-4A05-8D00-0858989603DE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.CommandHandlers.Test", "AzurePlayground.CommandHandlers.Test\AzurePlayground.CommandHandlers.Test.csproj", "{A7320F59-F04B-43E4-BC08-5200415BCD07}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Test.Utilities", "AzurePlayground.Test.Utilities\AzurePlayground.Test.Utilities.csproj", "{9C94C213-715E-4C3A-ABE9-608337808BC1}"
@@ -65,10 +63,6 @@ Global
 		{D4E722C8-0CD3-47C9-A479-CA3FA83FA225}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4E722C8-0CD3-47C9-A479-CA3FA83FA225}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4E722C8-0CD3-47C9-A479-CA3FA83FA225}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F741709-E965-4A05-8D00-0858989603DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F741709-E965-4A05-8D00-0858989603DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F741709-E965-4A05-8D00-0858989603DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F741709-E965-4A05-8D00-0858989603DE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A7320F59-F04B-43E4-BC08-5200415BCD07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A7320F59-F04B-43E4-BC08-5200415BCD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7320F59-F04B-43E4-BC08-5200415BCD07}.Release|Any CPU.ActiveCfg = Release|Any CPU

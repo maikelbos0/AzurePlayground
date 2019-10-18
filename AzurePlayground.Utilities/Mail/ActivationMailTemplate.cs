@@ -14,11 +14,8 @@ namespace AzurePlayground.Utilities.Mail {
         public MailMessage GetMessage(ActivationMailTemplateParameters parameters, string to) {
             return new MailMessage() {
                 To = to,
-                Subject = Resources.Security.ActivationEmailSubject,
-                Body = Resources.Security.ActivationEmailBody
-                    .Replace("{BaseUrl}", _appSettings["Application.BaseUrl"])
-                    .Replace("{ActivationCode}", parameters.ActivationCode.ToString())
-                    .Replace("{EmailEncoded}", WebUtility.UrlEncode(parameters.Email))
+                Subject = "Please activate your account",
+                Body = $"<p>Please <a href=\"{_appSettings["Application.BaseUrl"]}Home/Activate/?activationCode={parameters.ActivationCode}&email={WebUtility.UrlEncode(parameters.Email)}\">click here to activate your account</a>.</p><p>Activation code: {parameters.ActivationCode}</p>"
             };
         }
     }

@@ -14,11 +14,8 @@ namespace AzurePlayground.Utilities.Mail {
         public MailMessage GetMessage(PasswordResetMailTemplateParameters parameters, string to) {
             return new MailMessage() {
                 To = to,
-                Subject = Resources.Security.PasswordResetEmailSubject,
-                Body = Resources.Security.PasswordResetEmailBody
-                    .Replace("{BaseUrl}", _appSettings["Application.BaseUrl"])
-                    .Replace("{TokenEncoded}", WebUtility.UrlEncode(parameters.Token))
-                    .Replace("{EmailEncoded}", WebUtility.UrlEncode(parameters.Email))
+                Subject = "Your password reset request",
+                Body = $"<p>Please <a href=\"{_appSettings["Application.BaseUrl"]}Home/ResetPassword/?email={WebUtility.UrlEncode(parameters.Email)}&token={WebUtility.UrlEncode(parameters.Token)}\">click here to reset your password</a>.</p>"
             };
         }
     }
