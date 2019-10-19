@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Commands", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Queries", "AzurePlayground.Queries\AzurePlayground.Queries.csproj", "{176178A9-63E6-4665-A1CE-EBB8CE87BC7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Utilities.Tests", "AzurePlayground.Utilities.Tests\AzurePlayground.Utilities.Tests.csproj", "{E073816E-F4E6-43C8-8FE8-E4B45ED58559}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{176178A9-63E6-4665-A1CE-EBB8CE87BC7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{176178A9-63E6-4665-A1CE-EBB8CE87BC7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{176178A9-63E6-4665-A1CE-EBB8CE87BC7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E073816E-F4E6-43C8-8FE8-E4B45ED58559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E073816E-F4E6-43C8-8FE8-E4B45ED58559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E073816E-F4E6-43C8-8FE8-E4B45ED58559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E073816E-F4E6-43C8-8FE8-E4B45ED58559}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
