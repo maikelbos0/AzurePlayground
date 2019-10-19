@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 
-namespace AzurePlayground.CommandHandlers.Test.Security {
+namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class ActivateUserCommandHandlerTests {
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using AzurePlayground.Utilities.Mail;
 using NSubstitute;
 
-namespace AzurePlayground.CommandHandlers.Test.Security {
+namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class ForgotUserPasswordCommandHandlerTests {
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();

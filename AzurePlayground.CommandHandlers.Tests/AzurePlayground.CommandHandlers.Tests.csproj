@@ -9,8 +9,8 @@
     <ProjectGuid>{A7320F59-F04B-43E4-BC08-5200415BCD07}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AzurePlayground.CommandHandlers.Test</RootNamespace>
-    <AssemblyName>AzurePlayground.CommandHandlers.Test</AssemblyName>
+    <RootNamespace>AzurePlayground.CommandHandlers.Tests</RootNamespace>
+    <AssemblyName>AzurePlayground.CommandHandlers.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

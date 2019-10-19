@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
 
-namespace AzurePlayground.CommandHandlers.Test.Security {
+namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class ResetUserPasswordCommandHandlerTests {
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();

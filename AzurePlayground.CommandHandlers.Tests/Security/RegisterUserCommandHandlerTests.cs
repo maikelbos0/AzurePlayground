@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AzurePlayground.CommandHandlers.Test.Security {
+namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class RegisterUserCommandHandlerTests {
         private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();

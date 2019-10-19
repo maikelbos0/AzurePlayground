@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Models", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Utilities", "AzurePlayground.Utilities\AzurePlayground.Utilities.csproj", "{D4E722C8-0CD3-47C9-A479-CA3FA83FA225}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.CommandHandlers.Test", "AzurePlayground.CommandHandlers.Test\AzurePlayground.CommandHandlers.Test.csproj", "{A7320F59-F04B-43E4-BC08-5200415BCD07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.CommandHandlers.Tests", "AzurePlayground.CommandHandlers.Tests\AzurePlayground.CommandHandlers.Tests.csproj", "{A7320F59-F04B-43E4-BC08-5200415BCD07}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Test.Utilities", "AzurePlayground.Test.Utilities\AzurePlayground.Test.Utilities.csproj", "{9C94C213-715E-4C3A-ABE9-608337808BC1}"
 EndProject
