@@ -9,29 +9,26 @@ using System.Linq;
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
     public class ForgotUserPasswordCommandHandler : ICommandHandler<ForgotUserPasswordCommand> {
-        private readonly IPlaygroundContextFactory _playgroundContextFactory;
+        private readonly IPlaygroundContext _context;
         private readonly IMailClient _mailClient;
         private readonly IMailTemplate<PasswordResetMailTemplateParameters> _template;
 
-        public ForgotUserPasswordCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IMailTemplate<PasswordResetMailTemplateParameters> template) {
-            _playgroundContextFactory = playgroundContextFactory;
+        public ForgotUserPasswordCommandHandler(IPlaygroundContext context, IMailClient mailClient, IMailTemplate<PasswordResetMailTemplateParameters> template) {
+            _context = context;
             _mailClient = mailClient;
             _template = template;
         }
 
         public CommandResult<ForgotUserPasswordCommand> Execute(ForgotUserPasswordCommand parameter) {
             var result = new CommandResult<ForgotUserPasswordCommand>();
+            var user = _context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
-            using (var context = _playgroundContextFactory.GetContext()) {
-                var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
+            // There is no error reporting to prevent information leaking
+            if (user != null && user.Status == UserStatus.Active) {
+                var token = user.GeneratePasswordResetToken();
 
-                // There is no error reporting to prevent information leaking
-                if (user != null && user.Status == UserStatus.Active) {
-                    var token = user.GeneratePasswordResetToken();
-
-                    context.SaveChanges();
-                    _mailClient.Send(_template.GetMessage(new PasswordResetMailTemplateParameters(user.Email, token), user.Email));
-                }
+                _context.SaveChanges();
+                _mailClient.Send(_template.GetMessage(new PasswordResetMailTemplateParameters(user.Email, token), user.Email));
             }
 
             return result;

@@ -8,28 +8,25 @@ using System.Linq;
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
     public class LogInUserCommandHandler : ICommandHandler<LogInUserCommand> {
-        private readonly IPlaygroundContextFactory _playgroundContextFactory;
-        
-        public LogInUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory) {
-            _playgroundContextFactory = playgroundContextFactory;
+        private readonly IPlaygroundContext _context;
+
+        public LogInUserCommandHandler(IPlaygroundContext playgroundContext) {
+            _context = playgroundContext;
         }
 
         public CommandResult<LogInUserCommand> Execute(LogInUserCommand parameter) {
             var result = new CommandResult<LogInUserCommand>();
+            var user = _context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
-            using (var context = _playgroundContextFactory.GetContext()) {
-                var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
-
-                if (user == null || user.Status != UserStatus.Active || !user.Password.Verify(parameter.Password)) {
-                    result.AddError("Invalid email or password");
-                    user?.LogInFailed();
-                }
-                else {
-                    user.LogIn();
-                }
-
-                context.SaveChanges();
+            if (user == null || user.Status != UserStatus.Active || !user.Password.Verify(parameter.Password)) {
+                result.AddError("Invalid email or password");
+                user?.LogInFailed();
             }
+            else {
+                user.LogIn();
+            }
+
+            _context.SaveChanges();
 
             return result;
         }

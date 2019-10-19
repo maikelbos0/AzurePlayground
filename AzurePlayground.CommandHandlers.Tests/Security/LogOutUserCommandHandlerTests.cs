@@ -10,17 +10,17 @@ using System;
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class LogOutUserCommandHandlerTests {
-        private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
+        private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
 
         [TestMethod]
         public void LogOutUserCommandHandler_Succeeds() {
-            var handler = new LogOutUserCommandHandler(_playgroundContextFactory);
+            var handler = new LogOutUserCommandHandler(_context);
             var command = new LogOutUserCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Status.Returns(UserStatus.Active);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -30,7 +30,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogOutUserCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new LogOutUserCommandHandler(_playgroundContextFactory);
+            var handler = new LogOutUserCommandHandler(_context);
             var command = new LogOutUserCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -40,7 +40,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
                 var result = handler.Execute(command);
             };
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out inactive user 'test@test.com'");
             user.DidNotReceive().LogOut();
@@ -48,7 +48,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogOutUserCommandHandler_Throws_Exception_For_Inactive_User() {
-            var handler = new LogOutUserCommandHandler(_playgroundContextFactory);
+            var handler = new LogOutUserCommandHandler(_context);
             var command = new LogOutUserCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -58,7 +58,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
                 var result = handler.Execute(command);
             };
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out inactive user 'test@test.com'");
             user.DidNotReceive().LogOut();
@@ -67,7 +67,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogOutUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new LogOutUserCommandHandler(_playgroundContextFactory);
+            var handler = new LogOutUserCommandHandler(_context);
             var command = new LogOutUserCommand("test@test.com");
             Action commandAction = () => {
                 var result = handler.Execute(command);

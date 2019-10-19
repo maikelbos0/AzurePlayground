@@ -8,33 +8,30 @@ using System.Linq;
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
     public class ActivateUserCommandHandler : ICommandHandler<ActivateUserCommand> {
-        private readonly IPlaygroundContextFactory _playgroundContextFactory;
+        private readonly IPlaygroundContext _context;
 
-        public ActivateUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory) {
-            _playgroundContextFactory = playgroundContextFactory;
+        public ActivateUserCommandHandler(IPlaygroundContext context) {
+            _context = context;
         }
 
         public CommandResult<ActivateUserCommand> Execute(ActivateUserCommand parameter) {
             var result = new CommandResult<ActivateUserCommand>();
+            var user = _context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
 
-            using (var context = _playgroundContextFactory.GetContext()) {
-                var user = context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
+            // Any error that occurs gets the same message to prevent leaking information
+            if (user == null
+                || !int.TryParse(parameter.ActivationCode, out int activationCode)
+                || user.Status != UserStatus.New
+                || user.ActivationCode != activationCode) {
 
-                // Any error that occurs gets the same message to prevent leaking information
-                if (user == null 
-                    || !int.TryParse(parameter.ActivationCode, out int activationCode) 
-                    || user.Status != UserStatus.New 
-                    || user.ActivationCode != activationCode) {
-
-                    user?.ActivationFailed();
-                    result.AddError(p => p.ActivationCode, "This activation code is invalid");
-                }
-                else {
-                    user.Activate();
-                }
-
-                context.SaveChanges();
+                user?.ActivationFailed();
+                result.AddError(p => p.ActivationCode, "This activation code is invalid");
             }
+            else {
+                user.Activate();
+            }
+
+            _context.SaveChanges();
 
             return result;
         }

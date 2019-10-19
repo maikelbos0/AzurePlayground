@@ -10,18 +10,18 @@ using System;
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class ChangeUserPasswordCommandHandlerTests {
-        private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
+        private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
 
         [TestMethod]
         public void ChangeUserPasswordCommandHandler_Succeeds() {
-            var handler = new ChangeUserPasswordCommandHandler(_playgroundContextFactory);
+            var handler = new ChangeUserPasswordCommandHandler(_context);
             var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Active);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -32,7 +32,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserPasswordCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new ChangeUserPasswordCommandHandler(_playgroundContextFactory);
+            var handler = new ChangeUserPasswordCommandHandler(_context);
             var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
 
             Action commandAction = () => {
@@ -44,14 +44,14 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserPasswordCommandHandler_Throws_Exception_For_Inactive_User() {
-            var handler = new ChangeUserPasswordCommandHandler(_playgroundContextFactory);
+            var handler = new ChangeUserPasswordCommandHandler(_context);
             var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Inactive);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             Action commandAction = () => {
                 var result = handler.Execute(command);
@@ -64,14 +64,14 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserPasswordCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new ChangeUserPasswordCommandHandler(_playgroundContextFactory);
+            var handler = new ChangeUserPasswordCommandHandler(_context);
             var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.New);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             Action commandAction = () => {
                 var result = handler.Execute(command);
@@ -84,14 +84,14 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserPasswordCommandHandler_Fails_For_Wrong_Password() {
-            var handler = new ChangeUserPasswordCommandHandler(_playgroundContextFactory);
+            var handler = new ChangeUserPasswordCommandHandler(_context);
             var command = new ChangeUserPasswordCommand("test@test.com", "wrong", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Active);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 

@@ -56,7 +56,6 @@
     <Compile Include="FakeDbSet.cs" />
     <Compile Include="FakeMailClient.cs" />
     <Compile Include="FakePlaygroundContext.cs" />
-    <Compile Include="FakePlaygroundContextFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

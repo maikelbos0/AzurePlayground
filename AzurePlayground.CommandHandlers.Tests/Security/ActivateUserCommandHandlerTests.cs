@@ -9,11 +9,11 @@ using NSubstitute;
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class ActivateUserCommandHandlerTests {
-        private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
+        private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
 
         [TestMethod]
         public void ActivateUserCommandHandler_Succeeds() {
-            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new ActivateUserCommandHandler(_context);
             var command = new ActivateUserCommand("test@test.com", "999999");
             var user = Substitute.For<User>();
 
@@ -21,7 +21,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             user.ActivationCode.Returns(999999);
             user.Status.Returns(UserStatus.New);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -32,7 +32,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ActivateUserCommandHandler_Fails_For_Nonexistent_User() {
-            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new ActivateUserCommandHandler(_context);
             var command = new ActivateUserCommand("test@test.com", "999999");
             var user = Substitute.For<User>();
 
@@ -40,7 +40,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             user.ActivationCode.Returns(999999);
             user.Status.Returns(UserStatus.New);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -53,7 +53,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ActivateUserCommandHandler_Fails_For_Active_User() {
-            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new ActivateUserCommandHandler(_context);
             var command = new ActivateUserCommand("test@test.com", "999999");
             var user = Substitute.For<User>();
 
@@ -61,7 +61,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             user.ActivationCode.Returns(999999);
             user.Status.Returns(UserStatus.Active);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -74,7 +74,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ActivateUserCommandHandler_Fails_For_Inactive_User() {
-            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new ActivateUserCommandHandler(_context);
             var command = new ActivateUserCommand("test@test.com", "999999");
             var user = Substitute.For<User>();
 
@@ -82,7 +82,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             user.ActivationCode.Returns(999999);
             user.Status.Returns(UserStatus.Inactive);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -95,7 +95,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ActivateUserCommandHandler_Fails_For_Wrong_Code() {
-            var handler = new ActivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new ActivateUserCommandHandler(_context);
             var command = new ActivateUserCommand("test@test.com", "999987");
             var user = Substitute.For<User>();
 
@@ -103,7 +103,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             user.ActivationCode.Returns(999999);
             user.Status.Returns(UserStatus.New);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 

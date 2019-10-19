@@ -1,11 +1,13 @@
 ﻿using AzurePlayground.Database.Migrations;
 using AzurePlayground.Database.ReferenceEntities;
+using AzurePlayground.Utilities.Container;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using Security = AzurePlayground.Domain.Security;
 
 namespace AzurePlayground.Database {
+    [Injectable]
     public class PlaygroundContext : DbContext, IPlaygroundContext {
         static PlaygroundContext() {
             // When adding migrations the context can not be instantiated

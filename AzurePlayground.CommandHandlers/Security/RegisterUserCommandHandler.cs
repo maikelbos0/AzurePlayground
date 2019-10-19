@@ -9,12 +9,12 @@ using System.Linq;
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
     public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand> {
-        private readonly IPlaygroundContextFactory _playgroundContextFactory;
+        private readonly IPlaygroundContext _context;
         private readonly IMailClient _mailClient;
         private readonly IMailTemplate<ActivationMailTemplateParameters> _template;
 
-        public RegisterUserCommandHandler(IPlaygroundContextFactory playgroundContextFactory, IMailClient mailClient, IMailTemplate<ActivationMailTemplateParameters> template) {
-            _playgroundContextFactory = playgroundContextFactory;
+        public RegisterUserCommandHandler(IPlaygroundContext context, IMailClient mailClient, IMailTemplate<ActivationMailTemplateParameters> template) {
+            _context = context;
             _mailClient = mailClient;
             _template = template;
         }
@@ -23,17 +23,15 @@ namespace AzurePlayground.CommandHandlers.Security {
             var result = new CommandResult<RegisterUserCommand>();
             var user = new User(parameter.Email, parameter.Password);
 
-            using (var context = _playgroundContextFactory.GetContext()) {
-                if (context.Users.Any(u => u.Email.Equals(user.Email, StringComparison.InvariantCultureIgnoreCase))) {
-                    result.AddError(p => p.Email, "Email address already exists");
-                }
+            if (_context.Users.Any(u => u.Email.Equals(user.Email, StringComparison.InvariantCultureIgnoreCase))) {
+                result.AddError(p => p.Email, "Email address already exists");
+            }
 
-                if (result.Success) {
-                    context.Users.Add(user);
-                    context.SaveChanges();
+            if (result.Success) {
+                _context.Users.Add(user);
+                _context.SaveChanges();
 
-                    _mailClient.Send(_template.GetMessage(new ActivationMailTemplateParameters(user.Email, user.ActivationCode.Value), user.Email));
-                }
+                _mailClient.Send(_template.GetMessage(new ActivationMailTemplateParameters(user.Email, user.ActivationCode.Value), user.Email));
             }
 
             return result;

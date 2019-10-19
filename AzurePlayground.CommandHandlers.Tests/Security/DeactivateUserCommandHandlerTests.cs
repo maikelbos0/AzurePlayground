@@ -10,18 +10,18 @@ using System;
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class DeactivateUserCommandHandlerTests {
-        private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
+        private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Succeeds() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new DeactivateUserCommandHandler(_context);
             var command = new DeactivateUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Active);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -32,14 +32,14 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Fails_For_Wrong_Password() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new DeactivateUserCommandHandler(_context);
             var command = new DeactivateUserCommand("test@test.com", "wrong");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Active);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -52,7 +52,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new DeactivateUserCommandHandler(_context);
             var command = new DeactivateUserCommand("test@test.com", "test");
 
             Action commandAction = () => {
@@ -64,7 +64,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Throws_Exception_For_Inactive_User() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new DeactivateUserCommandHandler(_context);
             var command = new DeactivateUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -75,7 +75,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
                 var result = handler.Execute(command);
             };
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
             user.DidNotReceive().Deactivate();
@@ -84,7 +84,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+            var handler = new DeactivateUserCommandHandler(_context);
             var command = new DeactivateUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -95,7 +95,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
                 var result = handler.Execute(command);
             };
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
             user.DidNotReceive().Deactivate();

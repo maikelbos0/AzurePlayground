@@ -18,7 +18,7 @@ namespace AzurePlayground.Tests.Integration {
     [TestClass]
     public class HomeControllerTests {
         private readonly FakeAuthenticationService _authenticationService = new FakeAuthenticationService();
-        private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
+        private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
             Settings = new Dictionary<string, string>() {
@@ -29,7 +29,7 @@ namespace AzurePlayground.Tests.Integration {
         [TestInitialize]
         public void Initialize() {
             UnityConfig.Container.RegisterInstance<IAuthenticationService>(_authenticationService);
-            UnityConfig.Container.RegisterInstance<IPlaygroundContextFactory>(_playgroundContextFactory);
+            UnityConfig.Container.RegisterInstance<IPlaygroundContext>(_context);
             UnityConfig.Container.RegisterInstance<IMailClient>(_mailClient);
             UnityConfig.Container.RegisterInstance<IAppSettings>(_appSettings);
         }
@@ -71,7 +71,7 @@ namespace AzurePlayground.Tests.Integration {
             // Set up
             var user = new User("test@test.com", "old");
             user.Activate();
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             // Request password reset
             var forgotPasswordResult = (ViewResult)GetController().ForgotPassword(new ForgotUserPasswordModel() {
@@ -105,7 +105,7 @@ namespace AzurePlayground.Tests.Integration {
             // Set up
             var user = new User("test@test.com", "test");
             user.Activate();
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
             _authenticationService.Identity = "test@test.com";
 
             // Change password
@@ -137,7 +137,7 @@ namespace AzurePlayground.Tests.Integration {
             // Set up
             var user = new User("test@test.com", "test");
             user.Activate();
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             // Failed log in
             var failedLogInResult = GetController().LogIn(new LogInUserModel() {
@@ -164,7 +164,7 @@ namespace AzurePlayground.Tests.Integration {
 
             deactivateResult.Should().BeOfType<RedirectToRouteResult>();
             _authenticationService.Identity.Should().BeNull();
-            _playgroundContextFactory.Context.Users.Single().Status.Should().Be(UserStatus.Inactive);
+            _context.Users.Single().Status.Should().Be(UserStatus.Inactive);
         }
     }
 }

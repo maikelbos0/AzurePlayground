@@ -9,18 +9,18 @@ using NSubstitute;
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class LogInUserCommandHandlerTests {
-        private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
+        private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
 
         [TestMethod]
         public void LogInUserCommandHandler_Succeeds() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
+            var handler = new LogInUserCommandHandler(_context);
             var command = new LogInUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Active);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -31,7 +31,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Nonexistent_User() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
+            var handler = new LogInUserCommandHandler(_context);
             var command = new LogInUserCommand("other@test.com", "test");
 
             var result = handler.Execute(command);
@@ -43,14 +43,14 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Inactive_User() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
+            var handler = new LogInUserCommandHandler(_context);
             var command = new LogInUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Inactive);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -63,14 +63,14 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_New_User() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
+            var handler = new LogInUserCommandHandler(_context);
             var command = new LogInUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.New);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
@@ -83,14 +83,14 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Invalid_Password() {
-            var handler = new LogInUserCommandHandler(_playgroundContextFactory);
+            var handler = new LogInUserCommandHandler(_context);
             var command = new LogInUserCommand("test@test.com", "wrong");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Active);
 
-            _playgroundContextFactory.Context.Users.Add(user);
+            _context.Users.Add(user);
 
             var result = handler.Execute(command);
 
