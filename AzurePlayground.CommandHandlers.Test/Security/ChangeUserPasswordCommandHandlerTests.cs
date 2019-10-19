@@ -49,7 +49,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
-            user.Status.Returns(UserStatus.Active);
+            user.Status.Returns(UserStatus.Inactive);
 
             _playgroundContextFactory.Context.Users.Add(user);
 
@@ -89,7 +89,7 @@ namespace AzurePlayground.CommandHandlers.Test.Security {
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
             user.Password.Returns(new Password("test"));
-            user.Status.Returns(UserStatus.New);
+            user.Status.Returns(UserStatus.Active);
 
             _playgroundContextFactory.Context.Users.Add(user);
 
