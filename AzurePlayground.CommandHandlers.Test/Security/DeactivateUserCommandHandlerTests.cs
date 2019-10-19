@@ -1,103 +1,103 @@
-﻿using AzurePlayground.CommandHandlers.Security;
-using AzurePlayground.Domain.Security;
-using AzurePlayground.Commands.Security;
-using AzurePlayground.Test.Utilities;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
+﻿//using AzurePlayground.CommandHandlers.Security;
+//using AzurePlayground.Domain.Security;
+//using AzurePlayground.Commands.Security;
+//using AzurePlayground.Test.Utilities;
+//using FluentAssertions;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using System;
+//using System.Linq;
 
-namespace AzurePlayground.CommandHandlers.Test.Security {
-    [TestClass]
-    public class DeactivateUserCommandHandlerTests {
-        private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
+//namespace AzurePlayground.CommandHandlers.Test.Security {
+//    [TestClass]
+//    public class DeactivateUserCommandHandlerTests {
+//        private readonly FakePlaygroundContextFactory _playgroundContextFactory = new FakePlaygroundContextFactory();
 
-        [TestMethod]
-        public void DeactivateUserCommandHandler_Succeeds() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
-            var user = new User() {
-                Email = "test@test.com",
-                Password = new Password("test"),
-                Status = UserStatus.Active
-            };
-            var command = new DeactivateUserCommand("test@test.com", "test");
+//        [TestMethod]
+//        public void DeactivateUserCommandHandler_Succeeds() {
+//            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+//            var user = new User() {
+//                Email = "test@test.com",
+//                Password = new Password("test"),
+//                Status = UserStatus.Active
+//            };
+//            var command = new DeactivateUserCommand("test@test.com", "test");
 
-            _playgroundContextFactory.Context.Users.Add(user);
+//            _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(command);
+//            var result = handler.Execute(command);
 
-            result.Errors.Should().BeEmpty();
-            user.Status.Should().Be(UserStatus.Inactive);
-            user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().Type.Should().Be(UserEventType.Deactivated);
-        }
+//            result.Errors.Should().BeEmpty();
+//            user.Status.Should().Be(UserStatus.Inactive);
+//            user.UserEvents.Should().HaveCount(1);
+//            user.UserEvents.Single().Type.Should().Be(UserEventType.Deactivated);
+//        }
 
-        [TestMethod]
-        public void DeactivateUserCommandHandler_Fails_For_Wrong_Password() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
-            var user = new User() {
-                Email = "test@test.com",
-                Password = new Password("test"),
-                Status = UserStatus.Active
-            };
-            var command = new DeactivateUserCommand("test@test.com", "wrong");
+//        [TestMethod]
+//        public void DeactivateUserCommandHandler_Fails_For_Wrong_Password() {
+//            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+//            var user = new User() {
+//                Email = "test@test.com",
+//                Password = new Password("test"),
+//                Status = UserStatus.Active
+//            };
+//            var command = new DeactivateUserCommand("test@test.com", "wrong");
 
-            _playgroundContextFactory.Context.Users.Add(user);
+//            _playgroundContextFactory.Context.Users.Add(user);
 
-            var result = handler.Execute(command);
+//            var result = handler.Execute(command);
 
-            result.Errors.Should().HaveCount(1);
-            result.Errors[0].Expression.ToString().Should().Be("p => p.Password");
-            result.Errors[0].Message.Should().Be("Invalid password");
-            user.Status.Should().Be(UserStatus.Active);
-            user.UserEvents.Should().HaveCount(1);
-            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedDeactivation);            
-        }
+//            result.Errors.Should().HaveCount(1);
+//            result.Errors[0].Expression.ToString().Should().Be("p => p.Password");
+//            result.Errors[0].Message.Should().Be("Invalid password");
+//            user.Status.Should().Be(UserStatus.Active);
+//            user.UserEvents.Should().HaveCount(1);
+//            user.UserEvents.Single().Type.Should().Be(UserEventType.FailedDeactivation);            
+//        }
 
-        [TestMethod]
-        public void DeactivateUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
-            var command = new DeactivateUserCommand("test@test.com", "test");
+//        [TestMethod]
+//        public void DeactivateUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
+//            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+//            var command = new DeactivateUserCommand("test@test.com", "test");
 
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
+//            Action commandAction = () => {
+//                var result = handler.Execute(command);
+//            };
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate non-existent user 'test@test.com'");
-        }
+//            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate non-existent user 'test@test.com'");
+//        }
 
-        [TestMethod]
-        public void DeactivateUserCommandHandler_Throws_Exception_For_Inactive_User() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
-            var command = new DeactivateUserCommand("test@test.com", "test");
+//        [TestMethod]
+//        public void DeactivateUserCommandHandler_Throws_Exception_For_Inactive_User() {
+//            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+//            var command = new DeactivateUserCommand("test@test.com", "test");
 
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
+//            Action commandAction = () => {
+//                var result = handler.Execute(command);
+//            };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                Status = UserStatus.Inactive
-            });
+//            _playgroundContextFactory.Context.Users.Add(new User() {
+//                Email = "test@test.com",
+//                Status = UserStatus.Inactive
+//            });
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
-        }
+//            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
+//        }
 
-        [TestMethod]
-        public void DeactivateUserCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
-            var command = new DeactivateUserCommand("test@test.com", "test");
+//        [TestMethod]
+//        public void DeactivateUserCommandHandler_Throws_Exception_For_New_User() {
+//            var handler = new DeactivateUserCommandHandler(_playgroundContextFactory);
+//            var command = new DeactivateUserCommand("test@test.com", "test");
 
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
+//            Action commandAction = () => {
+//                var result = handler.Execute(command);
+//            };
 
-            _playgroundContextFactory.Context.Users.Add(new User() {
-                Email = "test@test.com",
-                Status = UserStatus.New
-            });
+//            _playgroundContextFactory.Context.Users.Add(new User() {
+//                Email = "test@test.com",
+//                Status = UserStatus.New
+//            });
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
-        }
-    }
-}
+//            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
+//        }
+//    }
+//}

@@ -5,14 +5,14 @@ using System.Text;
 
 namespace AzurePlayground.Domain.Security {
     public class User : Entity {
-        public UserStatus Status { get; set; }
-        public string Email { get; set; }
-        public int? ActivationCode { get; set; }
-        public Password Password { get; set; }
-        public TemporaryPassword PasswordResetToken { get; set; } = TemporaryPassword.None;
-        public ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
+        public virtual UserStatus Status { get; protected set; }
+        public virtual string Email { get; protected set; }
+        public virtual int? ActivationCode { get; protected set; }
+        public virtual Password Password { get; protected set; }
+        public virtual TemporaryPassword PasswordResetToken { get; protected set; } = TemporaryPassword.None;
+        public virtual ICollection<UserEvent> UserEvents { get; protected set; } = new List<UserEvent>();
 
-        public User() {
+        protected User() {
         }
 
         public User(string email, string password) : this() {
@@ -23,28 +23,28 @@ namespace AzurePlayground.Domain.Security {
             AddEvent(UserEventType.Registered);
         }
 
-        public void AddEvent(UserEventType userEventType) {
+        protected void AddEvent(UserEventType userEventType) {
             UserEvents.Add(new UserEvent() {
                 Date = DateTime.UtcNow,
                 Type = userEventType
             });
         }
 
-        public void LogIn() {
+        public virtual void LogIn() {
             // If we log in, the password reset is not needed anymore and leaving it is a security risk
             PasswordResetToken = TemporaryPassword.None;
             AddEvent(UserEventType.LoggedIn);
         }
 
-        public void LogInFailed() {
+        public virtual void LogInFailed() {
             AddEvent(UserEventType.FailedLogIn);
         }
 
-        public void LogOut() {
+        public virtual void LogOut() {
             AddEvent(UserEventType.LoggedOut);
         }
 
-        public string GeneratePasswordResetToken() {
+        public virtual string GeneratePasswordResetToken() {
             var token = GetNewPasswordResetToken();
 
             PasswordResetToken = new TemporaryPassword(token);
@@ -53,46 +53,46 @@ namespace AzurePlayground.Domain.Security {
             return token;
         }
 
-        public void Activate() {
+        public virtual void Activate() {
             Status = UserStatus.Active;
             ActivationCode = null;
             AddEvent(UserEventType.Activated);
         }
 
-        public void ActivationFailed() {
+        public virtual void ActivationFailed() {
             AddEvent(UserEventType.FailedActivation);
         }
 
-        public void ChangePassword(string password) {
+        public virtual void ChangePassword(string password) {
             Password = new Password(password);
             AddEvent(UserEventType.PasswordChanged);
         }
 
-        public void ChangePasswordFailed() {
+        public virtual void ChangePasswordFailed() {
             AddEvent(UserEventType.FailedPasswordChange);
         }
 
-        public void ResetPassword(string password) {
+        public virtual void ResetPassword(string password) {
             PasswordResetToken = TemporaryPassword.None;
             Password = new Password(password);
             AddEvent(UserEventType.PasswordReset);
         }
 
-        public void ResetPasswordFailed() {
+        public virtual void ResetPasswordFailed() {
             AddEvent(UserEventType.FailedPasswordReset);
         }
 
-        public void GenerateActivationCode() {
+        public virtual void GenerateActivationCode() {
             ActivationCode = GetNewActivationCode();
             AddEvent(UserEventType.ActivationCodeSent);
         }
 
-        public void Deactivate() {
+        public virtual void Deactivate() {
             Status = UserStatus.Inactive;
             AddEvent(UserEventType.Deactivated);
         }
 
-        public void DeactivationFailed() {
+        public virtual void DeactivationFailed() {
             AddEvent(UserEventType.FailedDeactivation);
         }
 
