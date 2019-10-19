@@ -119,7 +119,18 @@ namespace AzurePlayground.Domain.Security {
         }
 
         protected int GetNewActivationCode() {
-            return new Random().Next(10000, int.MaxValue);
+            using (var rng = new RNGCryptoServiceProvider()) {
+                byte[] buffer = new byte[4];
+                int activationCode = 0;
+
+                while (activationCode < 10000) {
+                    rng.GetBytes(buffer);
+
+                    activationCode = BitConverter.ToInt32(buffer, 0);
+                }
+
+                return activationCode;
+            }
         }
     }
 }

@@ -53,6 +53,19 @@ namespace AzurePlayground.Domain.Tests.Security {
         }
 
         [TestMethod]
+        public void User_GeneratePasswordResetToken_Succeeds() {
+            var user = new User("test@test.com", "test");
+
+            user.Activate();
+
+            var token = user.GeneratePasswordResetToken();
+
+            user.PasswordResetToken.Verify(token).Should().BeTrue();
+            user.UserEvents.Last().Type.Should().Be(UserEventType.PasswordResetRequested);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
+        }
+
+        [TestMethod]
         public void User_Activate_Succeeds() {
             var user = new User("test@test.com", "test");
 
@@ -101,26 +114,61 @@ namespace AzurePlayground.Domain.Tests.Security {
 
         [TestMethod]
         public void User_ResetPassword_Succeeds() {
-            throw new NotImplementedException();
+            var user = new User("test@test.com", "test");
+
+            user.Activate();
+            user.GeneratePasswordResetToken();
+            user.ResetPassword("new");
+
+            user.PasswordResetToken.Should().Be(TemporaryPassword.None);
+            user.Password.Verify("new").Should().BeTrue();
+            user.UserEvents.Last().Type.Should().Be(UserEventType.PasswordReset);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
 
         [TestMethod]
         public void User_ResetPasswordFailed_Succeeds() {
-            throw new NotImplementedException();
+            var user = new User("test@test.com", "test");
+
+            user.Activate();
+            user.ResetPasswordFailed();
+
+            user.UserEvents.Last().Type.Should().Be(UserEventType.FailedPasswordReset);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
 
         [TestMethod]
         public void User_GenerateActivationCode_Succeeds() {
-            throw new NotImplementedException();
+            var user = new User("test@test.com", "test");
+            var oldActivationCode = user.ActivationCode;
+            
+            user.GenerateActivationCode();
+
+            user.ActivationCode.Should().NotBe(oldActivationCode); // This test will fail once every 256 ^ 3 runs
+            user.UserEvents.Last().Type.Should().Be(UserEventType.ActivationCodeSent);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
 
         [TestMethod]
         public void User_Deactivate_Succeeds() {
-            throw new NotImplementedException();
+            var user = new User("test@test.com", "test");
+
+            user.Activate();
+            user.Deactivate();
+
+            user.Status.Should().Be(UserStatus.Inactive);
+            user.UserEvents.Last().Type.Should().Be(UserEventType.Deactivated);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
 
         [TestMethod] public void User_DeactivationFailed_Succeeds() {
-            throw new NotImplementedException();
+            var user = new User("test@test.com", "test");
+
+            user.Activate();
+            user.DeactivationFailed();
+
+            user.UserEvents.Last().Type.Should().Be(UserEventType.FailedDeactivation);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
     }
 }
