@@ -6,7 +6,7 @@ using AzurePlayground.Utilities.Mail;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class ForgotUserPasswordCommandHandler : ICommandHandler<ForgotUserPasswordCommand> {
+    public sealed class ForgotUserPasswordCommandHandler : ICommandHandler<ForgotUserPasswordCommand> {
         private readonly IUserRepository _repository;
         private readonly IMailClient _mailClient;
         private readonly IMailTemplate<PasswordResetMailTemplateParameters> _template;

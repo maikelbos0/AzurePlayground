@@ -5,7 +5,7 @@ using System.Configuration;
 
 namespace AzurePlayground.Utilities.Mail {
     [Injectable]
-    public class MailClient : IMailClient {
+    public sealed class MailClient : IMailClient {
         public void Send(MailMessage model) {
             var client = new SendGridClient(ConfigurationManager.AppSettings["SendGrid.ApiKey"]);
             var message = new SendGridMessage() {

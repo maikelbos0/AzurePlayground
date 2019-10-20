@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace AzurePlayground.Controllers {
     [RoutePrefix("Home")]
-    public class HomeController : Controller {
+    public sealed class HomeController : Controller {
         private readonly IAuthenticationService _authenticationService;
         private readonly IMessageService _messageService;
 

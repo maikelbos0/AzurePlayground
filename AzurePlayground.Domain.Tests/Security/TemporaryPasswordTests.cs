@@ -5,7 +5,7 @@ using System;
 
 namespace AzurePlayground.Domain.Tests.Security {
     [TestClass]
-    public class TemporaryPasswordTests {
+    public sealed class TemporaryPasswordTests {
         [TestMethod]
         public void TemporaryPassword_Verify_Valid_Password_Returns_True() {
             var pass = new TemporaryPassword("test");

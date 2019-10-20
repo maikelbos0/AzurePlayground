@@ -5,7 +5,7 @@ using System.Reflection;
 using Unity;
 
 namespace AzurePlayground.Utilities.Container {
-    public class InjectionRegistrar {
+    public sealed class InjectionRegistrar {
         public void RegisterTypes(IUnityContainer container) {
             // Ensure that all present solution assemblies are loaded
             foreach (var assemblyFile in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*AzurePlayground*.dll")) {

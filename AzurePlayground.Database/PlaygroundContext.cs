@@ -8,7 +8,7 @@ using Security = AzurePlayground.Domain.Security;
 
 namespace AzurePlayground.Database {
     [Injectable]
-    public class PlaygroundContext : DbContext, IPlaygroundContext {
+    public sealed class PlaygroundContext : DbContext, IPlaygroundContext {
         static PlaygroundContext() {
             // When adding migrations the context can not be instantiated
             // So far I have not worked out how to detect that the model has changed manually

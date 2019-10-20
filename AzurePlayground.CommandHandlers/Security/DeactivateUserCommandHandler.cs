@@ -6,7 +6,7 @@ using System;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class DeactivateUserCommandHandler : ICommandHandler<DeactivateUserCommand> {
+    public sealed class DeactivateUserCommandHandler : ICommandHandler<DeactivateUserCommand> {
         private readonly IUserRepository _repository;
 
         public DeactivateUserCommandHandler(IUserRepository repository) {

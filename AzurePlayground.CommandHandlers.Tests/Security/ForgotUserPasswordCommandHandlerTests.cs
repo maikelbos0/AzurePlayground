@@ -11,7 +11,7 @@ using AzurePlayground.Repositories.Security;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
-    public class ForgotUserPasswordCommandHandlerTests {
+    public sealed class ForgotUserPasswordCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
         private readonly UserRepository _repository;
         private readonly FakeMailClient _mailClient = new FakeMailClient();

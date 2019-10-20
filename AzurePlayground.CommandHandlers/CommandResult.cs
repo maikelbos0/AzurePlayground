@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 
 namespace AzurePlayground.CommandHandlers {
-    public class CommandResult<TCommand> where TCommand : ICommand {
+    public sealed class CommandResult<TCommand> where TCommand : ICommand {
         public List<CommandError<TCommand>> Errors { get; set; } = new List<CommandError<TCommand>>();
 
         public bool Success {

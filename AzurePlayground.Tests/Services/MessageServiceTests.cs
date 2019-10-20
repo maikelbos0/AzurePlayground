@@ -9,22 +9,22 @@ using FluentAssertions;
 
 namespace AzurePlayground.Tests.Services {
     [TestClass]
-    public class MessageServiceTests {
-        public class TestCommand : ICommand {
+    public sealed class MessageServiceTests {
+        public sealed class TestCommand : ICommand {
         }
 
         [Injectable]
-        public class TestCommandHandler : ICommandHandler<TestCommand> {
+        public sealed class TestCommandHandler : ICommandHandler<TestCommand> {
             public CommandResult<TestCommand> Execute(TestCommand command) {
                 return new CommandResult<TestCommand>();
             }
         }
 
-        public class TestQuery : IQuery<bool> {
+        public sealed class TestQuery : IQuery<bool> {
         }
 
         [Injectable]
-        public class TestQueryHandler : IQueryHandler<TestQuery, bool> {
+        public sealed class TestQueryHandler : IQueryHandler<TestQuery, bool> {
             public bool Execute(TestQuery query) {
                 return true;
             }

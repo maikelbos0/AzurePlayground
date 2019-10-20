@@ -1,5 +1,5 @@
 ﻿namespace AzurePlayground.Utilities.Mail {
-    public class ActivationMailTemplateParameters {
+    public sealed class ActivationMailTemplateParameters {
         public string Email { get; }
         public int ActivationCode { get; }
 

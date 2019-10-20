@@ -9,7 +9,7 @@ using NSubstitute;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
-    public class ActivateUserCommandHandlerTests {
+    public sealed class ActivateUserCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
         private readonly UserRepository _repository;
 

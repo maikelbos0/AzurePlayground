@@ -16,7 +16,7 @@ using Unity;
 
 namespace AzurePlayground.Tests.Integration {
     [TestClass]
-    public class HomeControllerTests {
+    public sealed class HomeControllerTests {
         private readonly FakeAuthenticationService _authenticationService = new FakeAuthenticationService();
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
         private readonly FakeMailClient _mailClient = new FakeMailClient();

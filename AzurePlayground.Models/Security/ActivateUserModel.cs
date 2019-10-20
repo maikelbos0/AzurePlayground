@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace AzurePlayground.Models.Security {
-    public class ActivateUserModel {
+    public sealed class ActivateUserModel {
         [DisplayName("Email address")]
         [Required(ErrorMessage = "Email address is required")]
         [EmailAddress(ErrorMessage = "This email address is invalid")]

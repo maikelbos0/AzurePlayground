@@ -6,7 +6,7 @@ using System;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class LogOutUserCommandHandler : ICommandHandler<LogOutUserCommand> {
+    public sealed class LogOutUserCommandHandler : ICommandHandler<LogOutUserCommand> {
         private readonly IUserRepository _repository;
 
         public LogOutUserCommandHandler(IUserRepository repository) {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 
 namespace AzurePlayground.Test.Utilities {
-    public class FakeDbSet<TEntity> : IDbSet<TEntity> where TEntity : class {
+    public sealed class FakeDbSet<TEntity> : IDbSet<TEntity> where TEntity : class {
         private readonly List<TEntity> _data;
 
         public FakeDbSet() {

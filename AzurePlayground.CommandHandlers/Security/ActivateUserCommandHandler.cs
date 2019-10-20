@@ -5,7 +5,7 @@ using AzurePlayground.Utilities.Container;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
-    public class ActivateUserCommandHandler : ICommandHandler<ActivateUserCommand> {
+    public sealed class ActivateUserCommandHandler : ICommandHandler<ActivateUserCommand> {
         private readonly IUserRepository _repository;
 
         public ActivateUserCommandHandler(IUserRepository repository) {

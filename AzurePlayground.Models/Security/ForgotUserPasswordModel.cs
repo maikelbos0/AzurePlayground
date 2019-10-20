@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace AzurePlayground.Models.Security {
-    public class ForgotUserPasswordModel {
+    public sealed class ForgotUserPasswordModel {
         [DisplayName("Email address")]
         [Required(ErrorMessage = "Email address is required")]
         [EmailAddress(ErrorMessage = "This email address is invalid")]

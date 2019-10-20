@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace AzurePlayground.Repositories.Security {
     [Injectable]
-    public class UserRepository : IUserRepository {
+    public sealed class UserRepository : IUserRepository {
         private readonly IPlaygroundContext _context;
 
         public UserRepository(IPlaygroundContext context) {

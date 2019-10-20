@@ -1,5 +1,5 @@
 ﻿namespace AzurePlayground.Utilities.Mail {
-    public class PasswordResetMailTemplateParameters {
+    public sealed class PasswordResetMailTemplateParameters {
         public string Email { get; }
         public string Token { get; }
 

@@ -3,7 +3,7 @@ using System.Data.Entity;
 using Security = AzurePlayground.Domain.Security;
 
 namespace AzurePlayground.Test.Utilities {
-    public class FakePlaygroundContext : IPlaygroundContext {
+    public sealed class FakePlaygroundContext : IPlaygroundContext {
         public IDbSet<Security.User> Users { get; set; } = new FakeDbSet<Security.User>();
         public int CallsToSaveChanges { get; private set; }
 

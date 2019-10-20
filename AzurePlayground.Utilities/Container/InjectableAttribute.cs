@@ -2,5 +2,5 @@
 
 namespace AzurePlayground.Utilities.Container {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class InjectableAttribute : Attribute { }
+    public sealed class InjectableAttribute : Attribute { }
 }

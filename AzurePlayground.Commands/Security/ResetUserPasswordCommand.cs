@@ -1,5 +1,5 @@
 ﻿namespace AzurePlayground.Commands.Security {
-    public class ResetUserPasswordCommand : ICommand {
+    public sealed class ResetUserPasswordCommand : ICommand {
         public string Email { get; }
         public string PasswordResetToken { get; }
         public string NewPassword { get; }

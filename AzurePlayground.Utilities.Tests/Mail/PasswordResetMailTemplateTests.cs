@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace AzurePlayground.Utilities.Tests.Mail {
     [TestClass]
-    public class PasswordResetMailTemplateTests {
+    public sealed class PasswordResetMailTemplateTests {
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
             Settings = new Dictionary<string, string>() {
                 { "Application.BaseUrl", "http://localhost/" }

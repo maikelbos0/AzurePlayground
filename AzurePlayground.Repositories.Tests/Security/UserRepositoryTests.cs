@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AzurePlayground.Repositories.Tests.Security {
     [TestClass]
-    public class UserRepositoryTests {
+    public sealed class UserRepositoryTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
 
         [TestInitialize]

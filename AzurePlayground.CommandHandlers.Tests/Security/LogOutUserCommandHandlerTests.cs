@@ -10,7 +10,7 @@ using AzurePlayground.Repositories.Security;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
-    public class LogOutUserCommandHandlerTests {
+    public sealed class LogOutUserCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
         private readonly UserRepository _repository;
 

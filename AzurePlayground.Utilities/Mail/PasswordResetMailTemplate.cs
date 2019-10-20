@@ -4,7 +4,7 @@ using System.Net;
 
 namespace AzurePlayground.Utilities.Mail {
     [Injectable]
-    public class PasswordResetMailTemplate : IMailTemplate<PasswordResetMailTemplateParameters> {
+    public sealed class PasswordResetMailTemplate : IMailTemplate<PasswordResetMailTemplateParameters> {
         private readonly IAppSettings _appSettings;
 
         public PasswordResetMailTemplate(IAppSettings appSettings) {

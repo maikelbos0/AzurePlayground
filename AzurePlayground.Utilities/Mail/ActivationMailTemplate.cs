@@ -4,7 +4,7 @@ using System.Net;
 
 namespace AzurePlayground.Utilities.Mail {
     [Injectable]
-    public class ActivationMailTemplate : IMailTemplate<ActivationMailTemplateParameters> {
+    public sealed class ActivationMailTemplate : IMailTemplate<ActivationMailTemplateParameters> {
         private readonly IAppSettings _appSettings;
 
         public ActivationMailTemplate(IAppSettings appSettings) {

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace AzurePlayground.Domain.Tests.Security {
     [TestClass]
-    public class PasswordTests {
+    public sealed class PasswordTests {
         [TestMethod]
         public void Password_Generates_Unique_Salt() {
             var pass1 = new Password("test");

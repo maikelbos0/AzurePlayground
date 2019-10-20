@@ -10,7 +10,7 @@ using System;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
-    public class ChangeUserPasswordCommandHandlerTests {
+    public sealed class ChangeUserPasswordCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
         private readonly UserRepository _repository;
 

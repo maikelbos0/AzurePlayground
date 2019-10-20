@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
-    public class SendUserActivationCommandHandlerTests {
+    public sealed class SendUserActivationCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
         private readonly UserRepository _repository;
         private readonly FakeMailClient _mailClient = new FakeMailClient();

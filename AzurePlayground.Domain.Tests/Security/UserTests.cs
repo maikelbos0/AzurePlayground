@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace AzurePlayground.Domain.Tests.Security {
     [TestClass]
-    public class UserTests {
+    public sealed class UserTests {
         [TestMethod]
         public void User_Register_Succeeds() {
             var user = new User("test@test.com", "test");
