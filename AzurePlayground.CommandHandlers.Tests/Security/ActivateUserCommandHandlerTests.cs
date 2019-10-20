@@ -1,6 +1,7 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
 using AzurePlayground.Commands.Security;
 using AzurePlayground.Domain.Security;
+using AzurePlayground.Repositories.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,10 +11,16 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class ActivateUserCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
+        private UserRepository _repository;
+
+        [TestInitialize]
+        public void Initialize() {
+            _repository = new UserRepository(_context);
+        }
 
         [TestMethod]
         public void ActivateUserCommandHandler_Succeeds() {
-            var handler = new ActivateUserCommandHandler(_context);
+            var handler = new ActivateUserCommandHandler(_repository);
             var command = new ActivateUserCommand("test@test.com", "999999");
             var user = Substitute.For<User>();
 
@@ -32,7 +39,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ActivateUserCommandHandler_Fails_For_Nonexistent_User() {
-            var handler = new ActivateUserCommandHandler(_context);
+            var handler = new ActivateUserCommandHandler(_repository);
             var command = new ActivateUserCommand("test@test.com", "999999");
             var user = Substitute.For<User>();
 
@@ -53,7 +60,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ActivateUserCommandHandler_Fails_For_Active_User() {
-            var handler = new ActivateUserCommandHandler(_context);
+            var handler = new ActivateUserCommandHandler(_repository);
             var command = new ActivateUserCommand("test@test.com", "999999");
             var user = Substitute.For<User>();
 
@@ -74,7 +81,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ActivateUserCommandHandler_Fails_For_Inactive_User() {
-            var handler = new ActivateUserCommandHandler(_context);
+            var handler = new ActivateUserCommandHandler(_repository);
             var command = new ActivateUserCommand("test@test.com", "999999");
             var user = Substitute.For<User>();
 
@@ -95,7 +102,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ActivateUserCommandHandler_Fails_For_Wrong_Code() {
-            var handler = new ActivateUserCommandHandler(_context);
+            var handler = new ActivateUserCommandHandler(_repository);
             var command = new ActivateUserCommand("test@test.com", "999987");
             var user = Substitute.For<User>();
 

@@ -1,6 +1,7 @@
 ﻿using AzurePlayground.Commands.Security;
 using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
+using AzurePlayground.Repositories.Security;
 using AzurePlayground.Utilities.Container;
 using System;
 using System.Linq;
@@ -8,15 +9,15 @@ using System.Linq;
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
     public class ActivateUserCommandHandler : ICommandHandler<ActivateUserCommand> {
-        private readonly IPlaygroundContext _context;
+        private readonly IUserRepository _repository;
 
-        public ActivateUserCommandHandler(IPlaygroundContext context) {
-            _context = context;
+        public ActivateUserCommandHandler(IUserRepository repository) {
+            _repository = repository;
         }
 
         public CommandResult<ActivateUserCommand> Execute(ActivateUserCommand parameter) {
             var result = new CommandResult<ActivateUserCommand>();
-            var user = _context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
+            var user = _repository.TryGetByEmail(parameter.Email);
 
             // Any error that occurs gets the same message to prevent leaking information
             if (user == null
@@ -31,7 +32,7 @@ namespace AzurePlayground.CommandHandlers.Security {
                 user.Activate();
             }
 
-            _context.SaveChanges();
+            _repository.Update();
 
             return result;
         }

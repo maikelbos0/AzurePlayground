@@ -1,6 +1,6 @@
 ﻿using AzurePlayground.Database;
-using Security = AzurePlayground.Domain.Security;
 using System.Data.Entity;
+using Security = AzurePlayground.Domain.Security;
 
 namespace AzurePlayground.Test.Utilities {
     public class FakePlaygroundContext : IPlaygroundContext {

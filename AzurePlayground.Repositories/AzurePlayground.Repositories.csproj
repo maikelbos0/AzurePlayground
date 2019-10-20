@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E157B9C5-042F-4DC3-B2E2-A721ECA67CDC}</ProjectGuid>
+    <ProjectGuid>{5F3B837B-41F5-40E9-B662-9069ACB3286D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AzurePlayground.Domain</RootNamespace>
-    <AssemblyName>AzurePlayground.Domain</AssemblyName>
+    <RootNamespace>AzurePlayground.Repositories</RootNamespace>
+    <AssemblyName>AzurePlayground.Repositories</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -51,16 +51,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateRoot.cs" />
-    <Compile Include="Entity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\Password.cs" />
-    <Compile Include="Security\TemporaryPassword.cs" />
-    <Compile Include="Security\User.cs" />
-    <Compile Include="Security\UserEvent.cs" />
-    <Compile Include="Security\UserEventType.cs" />
-    <Compile Include="Security\UserStatus.cs" />
-    <Compile Include="ValueObject.cs" />
+    <Compile Include="Security\IUserRepository.cs" />
+    <Compile Include="Security\UserRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AzurePlayground.Database\AzurePlayground.Database.csproj">
+      <Project>{a6de6643-8d01-4398-abed-536d33860ab6}</Project>
+      <Name>AzurePlayground.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.Domain\AzurePlayground.Domain.csproj">
+      <Project>{e157b9c5-042f-4dc3-b2e2-a721eca67cdc}</Project>
+      <Name>AzurePlayground.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.Utilities\AzurePlayground.Utilities.csproj">
+      <Project>{D4E722C8-0CD3-47C9-A479-CA3FA83FA225}</Project>
+      <Name>AzurePlayground.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

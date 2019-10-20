@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 
 namespace AzurePlayground.Domain.Security {
-    public class User : Entity {
+    public class User : AggregateRoot {
         public virtual UserStatus Status { get; protected set; }
         public virtual string Email { get; protected set; }
         public virtual int? ActivationCode { get; protected set; }

@@ -82,6 +82,10 @@
       <Project>{e157b9c5-042f-4dc3-b2e2-a721eca67cdc}</Project>
       <Name>AzurePlayground.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.Repositories\AzurePlayground.Repositories.csproj">
+      <Project>{5F3B837B-41F5-40E9-B662-9069ACB3286D}</Project>
+      <Name>AzurePlayground.Repositories</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Utilities\AzurePlayground.Utilities.csproj">
       <Project>{d4e722c8-0cd3-47c9-a479-ca3fa83fa225}</Project>
       <Name>AzurePlayground.Utilities</Name>
