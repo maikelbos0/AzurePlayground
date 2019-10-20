@@ -1,22 +1,20 @@
 ﻿using AzurePlayground.Commands.Security;
-using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
+using AzurePlayground.Repositories.Security;
 using AzurePlayground.Utilities.Container;
-using System;
-using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
     public class LogInUserCommandHandler : ICommandHandler<LogInUserCommand> {
-        private readonly IPlaygroundContext _context;
+        private readonly IUserRepository _repository;
 
-        public LogInUserCommandHandler(IPlaygroundContext playgroundContext) {
-            _context = playgroundContext;
+        public LogInUserCommandHandler(IUserRepository repository) {
+            _repository = repository;
         }
 
         public CommandResult<LogInUserCommand> Execute(LogInUserCommand parameter) {
             var result = new CommandResult<LogInUserCommand>();
-            var user = _context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
+            var user = _repository.TryGetByEmail(parameter.Email);
 
             if (user == null || user.Status != UserStatus.Active || !user.Password.Verify(parameter.Password)) {
                 result.AddError("Invalid email or password");
@@ -26,7 +24,7 @@ namespace AzurePlayground.CommandHandlers.Security {
                 user.LogIn();
             }
 
-            _context.SaveChanges();
+            _repository.Update();
 
             return result;
         }

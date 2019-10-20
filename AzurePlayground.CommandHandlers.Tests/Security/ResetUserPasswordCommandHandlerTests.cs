@@ -1,6 +1,7 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
 using AzurePlayground.Commands.Security;
 using AzurePlayground.Domain.Security;
+using AzurePlayground.Repositories.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,10 +12,15 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class ResetUserPasswordCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
+        private readonly UserRepository _repository;
+
+        public ResetUserPasswordCommandHandlerTests() {
+            _repository = new UserRepository(_context);
+        }
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Succeeds() {
-            var handler = new ResetUserPasswordCommandHandler(_context);
+            var handler = new ResetUserPasswordCommandHandler(_repository);
             var command = new ResetUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -33,7 +39,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Fails_For_Expired_Token() {
-            var handler = new ResetUserPasswordCommandHandler(_context);
+            var handler = new ResetUserPasswordCommandHandler(_repository);
             var command = new ResetUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -56,7 +62,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Fails_When_Already_Reset() {
-            var handler = new ResetUserPasswordCommandHandler(_context);
+            var handler = new ResetUserPasswordCommandHandler(_repository);
             var command = new ResetUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -77,7 +83,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Fails_For_Incorrect_Token() {
-            var handler = new ResetUserPasswordCommandHandler(_context);
+            var handler = new ResetUserPasswordCommandHandler(_repository);
             var command = new ResetUserPasswordCommand("test@test.com", "wrong", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -98,7 +104,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Throws_Exception_For_Inactive_User() {
-            var handler = new ResetUserPasswordCommandHandler(_context);
+            var handler = new ResetUserPasswordCommandHandler(_repository);
             var command = new ResetUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -120,7 +126,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new ResetUserPasswordCommandHandler(_context);
+            var handler = new ResetUserPasswordCommandHandler(_repository);
             var command = new ResetUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -142,7 +148,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ResetUserPasswordCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new ResetUserPasswordCommandHandler(_context);
+            var handler = new ResetUserPasswordCommandHandler(_repository);
             var command = new ResetUserPasswordCommand("test@test.com", "test", "test2");
 
             Action commandAction = () => {

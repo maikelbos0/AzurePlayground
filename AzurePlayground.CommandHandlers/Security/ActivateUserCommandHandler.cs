@@ -1,10 +1,7 @@
 ﻿using AzurePlayground.Commands.Security;
-using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
 using AzurePlayground.Repositories.Security;
 using AzurePlayground.Utilities.Container;
-using System;
-using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]

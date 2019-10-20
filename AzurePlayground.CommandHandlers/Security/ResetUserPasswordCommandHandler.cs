@@ -1,22 +1,21 @@
 ﻿using AzurePlayground.Commands.Security;
-using AzurePlayground.Database;
 using AzurePlayground.Domain.Security;
+using AzurePlayground.Repositories.Security;
 using AzurePlayground.Utilities.Container;
 using System;
-using System.Linq;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [Injectable]
     public class ResetUserPasswordCommandHandler : ICommandHandler<ResetUserPasswordCommand> {
-        private readonly IPlaygroundContext _context;
+        private readonly IUserRepository _repository;
 
-        public ResetUserPasswordCommandHandler(IPlaygroundContext context) {
-            _context = context;
+        public ResetUserPasswordCommandHandler(IUserRepository repository) {
+            _repository = repository;
         }
 
         public CommandResult<ResetUserPasswordCommand> Execute(ResetUserPasswordCommand parameter) {
             var result = new CommandResult<ResetUserPasswordCommand>();
-            var user = _context.Users.SingleOrDefault(u => u.Email.Equals(parameter.Email, StringComparison.InvariantCultureIgnoreCase));
+            var user = _repository.TryGetByEmail(parameter.Email);
 
             if (user == null || user.Status != UserStatus.Active) {
                 // Since there is no user input for email, the user is not responsible for these errors and we should not use the command result for feedback
@@ -31,7 +30,7 @@ namespace AzurePlayground.CommandHandlers.Security {
                 user.ResetPasswordFailed();
             }
 
-            _context.SaveChanges();
+            _repository.Update();
 
             return result;
         }

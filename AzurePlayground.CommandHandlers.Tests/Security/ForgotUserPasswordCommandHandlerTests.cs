@@ -7,21 +7,27 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using AzurePlayground.Utilities.Mail;
 using NSubstitute;
+using AzurePlayground.Repositories.Security;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class ForgotUserPasswordCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
+        private readonly UserRepository _repository;
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
             Settings = new Dictionary<string, string>() {
                 { "Application.BaseUrl", "http://localhost" }
             }
         };
+        
+        public ForgotUserPasswordCommandHandlerTests() {
+            _repository = new UserRepository(_context);
+        }
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Sends_Email() {
-            var handler = new ForgotUserPasswordCommandHandler(_context, _mailClient, new PasswordResetMailTemplate(_appSettings));
+            var handler = new ForgotUserPasswordCommandHandler(_repository, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var command = new ForgotUserPasswordCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -39,7 +45,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Succeeds() {
-            var handler = new ForgotUserPasswordCommandHandler(_context, _mailClient, new PasswordResetMailTemplate(_appSettings));
+            var handler = new ForgotUserPasswordCommandHandler(_repository, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var command = new ForgotUserPasswordCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -56,7 +62,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Does_Nothing_For_Nonexistent_User() {
-            var handler = new ForgotUserPasswordCommandHandler(_context, _mailClient, new PasswordResetMailTemplate(_appSettings));
+            var handler = new ForgotUserPasswordCommandHandler(_repository, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var command = new ForgotUserPasswordCommand("test@test.com");
 
             var result = handler.Execute(command);
@@ -67,7 +73,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Does_Nothing_For_Inactive_User() {
-            var handler = new ForgotUserPasswordCommandHandler(_context, _mailClient, new PasswordResetMailTemplate(_appSettings));
+            var handler = new ForgotUserPasswordCommandHandler(_repository, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var command = new ForgotUserPasswordCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -85,7 +91,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ForgotUserPasswordCommandHandler_Does_Nothing_For_New_User() {
-            var handler = new ForgotUserPasswordCommandHandler(_context, _mailClient, new PasswordResetMailTemplate(_appSettings));
+            var handler = new ForgotUserPasswordCommandHandler(_repository, _mailClient, new PasswordResetMailTemplate(_appSettings));
             var command = new ForgotUserPasswordCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");

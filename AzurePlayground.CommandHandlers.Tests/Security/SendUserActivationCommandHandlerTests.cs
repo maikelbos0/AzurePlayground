@@ -1,6 +1,7 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
 using AzurePlayground.Commands.Security;
 using AzurePlayground.Domain.Security;
+using AzurePlayground.Repositories.Security;
 using AzurePlayground.Test.Utilities;
 using AzurePlayground.Utilities.Mail;
 using FluentAssertions;
@@ -12,6 +13,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class SendUserActivationCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
+        private readonly UserRepository _repository;
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
             Settings = new Dictionary<string, string>() {
@@ -19,9 +21,13 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             }
         };
 
+        public SendUserActivationCommandHandlerTests() {
+            _repository = new UserRepository(_context);
+        }
+
         [TestMethod]
         public void SendUserActivationCommandHandler_Sends_Email() {
-            var handler = new SendUserActivationCommandHandler(_context, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new SendUserActivationCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new SendUserActivationCommand("test@test.com");
 
             _context.Users.Add(new User("test@test.com", "test"));
@@ -36,7 +42,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void SendUserActivationCommandHandler_Succeeds() {
-            var handler = new SendUserActivationCommandHandler(_context, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new SendUserActivationCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new SendUserActivationCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -54,7 +60,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void SendUserActivationCommandHandler_Does_Nothing_For_Active_User() {
-            var handler = new SendUserActivationCommandHandler(_context, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new SendUserActivationCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new SendUserActivationCommand("other@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -72,7 +78,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void SendUserActivationCommandHandler_Does_Nothing_For_Inactive_User() {
-            var handler = new SendUserActivationCommandHandler(_context, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new SendUserActivationCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new SendUserActivationCommand("other@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -90,7 +96,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void SendUserActivationCommandHandler_Does_Nothing_For_Nonexistent_User() {
-            var handler = new SendUserActivationCommandHandler(_context, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new SendUserActivationCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new SendUserActivationCommand("other@test.com");
 
             var result = handler.Execute(command);

@@ -6,15 +6,21 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
+using AzurePlayground.Repositories.Security;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class LogOutUserCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
+        private readonly UserRepository _repository;
+
+        public LogOutUserCommandHandlerTests() {
+            _repository = new UserRepository(_context);
+        }
 
         [TestMethod]
         public void LogOutUserCommandHandler_Succeeds() {
-            var handler = new LogOutUserCommandHandler(_context);
+            var handler = new LogOutUserCommandHandler(_repository);
             var command = new LogOutUserCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -30,7 +36,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogOutUserCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new LogOutUserCommandHandler(_context);
+            var handler = new LogOutUserCommandHandler(_repository);
             var command = new LogOutUserCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -48,7 +54,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogOutUserCommandHandler_Throws_Exception_For_Inactive_User() {
-            var handler = new LogOutUserCommandHandler(_context);
+            var handler = new LogOutUserCommandHandler(_repository);
             var command = new LogOutUserCommand("test@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -67,7 +73,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogOutUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new LogOutUserCommandHandler(_context);
+            var handler = new LogOutUserCommandHandler(_repository);
             var command = new LogOutUserCommand("test@test.com");
             Action commandAction = () => {
                 var result = handler.Execute(command);

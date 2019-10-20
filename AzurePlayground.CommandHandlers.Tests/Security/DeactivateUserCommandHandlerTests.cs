@@ -6,15 +6,21 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
+using AzurePlayground.Repositories.Security;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class DeactivateUserCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
+        private readonly UserRepository _repository;
+
+        public DeactivateUserCommandHandlerTests() {
+            _repository = new UserRepository(_context);
+        }
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Succeeds() {
-            var handler = new DeactivateUserCommandHandler(_context);
+            var handler = new DeactivateUserCommandHandler(_repository);
             var command = new DeactivateUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -32,7 +38,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Fails_For_Wrong_Password() {
-            var handler = new DeactivateUserCommandHandler(_context);
+            var handler = new DeactivateUserCommandHandler(_repository);
             var command = new DeactivateUserCommand("test@test.com", "wrong");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -52,7 +58,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new DeactivateUserCommandHandler(_context);
+            var handler = new DeactivateUserCommandHandler(_repository);
             var command = new DeactivateUserCommand("test@test.com", "test");
 
             Action commandAction = () => {
@@ -64,7 +70,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Throws_Exception_For_Inactive_User() {
-            var handler = new DeactivateUserCommandHandler(_context);
+            var handler = new DeactivateUserCommandHandler(_repository);
             var command = new DeactivateUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -84,7 +90,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void DeactivateUserCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new DeactivateUserCommandHandler(_context);
+            var handler = new DeactivateUserCommandHandler(_repository);
             var command = new DeactivateUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");

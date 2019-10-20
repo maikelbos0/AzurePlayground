@@ -1,6 +1,7 @@
 ﻿using AzurePlayground.CommandHandlers.Security;
 using AzurePlayground.Commands.Security;
 using AzurePlayground.Domain.Security;
+using AzurePlayground.Repositories.Security;
 using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,10 +11,15 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class LogInUserCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
+        private readonly UserRepository _repository;
+
+        public LogInUserCommandHandlerTests() {
+            _repository = new UserRepository(_context);
+        }
 
         [TestMethod]
         public void LogInUserCommandHandler_Succeeds() {
-            var handler = new LogInUserCommandHandler(_context);
+            var handler = new LogInUserCommandHandler(_repository);
             var command = new LogInUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -31,7 +37,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Nonexistent_User() {
-            var handler = new LogInUserCommandHandler(_context);
+            var handler = new LogInUserCommandHandler(_repository);
             var command = new LogInUserCommand("other@test.com", "test");
 
             var result = handler.Execute(command);
@@ -43,7 +49,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Inactive_User() {
-            var handler = new LogInUserCommandHandler(_context);
+            var handler = new LogInUserCommandHandler(_repository);
             var command = new LogInUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -63,7 +69,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_New_User() {
-            var handler = new LogInUserCommandHandler(_context);
+            var handler = new LogInUserCommandHandler(_repository);
             var command = new LogInUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -83,7 +89,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void LogInUserCommandHandler_Fails_For_Invalid_Password() {
-            var handler = new LogInUserCommandHandler(_context);
+            var handler = new LogInUserCommandHandler(_repository);
             var command = new LogInUserCommand("test@test.com", "wrong");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");

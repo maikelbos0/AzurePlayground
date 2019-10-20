@@ -11,10 +11,9 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class ActivateUserCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
-        private UserRepository _repository;
+        private readonly UserRepository _repository;
 
-        [TestInitialize]
-        public void Initialize() {
+        public ActivateUserCommandHandlerTests() {
             _repository = new UserRepository(_context);
         }
 

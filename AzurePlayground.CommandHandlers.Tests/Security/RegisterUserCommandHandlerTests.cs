@@ -7,11 +7,13 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using AzurePlayground.Repositories.Security;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
     public class RegisterUserCommandHandlerTests {
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
+        private readonly UserRepository _repository;
         private readonly FakeMailClient _mailClient = new FakeMailClient();
         private readonly FakeAppSettings _appSettings = new FakeAppSettings() {
             Settings = new Dictionary<string, string>() {
@@ -19,9 +21,13 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             }
         };
 
+        public RegisterUserCommandHandlerTests() {
+            _repository = new UserRepository(_context);
+        }
+
         [TestMethod]
         public void RegisterUserCommandHandler_Succeeds() {
-            var handler = new RegisterUserCommandHandler(_context, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new RegisterUserCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new RegisterUserCommand("test@test.com", "test");
 
             var result = handler.Execute(command);
@@ -36,7 +42,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void RegisterUserCommandHandler_Sends_Email() {
-            var handler = new RegisterUserCommandHandler(_context, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new RegisterUserCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new RegisterUserCommand("test@test.com", "test");
 
             handler.Execute(command);
@@ -48,7 +54,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void RegisterUserCommandHandler_Fails_For_Existing_Email() {
-            var handler = new RegisterUserCommandHandler(_context, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new RegisterUserCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new RegisterUserCommand("test@test.com", "test");
 
             _context.Users.Add(new User("test@test.com", "test"));
