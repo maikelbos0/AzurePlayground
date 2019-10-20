@@ -2,7 +2,7 @@
 using System.Linq;
 
 namespace AzurePlayground.Domain {
-    public abstract class ValueObject<T> where T : ValueObject<T> {
+    public abstract class ValueObject {
         /// <summary>
         /// An enumerable of items to compare the value object to another
         /// </summary>
@@ -11,20 +11,21 @@ namespace AzurePlayground.Domain {
         protected abstract IEnumerable<object> GetEqualityComponents();
 
         public override bool Equals(object obj) {
-            var other = obj as T;
-
-            if (ReferenceEquals(other, null)) {
+            if (ReferenceEquals(obj, null)) {
                 return false;
             }
 
-            return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
+            if (GetType() != obj.GetType())
+                return false;
+
+            return GetEqualityComponents().SequenceEqual(((ValueObject)obj).GetEqualityComponents());
         }
 
         public override int GetHashCode() {
             return GetEqualityComponents().Aggregate(1, (current, obj) => current * 23 + (obj?.GetHashCode() ?? 0));
         }
 
-        public static bool operator ==(ValueObject<T> a, ValueObject<T> b) {
+        public static bool operator ==(ValueObject a, ValueObject b) {
             if (ReferenceEquals(a, null) && ReferenceEquals(b, null)) {
                 return true;
             }
@@ -36,7 +37,7 @@ namespace AzurePlayground.Domain {
             return a.Equals(b);
         }
 
-        public static bool operator !=(ValueObject<T> a, ValueObject<T> b) {
+        public static bool operator !=(ValueObject a, ValueObject b) {
             return !(a == b);
         }
     }

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Cryptography;
 
 namespace AzurePlayground.Domain.Security {
-    public class Password : ValueObject<Password> {
+    public class Password : ValueObject {
         private const int _hashIterations = 1000;
 
         public byte[] Salt { get; private set; }
