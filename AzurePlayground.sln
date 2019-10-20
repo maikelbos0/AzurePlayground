@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Utilities.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Repositories", "AzurePlayground.Repositories\AzurePlayground.Repositories.csproj", "{5F3B837B-41F5-40E9-B662-9069ACB3286D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePlayground.Repositories.Tests", "AzurePlayground.Repositories.Tests\AzurePlayground.Repositories.Tests.csproj", "{45172AB2-999E-477E-9F49-014BE3BD2EE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{5F3B837B-41F5-40E9-B662-9069ACB3286D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F3B837B-41F5-40E9-B662-9069ACB3286D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F3B837B-41F5-40E9-B662-9069ACB3286D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45172AB2-999E-477E-9F49-014BE3BD2EE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45172AB2-999E-477E-9F49-014BE3BD2EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45172AB2-999E-477E-9F49-014BE3BD2EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45172AB2-999E-477E-9F49-014BE3BD2EE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
