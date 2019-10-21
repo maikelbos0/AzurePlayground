@@ -95,6 +95,8 @@
   <ItemGroup>
     <Compile Include="Configuration\AppSettings.cs" />
     <Compile Include="Configuration\IAppSettings.cs" />
+    <Compile Include="Container\Decorator.cs" />
+    <Compile Include="Container\DecoratorAttribute.cs" />
     <Compile Include="Container\InjectableAttribute.cs" />
     <Compile Include="Container\InjectionRegistrar.cs" />
     <Compile Include="Mail\ActivationMailTemplate.cs" />
