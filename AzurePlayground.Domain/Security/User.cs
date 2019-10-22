@@ -24,10 +24,7 @@ namespace AzurePlayground.Domain.Security {
         }
 
         protected void AddEvent(UserEventType userEventType) {
-            UserEvents.Add(new UserEvent() {
-                Date = DateTime.UtcNow,
-                Type = userEventType
-            });
+            UserEvents.Add(new UserEvent(this, userEventType));
         }
 
         public virtual void LogIn() {
