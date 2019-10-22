@@ -5,6 +5,7 @@ using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using Security = AzurePlayground.Domain.Security;
+using Auditing = AzurePlayground.Domain.Auditing;
 
 namespace AzurePlayground.Database {
     [Injectable]
@@ -27,6 +28,7 @@ namespace AzurePlayground.Database {
         }
 
         public IDbSet<Security.User> Users { get; set; }
+        public IDbSet<Auditing.CommandExecution> CommandExecutions { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
@@ -56,6 +58,12 @@ namespace AzurePlayground.Database {
             var userEvents = modelBuilder.Entity<Security.UserEvent>().ToTable("UserEvents", "Security").HasKey(e => e.Id);
 
             userEvents.Property(e => e.Type).HasColumnName("UserEventType_Id");
+
+            var commandExecutions = modelBuilder.Entity<Auditing.CommandExecution>().ToTable("CommandExecutions", "Auditing").HasKey(e => e.Id);
+
+            commandExecutions.Property(e => e.Date).IsRequired();
+            commandExecutions.Property(e => e.CommandType).IsRequired().HasMaxLength(255);
+            commandExecutions.Property(e => e.CommandData).IsRequired().IsMaxLength();
         }
 
         public void FixEfProviderServicesProblem() {
