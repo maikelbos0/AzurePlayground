@@ -13,6 +13,7 @@ namespace AzurePlayground.Utilities.Container {
             }
 
             var mappedTypes = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(assembly => assembly.FullName.Contains("AzurePlayground"))
                 .SelectMany(assembly => assembly.GetTypes())
                 .Where(type => Attribute.IsDefined(type, typeof(InjectableAttribute)))
                 .Select(type => new {
@@ -24,7 +25,9 @@ namespace AzurePlayground.Utilities.Container {
             foreach (var mappedType in mappedTypes) {
                 var decoratorTypes = mappedType.Type.GetCustomAttributes()
                     .Where(a => a.GetType().IsSubclassOf(typeof(DecoratorAttribute)))
-                    .Select(a => ((DecoratorAttribute)a).DecoratorType.MakeGenericType(mappedType.Interface.GetGenericArguments()));
+                    .Select(a => (DecoratorAttribute)a)
+                    .OrderByDescending(a => a.Order)
+                    .Select(a => a.DecoratorType.MakeGenericType(mappedType.Interface.GetGenericArguments()));
 
                 if (!decoratorTypes.Any()) {
                     container.RegisterType(mappedType.Interface, mappedType.Type);

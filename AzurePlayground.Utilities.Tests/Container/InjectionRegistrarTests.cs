@@ -1,16 +1,82 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using AzurePlayground.Utilities.Container;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Unity;
 
 namespace AzurePlayground.Utilities.Tests.Container {
     [TestClass]
     public sealed class InjectionRegistrarTests {
+        public interface ITest1 { }
+
+        [Injectable]
+        public sealed class Test1 : ITest1 { }
+
+        public interface ITest2<TValue> { }
+
+        [Injectable]
+        public sealed class Test2 : ITest2<Test1> { }
+
+        public interface ITest3<TValue> {
+            TValue GetValue();
+        }
+
+        [Injectable]
+        [TestDecorator1]
+        public sealed class Test3a : ITest3<string> {
+            public string GetValue() {
+                return "Success";
+            }
+        }
+
+        [Injectable]
+        [TestDecorator2]
+        [TestDecorator1(Order = 1)]
+        public sealed class Test3b : ITest3<int> {
+            public int GetValue() {
+                return 1;
+            }
+        }
+
+        public sealed class TestDecorator1Attribute : DecoratorAttribute {
+            public TestDecorator1Attribute() : base(typeof(TestDecorator1<>)) {
+            }
+        }
+
+        public sealed class TestDecorator1<TValue> : Decorator<ITest3<TValue>>, ITest3<TValue> {
+            public TValue GetValue() {
+                return Handler.GetValue();
+            }
+        }
+
+        public sealed class TestDecorator2Attribute : DecoratorAttribute {
+            public TestDecorator2Attribute() : base(typeof(TestDecorator2<>)) {
+            }
+        }
+
+        public sealed class TestDecorator2<TValue> : Decorator<ITest3<TValue>>, ITest3<TValue> {
+            public TValue GetValue() {
+                return Handler.GetValue();
+            }
+        }
+
         [TestMethod]
         public void InjectionRegistrar_Registers_For_Matching_Interface() {
-            throw new System.NotImplementedException();
+            var container = new UnityContainer();
+            var registrar = new InjectionRegistrar();
+
+            registrar.RegisterTypes(container);
+
+            container.Resolve<ITest1>().Should().BeOfType<Test1>();
         }
 
         [TestMethod]
         public void InjectionRegistrar_Registers_For_Single_Interface() {
-            throw new System.NotImplementedException();
+            var container = new UnityContainer();
+            var registrar = new InjectionRegistrar();
+
+            registrar.RegisterTypes(container);
+
+            container.Resolve<ITest2<Test1>>().Should().BeOfType<Test2>();
         }
 
         [TestMethod]
@@ -25,7 +91,31 @@ namespace AzurePlayground.Utilities.Tests.Container {
 
         [TestMethod]
         public void InjectionRegistrar_Registers_Decorators() {
-            throw new System.NotImplementedException();
+            var container = new UnityContainer();
+            var registrar = new InjectionRegistrar();
+
+            registrar.RegisterTypes(container);
+
+            var decorator = container.Resolve<ITest3<string>>();
+
+            decorator.Should().BeOfType<TestDecorator1<string>>();
+            ((TestDecorator1<string>)decorator).Handler.Should().BeOfType<Test3a>();
+            decorator.GetValue().Should().Be("Success");
+        }
+
+        [TestMethod]
+        public void InjectionRegistrar_Registers_Chained_Decorators() {
+            var container = new UnityContainer();
+            var registrar = new InjectionRegistrar();
+
+            registrar.RegisterTypes(container);
+
+            var decorator = container.Resolve<ITest3<int>>();
+
+            decorator.Should().BeOfType<TestDecorator1<int>>();
+            ((TestDecorator1<int>)decorator).Handler.Should().BeOfType<TestDecorator2<int>>();
+            ((TestDecorator2<int>)((TestDecorator1<int>)decorator).Handler).Handler.Should().BeOfType<Test3b>();
+            decorator.GetValue().Should().Be(1);
         }
 
         [TestMethod]
