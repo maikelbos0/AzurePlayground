@@ -1,6 +1,9 @@
 ﻿using AzurePlayground.Utilities.Container;
+using AzurePlayground.Utilities.Reflection;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using System;
 using Unity;
 
 namespace AzurePlayground.Utilities.Tests.Container {
@@ -59,10 +62,18 @@ namespace AzurePlayground.Utilities.Tests.Container {
             }
         }
 
+        public IClassFinder GetClassFinderFor<T>() {
+            var classFinder = Substitute.For<IClassFinder>();
+
+            classFinder.FindAllClasses().Returns(new Type[] { typeof(T) });
+
+            return classFinder;
+        }
+
         [TestMethod]
         public void InjectionRegistrar_Registers_For_Matching_Interface() {
             var container = new UnityContainer();
-            var registrar = new InjectionRegistrar();
+            var registrar = new InjectionRegistrar(GetClassFinderFor<Test1>());
 
             registrar.RegisterTypes(container);
 
@@ -72,7 +83,7 @@ namespace AzurePlayground.Utilities.Tests.Container {
         [TestMethod]
         public void InjectionRegistrar_Registers_For_Single_Interface() {
             var container = new UnityContainer();
-            var registrar = new InjectionRegistrar();
+            var registrar = new InjectionRegistrar(GetClassFinderFor<Test2>());
 
             registrar.RegisterTypes(container);
 
@@ -92,7 +103,7 @@ namespace AzurePlayground.Utilities.Tests.Container {
         [TestMethod]
         public void InjectionRegistrar_Registers_Decorators() {
             var container = new UnityContainer();
-            var registrar = new InjectionRegistrar();
+            var registrar = new InjectionRegistrar(GetClassFinderFor<Test3a>());
 
             registrar.RegisterTypes(container);
 
@@ -106,7 +117,7 @@ namespace AzurePlayground.Utilities.Tests.Container {
         [TestMethod]
         public void InjectionRegistrar_Registers_Chained_Decorators() {
             var container = new UnityContainer();
-            var registrar = new InjectionRegistrar();
+            var registrar = new InjectionRegistrar(GetClassFinderFor<Test3b>());
 
             registrar.RegisterTypes(container);
 

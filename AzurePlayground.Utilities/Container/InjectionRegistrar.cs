@@ -1,20 +1,19 @@
-﻿using System;
+﻿using AzurePlayground.Utilities.Reflection;
+using System;
 using System.Linq;
-using System.IO;
 using System.Reflection;
 using Unity;
 
 namespace AzurePlayground.Utilities.Container {
     public sealed class InjectionRegistrar {
-        public void RegisterTypes(IUnityContainer container) {
-            // Ensure that all present solution assemblies are loaded
-            foreach (var assemblyFile in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*AzurePlayground*.dll")) {
-                Assembly.LoadFile(assemblyFile);
-            }
+        private readonly IClassFinder _classFinder;
 
-            var mappedTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(assembly => assembly.FullName.Contains("AzurePlayground"))
-                .SelectMany(assembly => assembly.GetTypes())
+        public InjectionRegistrar(IClassFinder classFinder) {
+            _classFinder = classFinder;
+        }
+
+        public void RegisterTypes(IUnityContainer container) {
+            var mappedTypes = _classFinder.FindAllClasses()
                 .Where(type => Attribute.IsDefined(type, typeof(InjectableAttribute)))
                 .Select(type => new {
                     Type = type,
@@ -38,7 +37,9 @@ namespace AzurePlayground.Utilities.Container {
                     }
 
                     // If we have decorators, we chain the calls
+#pragma warning disable IDE0039 // Use local function
                     Func<IUnityContainer, object> action = c => {
+#pragma warning restore IDE0039 // Use local function
                         dynamic obj = c.Resolve(mappedType.Type);
 
                         foreach (var decoratorType in decoratorTypes) {

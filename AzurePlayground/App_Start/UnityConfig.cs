@@ -1,4 +1,5 @@
 using AzurePlayground.Utilities.Container;
+using AzurePlayground.Utilities.Reflection;
 using System;
 using Unity;
 
@@ -32,7 +33,7 @@ namespace AzurePlayground {
         /// registered.
         /// </remarks>
         public static void RegisterTypes(IUnityContainer container) {
-            var registrar = new InjectionRegistrar();
+            var registrar = new InjectionRegistrar(new ClassFinder());
 
             registrar.RegisterTypes(container);
         }
