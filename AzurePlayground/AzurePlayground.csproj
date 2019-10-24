@@ -168,6 +168,7 @@
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\Application\jquery-htmlform.js" />
     <Content Include="Scripts\Application\jquery-ajaxform.js" />
     <Content Include="Scripts\Application\toastr-defaults.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
