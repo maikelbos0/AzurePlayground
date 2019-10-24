@@ -20,14 +20,18 @@ namespace AzurePlayground.Utilities.Container {
                     Interface = type.GetInterfaces().SingleOrDefault(i => i.Name == $"I{type.Name}") ?? type.GetInterfaces().SingleOrDefault()
                 })
                 .Where(type => type.Interface != null);
-
+            
             foreach (var mappedType in mappedTypes) {
+                if (container.IsRegistered(mappedType.Interface)) {
+                    throw new InvalidOperationException($"Type registration for {mappedType.Interface.FullName} failed; double type registration found.");
+                }
+
                 var decoratorTypes = mappedType.Type.GetCustomAttributes()
                     .Where(a => a.GetType().IsSubclassOf(typeof(DecoratorAttribute)))
                     .Select(a => (DecoratorAttribute)a)
                     .OrderByDescending(a => a.Order)
                     .Select(a => a.DecoratorType.MakeGenericType(mappedType.Interface.GetGenericArguments()));
-
+                
                 if (!decoratorTypes.Any()) {
                     container.RegisterType(mappedType.Interface, mappedType.Type);
                 }

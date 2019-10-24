@@ -14,6 +14,9 @@ namespace AzurePlayground.Utilities.Tests.Container {
         [InterfaceInjectable]
         public sealed class Test1 : ITest1 { }
 
+        [InterfaceInjectable]
+        public sealed class Test1b : ITest1 { }
+
         public interface ITest2<TValue> { }
 
         [InterfaceInjectable]
@@ -65,13 +68,40 @@ namespace AzurePlayground.Utilities.Tests.Container {
             }
         }
 
+        public interface ITest5<TValue> {
+            TValue GetValue();
+        }
+
+        [InterfaceInjectable]
+        public sealed class Test5 : ITest5<string> {
+            public string GetValue() {
+                return "Success";
+            }
+        }
+
+        public sealed class TestDecorator5Attribute : DecoratorAttribute {
+            public TestDecorator5Attribute() : base(typeof(TestDecorator5<,>)) {
+            }
+        }
+
+        public sealed class TestDecorator5<TValue, TExtra> : Decorator<ITest5<TValue>>, ITest5<TValue> {
+            public TValue GetValue() {
+                return Handler.GetValue();
+            }
+        }
+
         public IClassFinder GetClassFinderFor<T>() {
+            return GetClassFinderFor(typeof(T));
+        }
+
+        public IClassFinder GetClassFinderFor(params Type[] types) {
             var classFinder = Substitute.For<IClassFinder>();
 
-            classFinder.FindAllClasses().Returns(new Type[] { typeof(T) });
+            classFinder.FindAllClasses().Returns(types);
 
             return classFinder;
         }
+
 
         [TestMethod]
         public void InjectionRegistrar_Registers_For_Matching_Interface() {
@@ -107,7 +137,14 @@ namespace AzurePlayground.Utilities.Tests.Container {
 
         [TestMethod]
         public void InjectionRegistrar_Throws_Exception_For_Multiple_Types_One_Interface() {
-            throw new System.NotImplementedException();
+            var container = new UnityContainer();
+            var registrar = new InjectionRegistrar(GetClassFinderFor(typeof(Test1), typeof(Test1b)));
+
+            Action action = () => {
+                registrar.RegisterTypes(container);
+            };
+
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [TestMethod]
@@ -141,7 +178,16 @@ namespace AzurePlayground.Utilities.Tests.Container {
 
         [TestMethod]
         public void InjectionRegistrar_Throw_Exception_For_Mismatched_Decorator() {
-            throw new System.NotImplementedException();
+            var container = new UnityContainer();
+            var registrar = new InjectionRegistrar(GetClassFinderFor<Test5>());
+
+            registrar.RegisterTypes(container);
+
+            Action action = () => {
+                registrar.RegisterTypes(container);
+            };
+
+            action.Should().Throw<InvalidOperationException>();
         }
     }
 }
