@@ -4,15 +4,16 @@ using System.Web.Mvc;
 
 namespace AzurePlayground.Extensions {
     public static class ModelStateDictionaryExtensions {
-        public static void Merge<TModel, TCommand>(this ModelStateDictionary modelState, CommandResult<TCommand> commandResult) where TCommand : ICommand {
+        public static void Merge<TCommand>(this ModelStateDictionary modelState, object model, CommandResult<TCommand> commandResult) where TCommand : ICommand {
             foreach (var commandError in commandResult.Errors) {
                 string propertyName = null;
+                var modelType = model.GetType();
 
                 if (commandError.Expression != null) {
                     propertyName = ExpressionHelper.GetExpressionText(commandError.Expression);
                 }
                 
-                if (propertyName == null || typeof(TModel).GetProperty(propertyName) == null) {
+                if (propertyName == null || modelType.GetProperty(propertyName) == null) {
                     modelState.AddModelError(string.Empty, commandError.Message);
                 }
                 else {
