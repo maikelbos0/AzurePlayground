@@ -19,6 +19,9 @@ namespace AzurePlayground.Utilities.Tests.Container {
         [Injectable]
         public sealed class Test2 : ITest2<Test1> { }
 
+        [Injectable]
+        public sealed class Test4 : ITest1, ITest2<string> { }
+
         public interface ITest3<TValue> {
             TValue GetValue();
         }
@@ -92,7 +95,14 @@ namespace AzurePlayground.Utilities.Tests.Container {
 
         [TestMethod]
         public void InjectionRegistrar_Throws_Exception_For_Multiple_Interfaces() {
-            throw new System.NotImplementedException();
+            var container = new UnityContainer();
+            var registrar = new InjectionRegistrar(GetClassFinderFor<Test4>());
+
+            Action action = () => {
+                registrar.RegisterTypes(container);
+            };
+
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [TestMethod]
