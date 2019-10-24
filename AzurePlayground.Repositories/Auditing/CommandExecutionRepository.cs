@@ -3,7 +3,7 @@ using AzurePlayground.Domain.Auditing;
 using AzurePlayground.Utilities.Container;
 
 namespace AzurePlayground.Repositories.Auditing {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class CommandExecutionRepository : ICommandExecutionRepository {
         private readonly IPlaygroundContext _context;
 

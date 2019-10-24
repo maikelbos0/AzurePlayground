@@ -8,7 +8,7 @@ using Security = AzurePlayground.Domain.Security;
 using Auditing = AzurePlayground.Domain.Auditing;
 
 namespace AzurePlayground.Database {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class PlaygroundContext : DbContext, IPlaygroundContext {
         static PlaygroundContext() {
             // When adding migrations the context can not be instantiated

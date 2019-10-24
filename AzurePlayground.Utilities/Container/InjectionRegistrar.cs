@@ -14,7 +14,7 @@ namespace AzurePlayground.Utilities.Container {
 
         public void RegisterTypes(IUnityContainer container) {
             var mappedTypes = _classFinder.FindAllClasses()
-                .Where(type => Attribute.IsDefined(type, typeof(InjectableAttribute)))
+                .Where(type => Attribute.IsDefined(type, typeof(InterfaceInjectableAttribute)))
                 .Select(type => new {
                     Type = type,
                     Interface = type.GetInterfaces().SingleOrDefault(i => i.Name == $"I{type.Name}") ?? type.GetInterfaces().SingleOrDefault()

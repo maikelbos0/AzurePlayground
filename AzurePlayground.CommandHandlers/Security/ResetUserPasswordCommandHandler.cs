@@ -5,7 +5,7 @@ using AzurePlayground.Utilities.Container;
 using System;
 
 namespace AzurePlayground.CommandHandlers.Security {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class ResetUserPasswordCommandHandler : ICommandHandler<ResetUserPasswordCommand> {
         private readonly IUserRepository _repository;
 

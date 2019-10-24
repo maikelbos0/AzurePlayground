@@ -4,7 +4,7 @@ using SendGrid.Helpers.Mail;
 using System.Configuration;
 
 namespace AzurePlayground.Utilities.Mail {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class MailClient : IMailClient {
         public void Send(MailMessage model) {
             var client = new SendGridClient(ConfigurationManager.AppSettings["SendGrid.ApiKey"]);

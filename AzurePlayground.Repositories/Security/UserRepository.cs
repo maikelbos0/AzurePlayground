@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 
 namespace AzurePlayground.Repositories.Security {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class UserRepository : IUserRepository {
         private readonly IPlaygroundContext _context;
 

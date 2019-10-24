@@ -3,7 +3,7 @@ using System.Web;
 using System.Web.Security;
 
 namespace AzurePlayground.Services {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class AuthenticationService : IAuthenticationService {
         public string GetIdentity() {
             return HttpContext.Current.User.Identity.Name;

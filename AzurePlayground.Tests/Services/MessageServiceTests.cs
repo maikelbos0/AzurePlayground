@@ -13,7 +13,7 @@ namespace AzurePlayground.Tests.Services {
         public sealed class TestCommand : ICommand {
         }
 
-        [Injectable]
+        [InterfaceInjectable]
         public sealed class TestCommandHandler : ICommandHandler<TestCommand> {
             public CommandResult<TestCommand> Execute(TestCommand command) {
                 return new CommandResult<TestCommand>();
@@ -23,7 +23,7 @@ namespace AzurePlayground.Tests.Services {
         public sealed class TestQuery : IQuery<bool> {
         }
 
-        [Injectable]
+        [InterfaceInjectable]
         public sealed class TestQueryHandler : IQueryHandler<TestQuery, bool> {
             public bool Execute(TestQuery query) {
                 return true;

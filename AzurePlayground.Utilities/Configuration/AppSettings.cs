@@ -2,7 +2,7 @@
 using System.Configuration;
 
 namespace AzurePlayground.Utilities.Configuration {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class AppSettings : IAppSettings {
         public string this[string name] {
             get {

@@ -6,7 +6,7 @@ using AzurePlayground.Utilities.Container;
 using Unity;
 
 namespace AzurePlayground.Services {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class MessageService : IMessageService {
         private readonly IUnityContainer _container;
 

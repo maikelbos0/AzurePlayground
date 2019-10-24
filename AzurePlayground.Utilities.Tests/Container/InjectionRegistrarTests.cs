@@ -11,22 +11,22 @@ namespace AzurePlayground.Utilities.Tests.Container {
     public sealed class InjectionRegistrarTests {
         public interface ITest1 { }
 
-        [Injectable]
+        [InterfaceInjectable]
         public sealed class Test1 : ITest1 { }
 
         public interface ITest2<TValue> { }
 
-        [Injectable]
+        [InterfaceInjectable]
         public sealed class Test2 : ITest2<Test1> { }
 
-        [Injectable]
+        [InterfaceInjectable]
         public sealed class Test4 : ITest1, ITest2<string> { }
 
         public interface ITest3<TValue> {
             TValue GetValue();
         }
 
-        [Injectable]
+        [InterfaceInjectable]
         [TestDecorator1]
         public sealed class Test3a : ITest3<string> {
             public string GetValue() {
@@ -34,7 +34,7 @@ namespace AzurePlayground.Utilities.Tests.Container {
             }
         }
 
-        [Injectable]
+        [InterfaceInjectable]
         [TestDecorator2]
         [TestDecorator1(Order = 1)]
         public sealed class Test3b : ITest3<int> {

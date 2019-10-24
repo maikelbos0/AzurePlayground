@@ -3,7 +3,7 @@ using AzurePlayground.Utilities.Container;
 using System.Net;
 
 namespace AzurePlayground.Utilities.Mail {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class ActivationMailTemplate : IMailTemplate<ActivationMailTemplateParameters> {
         private readonly IAppSettings _appSettings;
 

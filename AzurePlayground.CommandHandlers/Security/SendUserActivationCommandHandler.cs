@@ -5,7 +5,7 @@ using AzurePlayground.Utilities.Container;
 using AzurePlayground.Utilities.Mail;
 
 namespace AzurePlayground.CommandHandlers.Security {
-    [Injectable]
+    [InterfaceInjectable]
     public sealed class SendUserActivationCommandHandler : ICommandHandler<SendUserActivationCommand> {
         private readonly IUserRepository _repository;
         private readonly IMailClient _mailClient;
