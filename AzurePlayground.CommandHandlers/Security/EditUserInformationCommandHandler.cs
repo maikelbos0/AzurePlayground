@@ -8,15 +8,15 @@ using System;
 namespace AzurePlayground.CommandHandlers.Security {
     [InterfaceInjectable]
     [Audit]
-    public sealed class SaveUserInformationCommandHandler : ICommandHandler<SaveUserInformationCommand> {
+    public sealed class EditUserInformationCommandHandler : ICommandHandler<EditUserInformationCommand> {
         private readonly IUserRepository _repository;
 
-        public SaveUserInformationCommandHandler(IUserRepository repository) {
+        public EditUserInformationCommandHandler(IUserRepository repository) {
             _repository = repository;
         }
 
-        public CommandResult<SaveUserInformationCommand> Execute(SaveUserInformationCommand command) {
-            var result = new CommandResult<SaveUserInformationCommand>();
+        public CommandResult<EditUserInformationCommand> Execute(EditUserInformationCommand command) {
+            var result = new CommandResult<EditUserInformationCommand>();
             var user = _repository.TryGetByEmail(command.Email);
 
             if (user != null && user.Status == UserStatus.Active) {

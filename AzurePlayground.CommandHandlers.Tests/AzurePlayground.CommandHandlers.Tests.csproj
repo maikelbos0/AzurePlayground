@@ -85,7 +85,7 @@
     <Compile Include="Security\RegisterUserCommandHandlerTests.cs" />
     <Compile Include="Security\ForgotUserPasswordCommandHandlerTests.cs" />
     <Compile Include="Security\ResetUserPasswordCommandHandlerTests.cs" />
-    <Compile Include="Security\SaveUserInformationCommandTests.cs" />
+    <Compile Include="Security\EditUserInformationCommandTests.cs" />
     <Compile Include="Security\SendUserActivationCommandHandlerTests.cs" />
   </ItemGroup>
   <ItemGroup>
