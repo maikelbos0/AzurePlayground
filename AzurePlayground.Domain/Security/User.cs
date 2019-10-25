@@ -10,7 +10,7 @@ namespace AzurePlayground.Domain.Security {
         public virtual int? ActivationCode { get; protected set; }
         public virtual Password Password { get; protected set; }
         public virtual TemporaryPassword PasswordResetToken { get; protected set; } = TemporaryPassword.None;
-        public virtual ICollection<UserEvent> UserEvents { get; protected set; } = new List<UserEvent>();
+        public ICollection<UserEvent> UserEvents { get; protected set; } = new List<UserEvent>();
 
         protected User() {
         }
