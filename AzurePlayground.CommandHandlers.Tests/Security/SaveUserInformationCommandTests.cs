@@ -6,6 +6,7 @@ using AzurePlayground.Test.Utilities;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using System;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
@@ -44,30 +45,62 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void SaveUserInformationCommand_Throws_Exception_For_Nonexistent_User() {
-            throw new System.NotImplementedException();
-
-            /*
+            var handler = new SaveUserInformationCommandHandler(_repository);
+            var command = new SaveUserInformationCommand("test@test.com") {
+                DisplayName = "Test",
+                Description = "A test description",
+                ShowEmail = true
+            };
+                        
             Action commandAction = () => {
                 var result = handler.Execute(command);
             };
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate non-existent user 'test@test.com'");
-            */
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to save user information for non-existent user 'test@test.com'");
         }
 
         [TestMethod]
-        public void SaveUserInformationCommand_Throws_Exception_For_Inactive_User() {
-            throw new System.NotImplementedException();
+        public void SaveUserInformationCommand_Throws_Exception_For_New_User() {
+            var handler = new SaveUserInformationCommandHandler(_repository);
+            var command = new SaveUserInformationCommand("test@test.com") {
+                DisplayName = "Test",
+                Description = "A test description",
+                ShowEmail = true
+            };
 
-            /*
+            var user = Substitute.For<User>();
+            user.Email.Returns("test@test.com");
+            user.Status.Returns(UserStatus.New);
+            
             Action commandAction = () => {
                 var result = handler.Execute(command);
             };
 
             _context.Users.Add(user);
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
-            */
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to save user information for inactive user 'test@test.com'");
+        }
+
+        [TestMethod]
+        public void SaveUserInformationCommand_Throws_Exception_For_Inactive_User() {
+            var handler = new SaveUserInformationCommandHandler(_repository);
+            var command = new SaveUserInformationCommand("test@test.com") {
+                DisplayName = "Test",
+                Description = "A test description",
+                ShowEmail = true
+            };
+
+            var user = Substitute.For<User>();
+            user.Email.Returns("test@test.com");
+            user.Status.Returns(UserStatus.Inactive);
+            
+            Action commandAction = () => {
+                var result = handler.Execute(command);
+            };
+
+            _context.Users.Add(user);
+
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to save user information for inactive user 'test@test.com'");
         }
     }
 }
