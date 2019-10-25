@@ -1,5 +1,6 @@
 ﻿using AzurePlayground.Commands.Security;
 using AzurePlayground.Models.Security;
+using AzurePlayground.Queries.Security;
 using AzurePlayground.Services;
 using System.Web.Mvc;
 
@@ -159,18 +160,18 @@ namespace AzurePlayground.Controllers {
         [HttpGet]
         [Authorize]
         public ActionResult ChangeProfile() {
-            return View(new EditUserInformationModel());
+            return View(_messageService.Dispatch(new GetUserProfileQuery(_authenticationService.GetIdentity())));
         }
 
         [Route("ChangeProfile")]
         [HttpPost]
         [Authorize]
-        public ActionResult ChangeProfile(EditUserInformationModel model) {
+        public ActionResult ChangeProfile(UserProfileModel model) {
             return ValidatedCommandResult(model, new ChangeUserProfileCommand(_authenticationService.GetIdentity()) {
                 DisplayName = model.DisplayName,
                 Description = model.Description,
                 ShowEmail = model.ShowEmail
-            }, "UserInformationUpdated");
+            }, "ProfileChanged");
         }
     }
 }

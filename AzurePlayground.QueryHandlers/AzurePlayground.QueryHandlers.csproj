@@ -52,10 +52,9 @@
   <ItemGroup>
     <Compile Include="IQueryHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\GetUserProfileQueryHandler.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Security\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\AzurePlayground.Database\AzurePlayground.Database.csproj">
       <Project>{a6de6643-8d01-4398-abed-536d33860ab6}</Project>
@@ -64,6 +63,10 @@
     <ProjectReference Include="..\AzurePlayground.Domain\AzurePlayground.Domain.csproj">
       <Project>{e157b9c5-042f-4dc3-b2e2-a721eca67cdc}</Project>
       <Name>AzurePlayground.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzurePlayground.Models\AzurePlayground.Models.csproj">
+      <Project>{FE4C0D69-D134-4F3A-B19E-0BE8E3CB6FC2}</Project>
+      <Name>AzurePlayground.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\AzurePlayground.Queries\AzurePlayground.Queries.csproj">
       <Project>{176178a9-63e6-4665-a1ce-ebb8ce87bc7c}</Project>

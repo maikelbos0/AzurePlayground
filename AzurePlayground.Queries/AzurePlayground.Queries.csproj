@@ -43,6 +43,13 @@
   <ItemGroup>
     <Compile Include="IQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\GetUserProfileQuery.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AzurePlayground.Models\AzurePlayground.Models.csproj">
+      <Project>{FE4C0D69-D134-4F3A-B19E-0BE8E3CB6FC2}</Project>
+      <Name>AzurePlayground.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
