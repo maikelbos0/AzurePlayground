@@ -6,10 +6,7 @@ using System.Web.Mvc;
 namespace AzurePlayground.Controllers {
     [RoutePrefix("Home")]
     public sealed class HomeController : BaseController {
-        private readonly IAuthenticationService _authenticationService;
-
-        public HomeController(IAuthenticationService authenticationService, IMessageService messageService) : base(messageService) {
-            _authenticationService = authenticationService;
+        public HomeController(IAuthenticationService authenticationService, IMessageService messageService) : base(messageService, authenticationService) {
         }
 
         [Route("~/")]
@@ -156,6 +153,24 @@ namespace AzurePlayground.Controllers {
                     _authenticationService.SignOut();
                     return RedirectToAction("Index");
                 });
+        }
+
+        [Route("ChangeProfile")]
+        [HttpGet]
+        [Authorize]
+        public ActionResult ChangeProfile() {
+            return View(new EditUserInformationModel());
+        }
+
+        [Route("ChangeProfile")]
+        [HttpPost]
+        [Authorize]
+        public ActionResult ChangeProfile(EditUserInformationModel model) {
+            return ValidatedCommandResult(model, new ChangeUserProfileCommand(_authenticationService.GetIdentity()) {
+                DisplayName = model.DisplayName,
+                Description = model.Description,
+                ShowEmail = model.ShowEmail
+            }, "UserInformationUpdated");
         }
     }
 }

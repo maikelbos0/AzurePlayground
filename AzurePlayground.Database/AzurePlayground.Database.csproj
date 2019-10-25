@@ -58,9 +58,9 @@
     <Compile Include="Migrations\201910221251225_Auditing-CommandExecutions.Designer.cs">
       <DependentUpon>201910221251225_Auditing-CommandExecutions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910250648465_Users-UserInformation.cs" />
-    <Compile Include="Migrations\201910250648465_Users-UserInformation.Designer.cs">
-      <DependentUpon>201910250648465_Users-UserInformation.cs</DependentUpon>
+    <Compile Include="Migrations\201910250822536_Users-UserInformation.cs" />
+    <Compile Include="Migrations\201910250822536_Users-UserInformation.Designer.cs">
+      <DependentUpon>201910250822536_Users-UserInformation.cs</DependentUpon>
     </Compile>
     <Compile Include="ReferenceEntities\BaseReferenceEntity.cs" />
     <Compile Include="IPlaygroundContext.cs" />
@@ -92,8 +92,8 @@
     <EmbeddedResource Include="Migrations\201910221251225_Auditing-CommandExecutions.resx">
       <DependentUpon>201910221251225_Auditing-CommandExecutions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910250648465_Users-UserInformation.resx">
-      <DependentUpon>201910250648465_Users-UserInformation.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910250822536_Users-UserInformation.resx">
+      <DependentUpon>201910250822536_Users-UserInformation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

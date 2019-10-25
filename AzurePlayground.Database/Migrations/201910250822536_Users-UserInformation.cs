@@ -7,7 +7,7 @@ namespace AzurePlayground.Database.Migrations
     {
         public override void Up()
         {
-            AddColumn("Security.Users", "DisplayName", c => c.String());
+            AddColumn("Security.Users", "DisplayName", c => c.String(maxLength: 50));
             AddColumn("Security.Users", "Description", c => c.String());
             AddColumn("Security.Users", "ShowEmail", c => c.Boolean(nullable: false));
         }

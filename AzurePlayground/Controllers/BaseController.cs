@@ -7,9 +7,11 @@ using System.Web.Mvc;
 namespace AzurePlayground.Controllers {
     public abstract class BaseController : Controller {
         protected readonly IMessageService _messageService;
+        protected readonly IAuthenticationService _authenticationService;
 
-        public BaseController(IMessageService messageService) {
+        public BaseController(IMessageService messageService, IAuthenticationService authenticationService) {
             _messageService = messageService;
+            _authenticationService = authenticationService;
         }
 
         protected ActionResult ValidatedCommandResult<TCommand>(object model, TCommand command, string onValidViewName) where TCommand : ICommand {

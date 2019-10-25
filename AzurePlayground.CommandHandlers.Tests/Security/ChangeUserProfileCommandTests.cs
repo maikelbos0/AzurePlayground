@@ -10,20 +10,20 @@ using System;
 
 namespace AzurePlayground.CommandHandlers.Tests.Security {
     [TestClass]
-    public sealed class EditUserInformationCommandTests {
+    public sealed class ChangeUserProfileCommandTests {
 
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
         private readonly UserRepository _repository;
 
-        public EditUserInformationCommandTests() {
+        public ChangeUserProfileCommandTests() {
             _repository = new UserRepository(_context);
         }
 
 
         [TestMethod]
-        public void EditUserInformationCommand_Succeeds() {
-            var handler = new EditUserInformationCommandHandler(_repository);
-            var command = new EditUserInformationCommand("test@test.com") {
+        public void ChangeUserProfileCommandHandler_Succeeds() {
+            var handler = new ChangeUserProfileCommandHandler(_repository);
+            var command = new ChangeUserProfileCommand("test@test.com") {
                 DisplayName = "Test",
                 Description = "A test description",
                 ShowEmail = true
@@ -44,9 +44,9 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
         }
 
         [TestMethod]
-        public void EditUserInformationCommand_Throws_Exception_For_Nonexistent_User() {
-            var handler = new EditUserInformationCommandHandler(_repository);
-            var command = new EditUserInformationCommand("test@test.com") {
+        public void ChangeUserProfileCommandHandler_Throws_Exception_For_Nonexistent_User() {
+            var handler = new ChangeUserProfileCommandHandler(_repository);
+            var command = new ChangeUserProfileCommand("test@test.com") {
                 DisplayName = "Test",
                 Description = "A test description",
                 ShowEmail = true
@@ -60,9 +60,9 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
         }
 
         [TestMethod]
-        public void EditUserInformationCommand_Throws_Exception_For_New_User() {
-            var handler = new EditUserInformationCommandHandler(_repository);
-            var command = new EditUserInformationCommand("test@test.com") {
+        public void ChangeUserProfileCommandHandler_Throws_Exception_For_New_User() {
+            var handler = new ChangeUserProfileCommandHandler(_repository);
+            var command = new ChangeUserProfileCommand("test@test.com") {
                 DisplayName = "Test",
                 Description = "A test description",
                 ShowEmail = true
@@ -82,9 +82,9 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
         }
 
         [TestMethod]
-        public void EditUserInformationCommand_Throws_Exception_For_Inactive_User() {
-            var handler = new EditUserInformationCommandHandler(_repository);
-            var command = new EditUserInformationCommand("test@test.com") {
+        public void ChangeUserProfileCommandHandler_Throws_Exception_For_Inactive_User() {
+            var handler = new ChangeUserProfileCommandHandler(_repository);
+            var command = new ChangeUserProfileCommand("test@test.com") {
                 DisplayName = "Test",
                 Description = "A test description",
                 ShowEmail = true

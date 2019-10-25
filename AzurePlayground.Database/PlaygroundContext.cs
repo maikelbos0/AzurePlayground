@@ -54,6 +54,8 @@ namespace AzurePlayground.Database {
             users.Property(u => u.PasswordResetToken.Salt).HasMaxLength(20);
             users.Property(u => u.PasswordResetToken.Hash).HasMaxLength(20);
             users.Property(u => u.Status).HasColumnName("UserStatus_Id");
+            users.Property(u => u.DisplayName).HasMaxLength(50);
+            users.Property(u => u.Description).IsMaxLength();
 
             var userEvents = modelBuilder.Entity<Security.UserEvent>().ToTable("UserEvents", "Security").HasKey(e => e.Id);
 
