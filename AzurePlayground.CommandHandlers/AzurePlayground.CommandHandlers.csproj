@@ -63,6 +63,7 @@
     <Compile Include="Security\RegisterUserCommandHandler.cs" />
     <Compile Include="Security\ForgotUserPasswordCommandHandler.cs" />
     <Compile Include="Security\ResetUserPasswordCommandHandler.cs" />
+    <Compile Include="Security\SaveUserInformationCommandHandler.cs" />
     <Compile Include="Security\SendUserActivationCommandHandler.cs" />
     <Compile Include="Security\LogInUserCommandHandler.cs" />
   </ItemGroup>

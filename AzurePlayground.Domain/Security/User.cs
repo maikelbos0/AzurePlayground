@@ -12,6 +12,10 @@ namespace AzurePlayground.Domain.Security {
         public virtual TemporaryPassword PasswordResetToken { get; protected set; } = TemporaryPassword.None;
         public ICollection<UserEvent> UserEvents { get; protected set; } = new List<UserEvent>();
 
+        public virtual string DisplayName { get; set; }
+        public virtual string Description { get; set; }
+        public virtual bool ShowEmail { get; set; } = false;
+
         protected User() {
         }
 

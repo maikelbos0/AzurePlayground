@@ -7,7 +7,6 @@ using AzurePlayground.Utilities.Mail;
 
 namespace AzurePlayground.CommandHandlers.Security {
     [InterfaceInjectable]
-    [Audit] // TODO remove, this is test
     public sealed class ForgotUserPasswordCommandHandler : ICommandHandler<ForgotUserPasswordCommand> {
         private readonly IUserRepository _repository;
         private readonly IMailClient _mailClient;
