@@ -12,11 +12,11 @@ namespace AzurePlayground.Controllers {
             _messageService = messageService;
         }
 
-        protected ActionResult ValidatedCommandResult<TCommand>(object model, TCommand command, Func<ActionResult> onValid) where TCommand : ICommand {
-            return ValidatedCommandResult(model, command, onValid, () => View(model));
+        protected ActionResult ValidatedCommandResult<TCommand>(object model, TCommand command, string onValidViewName) where TCommand : ICommand {
+            return ValidatedCommandResult(model, command, () => View(onValidViewName));
         }
 
-        protected ActionResult ValidatedCommandResult<TCommand>(object model, TCommand command, Func<ActionResult> onValid, Func<ActionResult> onInvalid) where TCommand : ICommand {
+        protected ActionResult ValidatedCommandResult<TCommand>(object model, TCommand command, Func<ActionResult> onValid) where TCommand : ICommand {
             if (ModelState.IsValid) {
                 ModelState.Merge(model, _messageService.Dispatch(command));
             }
@@ -25,9 +25,8 @@ namespace AzurePlayground.Controllers {
                 return onValid();
             }
             else {
-                return onInvalid();
+                return View(model);
             }
-
         }
     }
 }
