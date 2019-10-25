@@ -22,8 +22,9 @@
                     @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
                 </li>
 
-
                 @if (User.Identity.IsAuthenticated) {
+                    @Html.ActionLink("Users", "Index", "User", null, new { @class = "nav-link" })
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbar-login-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             @User.Identity.Name

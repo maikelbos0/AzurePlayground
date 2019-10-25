@@ -1,0 +1,19 @@
+﻿@model System.Collections.Generic.IEnumerable<AzurePlayground.Models.Security.UserViewModel>
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>Users</h2>
+
+<table>
+    <tr>
+        <th>Display name</th>
+    </tr>
+
+    @foreach (var user in Model) {
+        <tr>
+            <td>@user.DisplayName</td>
+        </tr>
+    }
+</table>
