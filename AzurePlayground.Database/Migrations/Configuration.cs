@@ -14,6 +14,10 @@ namespace AzurePlayground.Database.Migrations {
             AddOrUpdateUser(context, "anon@test.com", null, null, false);
             AddOrUpdateUser(context, "you@test.com", "You", "Who are you?", false);
             AddOrUpdateUser(context, "another@test.com", "Another", "One bites the dust", true);
+
+            for (var i = 0; i < 100; i++) {
+                AddOrUpdateUser(context, $"user{i}@test.com", $"User {i}", (i % 3 == 0 ? null : $"Hello I am user number {i}"), i % 2 == 0);
+            }
         }
 
         private void SeedEntityType<TEnum, TReferenceEntity>(PlaygroundContext context)
