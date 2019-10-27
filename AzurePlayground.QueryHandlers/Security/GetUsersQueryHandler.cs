@@ -8,20 +8,21 @@ using System.Linq;
 
 namespace AzurePlayground.QueryHandlers.Security {
     [InterfaceInjectable]
-    public sealed class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, IEnumerable<UserViewModel>> {
-        private IPlaygroundContext _context;
+    public sealed class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, IList<UserViewModel>> {
+        private readonly IPlaygroundContext _context;
 
         public GetUsersQueryHandler(IPlaygroundContext context) {
             _context = context;
         }
 
-        public IEnumerable<UserViewModel> Execute(GetUsersQuery query) {
+        public IList<UserViewModel> Execute(GetUsersQuery query) {
             return _context.Users
                 .Where(u => u.Status == UserStatus.Active)
+                .OrderBy(u => u.Id)
                 .Select(u => new UserViewModel() {
                     Id = u.Id,
-                    DisplayName = u.DisplayName,
-                    Email = u.ShowEmail ? u.Email : null,
+                    DisplayName = u.DisplayName ?? "Anonymous",
+                    Email = u.ShowEmail ? u.Email : "Private",
                     Description = u.Description,
                     StartDate = u.UserEvents.Min(e => e.Date)
                 })

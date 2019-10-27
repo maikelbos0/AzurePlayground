@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 
 namespace AzurePlayground.Queries.Security {
-    public sealed class GetUsersQuery : IQuery<IEnumerable<UserViewModel>> {
+    public sealed class GetUsersQuery : IQuery<IList<UserViewModel>> {
     }
 }

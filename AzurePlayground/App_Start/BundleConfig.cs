@@ -7,7 +7,8 @@ namespace AzurePlayground.App_Start {
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/jquery.validate.js",
                 "~/Scripts/jquery.validate.unobtrusive.js",
-                "~/Scripts/toastr.js"));
+                "~/Scripts/toastr.js",
+                "~/Scripts/jquery-datagridview.js"));
 
             bundles.Add(new ScriptBundle("~/Scripts/bootstrap").Include(
                 "~/Scripts/umd/popper.js",
@@ -23,7 +24,9 @@ namespace AzurePlayground.App_Start {
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/Site.css",
-                "~/Content/toastr.css"));
+                "~/Content/toastr.css",
+                "~/Content/jquery-datagridview.css",
+                "~/Content/jquery-datagridview.style.css"));
         }
     }
 }
