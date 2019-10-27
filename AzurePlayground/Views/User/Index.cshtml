@@ -9,11 +9,15 @@
 <table>
     <tr>
         <th>Display name</th>
+        <th>Email address</th>
+        <th>Description</th>
     </tr>
 
     @foreach (var user in Model) {
         <tr>
-            <td>@user.DisplayName</td>
+            <td>@(user.DisplayName ?? "Anonymous")</td>
+            <td>@(user.Email ?? "Private")</td>
+            <td>@user.Description</td>
         </tr>
     }
 </table>
