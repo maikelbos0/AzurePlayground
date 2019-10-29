@@ -15,7 +15,7 @@ namespace AzurePlayground.QueryHandlers.Tests.Security {
         [TestMethod]
         public void GetUserProfileQueryHandler_Succeeds() {
             var handler = new GetUserProfileQueryHandler(_context);
-            var command = new GetUserProfileQuery("test@test.com");
+            var query = new GetUserProfileQuery("test@test.com");
             var user = Substitute.For<User>();
 
             user.Email.Returns("test@test.com");
@@ -25,7 +25,7 @@ namespace AzurePlayground.QueryHandlers.Tests.Security {
 
             _context.Users.Add(user);
 
-            var result = handler.Execute(command);
+            var result = handler.Execute(query);
 
             result.DisplayName.Should().Be("Test name");
             result.Description.Should().Be("Test description");
@@ -35,10 +35,10 @@ namespace AzurePlayground.QueryHandlers.Tests.Security {
         [TestMethod]
         public void GetUserProfileQueryHandler_Throws_Exception_For_Nonexistent_User() {
             var handler = new GetUserProfileQueryHandler(_context);
-            var command = new GetUserProfileQuery("test@test.com");
+            var query = new GetUserProfileQuery("test@test.com");
 
             Action queryAction = () => {
-                var result = handler.Execute(command);
+                var result = handler.Execute(query);
             };
 
             queryAction.Should().Throw<InvalidOperationException>();

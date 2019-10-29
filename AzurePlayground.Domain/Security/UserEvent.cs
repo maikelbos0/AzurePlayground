@@ -3,8 +3,8 @@
 namespace AzurePlayground.Domain.Security {
     public class UserEvent : Entity {
         public User User { get; protected set; }
-        public DateTime Date { get; protected set; }
-        public UserEventType Type { get; protected set; }
+        public virtual DateTime Date { get; protected set; }
+        public virtual UserEventType Type { get; protected set; }
 
         protected UserEvent() {
         }

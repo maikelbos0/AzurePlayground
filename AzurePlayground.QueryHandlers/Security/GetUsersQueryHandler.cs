@@ -3,6 +3,7 @@ using AzurePlayground.Domain.Security;
 using AzurePlayground.Models.Security;
 using AzurePlayground.Queries.Security;
 using AzurePlayground.Utilities.Container;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,7 +25,7 @@ namespace AzurePlayground.QueryHandlers.Security {
                     DisplayName = u.DisplayName ?? "Anonymous",
                     Email = u.ShowEmail ? u.Email : "Private",
                     Description = u.Description,
-                    StartDate = u.UserEvents.Min(e => e.Date)
+                    StartDate = u.UserEvents.Min(e => (DateTime?)e.Date)
                 })
                 .ToList();
         }

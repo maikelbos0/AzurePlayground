@@ -10,7 +10,10 @@ namespace AzurePlayground.Controllers {
     [Authorize]
     [RoutePrefix("User")]
     public sealed class UserController : BaseController {
-        public UserController(IAuthenticationService authenticationService, IMessageService messageService) : base(messageService, authenticationService) {
+        private readonly IDataGridViewService _dataGridViewService;
+
+        public UserController(IAuthenticationService authenticationService, IMessageService messageService, IDataGridViewService dataGridViewService) : base(messageService, authenticationService) {
+            _dataGridViewService = dataGridViewService;
         }
 
         [Route]
@@ -25,28 +28,7 @@ namespace AzurePlayground.Controllers {
         public ActionResult GetUsers(DataGridViewMetaData metaData) {
             IEnumerable<UserViewModel> data = _messageService.Dispatch(new GetUsersQuery());
 
-            metaData.totalRows = data.Count();
-
-            if (metaData.rowsPerPage == 0) {
-                metaData.rowsPerPage = 25;
-            }
-
-            // Sorting
-            if (metaData.sortColumn != null) {
-                var property = typeof(UserViewModel).GetProperty(metaData.sortColumn);
-
-                if (property != null) {
-                    if (metaData.sortDescending) {
-                        data = data.OrderByDescending(i => property.GetValue(i));
-                    }
-                    else {
-                        data = data.OrderBy(i => property.GetValue(i));
-                    }
-                }
-            }
-
-            // Paging
-            data = data.Skip(metaData.page * metaData.rowsPerPage).Take(metaData.rowsPerPage);
+            data = _dataGridViewService.ApplyMetaData(data, ref metaData);
 
             return Json(new {
                 metaData,

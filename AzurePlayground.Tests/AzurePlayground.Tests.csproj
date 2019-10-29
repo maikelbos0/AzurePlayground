@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Integration\HomeControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DataGridViewServiceTests.cs" />
     <Compile Include="Services\MessageServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>

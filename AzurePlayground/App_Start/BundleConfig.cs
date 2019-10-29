@@ -17,7 +17,8 @@ namespace AzurePlayground.App_Start {
             bundles.Add(new ScriptBundle("~/Scripts/app").Include(
                 "~/Scripts/application/jquery-ajaxform.js",
                 "~/Scripts/application/jquery-htmlform.js",
-                "~/Scripts/application/toastr-defaults.js"));
+                "~/Scripts/application/toastr-defaults.js",
+                "~/Scripts/application/jquery-datagridview-defaults.js"));
 
             bundles.Add(new StyleBundle("~/Content/css-bootstrap").Include(
                 "~/Content/bootstrap.css"));

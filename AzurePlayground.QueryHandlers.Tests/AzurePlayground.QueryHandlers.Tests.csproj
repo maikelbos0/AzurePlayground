@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\GetUserProfileQueryHandlerTests.cs" />
+    <Compile Include="Security\GetUsersQueryHandlerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AzurePlayground.Database\AzurePlayground.Database.csproj">

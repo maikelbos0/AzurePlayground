@@ -1,6 +1,6 @@
 ﻿namespace AzurePlayground.Domain {
     public abstract class Entity {
-        public int Id { get; protected set; }
+        public virtual int Id { get; protected set; }
 
         public override bool Equals(object obj) {
             var other = obj as Entity;
