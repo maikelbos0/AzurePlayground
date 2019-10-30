@@ -2,6 +2,7 @@
 using AzurePlayground.Domain.Security;
 using AzurePlayground.Models.Security;
 using AzurePlayground.Queries.Security;
+using AzurePlayground.QueryHandlers.Decorators;
 using AzurePlayground.Utilities.Container;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Linq;
 
 namespace AzurePlayground.QueryHandlers.Security {
     [InterfaceInjectable]
+    [Audit]
     public sealed class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, IList<UserViewModel>> {
         private readonly IPlaygroundContext _context;
 

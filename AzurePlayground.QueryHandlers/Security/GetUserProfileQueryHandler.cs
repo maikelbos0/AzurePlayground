@@ -1,14 +1,16 @@
 ﻿using AzurePlayground.Database;
 using AzurePlayground.Models.Security;
 using AzurePlayground.Queries.Security;
+using AzurePlayground.QueryHandlers.Decorators;
 using AzurePlayground.Utilities.Container;
 using System;
 using System.Linq;
 
 namespace AzurePlayground.QueryHandlers.Security {
     [InterfaceInjectable]
+    [Audit]
     public sealed class GetUserProfileQueryHandler : IQueryHandler<GetUserProfileQuery, UserProfileModel> {
-        private IPlaygroundContext _context;
+        private readonly IPlaygroundContext _context;
 
         public GetUserProfileQueryHandler(IPlaygroundContext context) {
             _context = context;

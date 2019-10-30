@@ -7,6 +7,7 @@ namespace AzurePlayground.Database {
     public interface IPlaygroundContext : IDisposable {
         IDbSet<Security.User> Users { get; set; }
         IDbSet<Auditing.CommandExecution> CommandExecutions { get; set; }
+        IDbSet<Auditing.QueryExecution> QueryExecutions { get; set; }
         int SaveChanges();
     }
 }

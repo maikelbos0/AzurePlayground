@@ -62,6 +62,10 @@
     <Compile Include="Migrations\201910250822536_Users-UserInformation.Designer.cs">
       <DependentUpon>201910250822536_Users-UserInformation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910301922574_Auditing-QueryExecutions.cs" />
+    <Compile Include="Migrations\201910301922574_Auditing-QueryExecutions.Designer.cs">
+      <DependentUpon>201910301922574_Auditing-QueryExecutions.cs</DependentUpon>
+    </Compile>
     <Compile Include="ReferenceEntities\BaseReferenceEntity.cs" />
     <Compile Include="IPlaygroundContext.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -94,6 +98,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910250822536_Users-UserInformation.resx">
       <DependentUpon>201910250822536_Users-UserInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910301922574_Auditing-QueryExecutions.resx">
+      <DependentUpon>201910301922574_Auditing-QueryExecutions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

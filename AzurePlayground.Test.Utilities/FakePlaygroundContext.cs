@@ -8,6 +8,7 @@ namespace AzurePlayground.Test.Utilities {
         public IDbSet<Security.User> Users { get; set; } = new FakeDbSet<Security.User>();
         public int CallsToSaveChanges { get; private set; }
         public IDbSet<Auditing.CommandExecution> CommandExecutions { get ; set ; } = new FakeDbSet<Auditing.CommandExecution>();
+        public IDbSet<Auditing.QueryExecution> QueryExecutions { get; set; } = new FakeDbSet<Auditing.QueryExecution>();
 
         public void Dispose() {
             SaveChanges();

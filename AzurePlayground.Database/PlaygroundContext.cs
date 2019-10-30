@@ -29,6 +29,7 @@ namespace AzurePlayground.Database {
 
         public IDbSet<Security.User> Users { get; set; }
         public IDbSet<Auditing.CommandExecution> CommandExecutions { get; set; }
+        public IDbSet<Auditing.QueryExecution> QueryExecutions { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
@@ -66,6 +67,12 @@ namespace AzurePlayground.Database {
             commandExecutions.Property(e => e.Date).IsRequired();
             commandExecutions.Property(e => e.CommandType).IsRequired().HasMaxLength(255);
             commandExecutions.Property(e => e.CommandData).IsRequired().IsMaxLength();
+
+            var queryExecutions = modelBuilder.Entity<Auditing.QueryExecution>().ToTable("QueryExecutions", "Auditing").HasKey(e => e.Id);
+
+            queryExecutions.Property(e => e.Date).IsRequired();
+            queryExecutions.Property(e => e.QueryType).IsRequired().HasMaxLength(255);
+            queryExecutions.Property(e => e.QueryData).IsRequired().IsMaxLength();
         }
 
         public void FixEfProviderServicesProblem() {
