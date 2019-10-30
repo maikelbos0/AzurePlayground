@@ -30,7 +30,8 @@ namespace AzurePlayground.Utilities.Container {
                     .Where(a => a.GetType().IsSubclassOf(typeof(DecoratorAttribute)))
                     .Select(a => (DecoratorAttribute)a)
                     .OrderByDescending(a => a.Order)
-                    .Select(a => a.DecoratorType.MakeGenericType(mappedType.Interface.GetGenericArguments()));
+                    .Select(a => a.DecoratorType.MakeGenericType(mappedType.Interface.GetGenericArguments()))
+                    .ToArray();
                 
                 if (!decoratorTypes.Any()) {
                     container.RegisterType(mappedType.Interface, mappedType.Type);
