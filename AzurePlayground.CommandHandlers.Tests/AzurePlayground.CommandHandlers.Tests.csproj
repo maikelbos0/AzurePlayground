@@ -78,6 +78,7 @@
     <Compile Include="Decorators\AuditDecoratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ActivateUserCommandHandlerTests.cs" />
+    <Compile Include="Security\ChangeUserEmailCommandHandlerTests.cs" />
     <Compile Include="Security\ChangeUserPasswordCommandHandlerTests.cs" />
     <Compile Include="Security\DeactivateUserCommandHandlerTests.cs" />
     <Compile Include="Security\LogInUserCommandHandlerTests.cs" />

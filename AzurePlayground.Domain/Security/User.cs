@@ -97,6 +97,15 @@ namespace AzurePlayground.Domain.Security {
             AddEvent(UserEventType.FailedDeactivation);
         }
 
+        public virtual void ChangeEmail(string email) {
+            Email = email;
+            AddEvent(UserEventType.EmailChanged);
+        }
+
+        public virtual void ChangeEmailFailed() {
+            AddEvent(UserEventType.FailedEmailChange);
+        }
+
         protected string GetNewPasswordResetToken() {
             using (var rng = new RNGCryptoServiceProvider()) {
                 // Establish a maximum based on the amount of characters to prevent bias

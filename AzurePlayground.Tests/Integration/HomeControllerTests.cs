@@ -166,5 +166,10 @@ namespace AzurePlayground.Tests.Integration {
             _authenticationService.Identity.Should().BeNull();
             _context.Users.Single().Status.Should().Be(UserStatus.Inactive);
         }
+
+        [TestMethod]
+        public void HomeController_ChangeEmail_LogOut_Activate_To_LogIn_Succeeds() {
+            throw new System.NotImplementedException();
+        }
     }
 }

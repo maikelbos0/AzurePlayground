@@ -161,13 +161,39 @@ namespace AzurePlayground.Domain.Tests.Security {
             user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
 
-        [TestMethod] public void User_DeactivationFailed_Succeeds() {
+        [TestMethod]
+        public void User_DeactivationFailed_Succeeds() {
             var user = new User("test@test.com", "test");
 
             user.Activate();
             user.DeactivationFailed();
 
             user.UserEvents.Last().Type.Should().Be(UserEventType.FailedDeactivation);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
+        }
+
+        [TestMethod]
+        public void User_EmailChanged_Succeeds() {
+            var user = new User("test@test.com", "test");
+
+            user.Activate();
+            user.ChangeEmail("new@test.com");
+
+            user.Status.Should().Be(UserStatus.New);
+            user.ActivationCode.Should().NotBeNull();
+            user.Email.Should().Be("new@test.com");
+            user.UserEvents.Last().Type.Should().Be(UserEventType.PasswordChanged);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
+        }
+
+        [TestMethod]
+        public void User_ChangeEmailFailed_Succeeds() {
+            var user = new User("test@test.com", "test");
+
+            user.Activate();
+            user.ChangeEmailFailed();
+
+            user.UserEvents.Last().Type.Should().Be(UserEventType.FailedPasswordChange);
             user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
     }

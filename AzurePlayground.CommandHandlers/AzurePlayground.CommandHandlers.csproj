@@ -57,6 +57,7 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ActivateUserCommandHandler.cs" />
+    <Compile Include="Security\ChangeUserEmailCommandHandler.cs" />
     <Compile Include="Security\ChangeUserPasswordCommandHandler.cs" />
     <Compile Include="Security\DeactivateUserCommandHandler.cs" />
     <Compile Include="Security\LogOutUserCommandHandler.cs" />
