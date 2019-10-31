@@ -32,6 +32,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
+            user.ActivationCode.Returns(999999);
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Active);
 
@@ -47,18 +48,16 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
         public void ChangeUserEmailCommandHandler_Sends_Email() {
             var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
             var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
-            var user = Substitute.For<User>();
-            user.Email.Returns("test@test.com");
-            user.Password.Returns(new Password("test"));
-            user.Status.Returns(UserStatus.Active);
+            var user = new User("test@test.com", "test");
 
+            user.Activate();
             _context.Users.Add(user);
 
             handler.Execute(command);
 
             _mailClient.SentMessages.Should().HaveCount(1);
             _mailClient.SentMessages[0].Subject.Should().Be("Please activate your account");
-            _mailClient.SentMessages[0].To.Should().Be("test2@test.com");
+            _mailClient.SentMessages[0].To.Should().Be("new@test.com");
         }
 
         [TestMethod]
@@ -72,8 +71,11 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
             _context.Users.Add(user);
 
-            handler.Execute(command);
+            var result = handler.Execute(command);
 
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("c => c.Password");
+            result.Errors[0].Message.Should().Be("Invalid password");
             user.DidNotReceive().ChangeEmail(Arg.Any<string>());
             user.Received().ChangeEmailFailed();
             _mailClient.SentMessages.Should().BeEmpty();
@@ -94,9 +96,12 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             user2.Email.Returns("new@test.com");
 
             _context.Users.Add(user2);
-                       
-            handler.Execute(command);
 
+            var result = handler.Execute(command);
+
+            result.Errors.Should().HaveCount(1);
+            result.Errors[0].Expression.ToString().Should().Be("c => c.NewEmail");
+            result.Errors[0].Message.Should().Be("Email address already exists");
             user.DidNotReceive().ChangeEmail(Arg.Any<string>());
             user.Received().ChangeEmailFailed();
             _mailClient.SentMessages.Should().BeEmpty();
@@ -111,7 +116,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
                 var result = handler.Execute(command);
             };
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change email for nonexistent user 'test@test.com'");
+            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change email for non-existent user 'test@test.com'");
 
             _mailClient.SentMessages.Should().BeEmpty();
         }

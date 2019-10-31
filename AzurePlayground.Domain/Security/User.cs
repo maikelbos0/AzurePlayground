@@ -99,6 +99,8 @@ namespace AzurePlayground.Domain.Security {
 
         public virtual void ChangeEmail(string email) {
             Email = email;
+            Status = UserStatus.New;
+            ActivationCode = GetNewActivationCode();
             AddEvent(UserEventType.EmailChanged);
         }
 

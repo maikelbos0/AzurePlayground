@@ -182,7 +182,7 @@ namespace AzurePlayground.Domain.Tests.Security {
             user.Status.Should().Be(UserStatus.New);
             user.ActivationCode.Should().NotBeNull();
             user.Email.Should().Be("new@test.com");
-            user.UserEvents.Last().Type.Should().Be(UserEventType.PasswordChanged);
+            user.UserEvents.Last().Type.Should().Be(UserEventType.EmailChanged);
             user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
 
@@ -193,7 +193,7 @@ namespace AzurePlayground.Domain.Tests.Security {
             user.Activate();
             user.ChangeEmailFailed();
 
-            user.UserEvents.Last().Type.Should().Be(UserEventType.FailedPasswordChange);
+            user.UserEvents.Last().Type.Should().Be(UserEventType.FailedEmailChange);
             user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
     }
