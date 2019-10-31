@@ -1,6 +1,7 @@
 ﻿namespace AzurePlayground.Services {
     public interface IAuthenticationService {
-        string GetIdentity();
+        bool IsAuthenticated { get; }
+        string Identity { get; }
         void SignIn(string identity);
         void SignOut();
     }

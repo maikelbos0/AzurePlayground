@@ -5,8 +5,16 @@ using System.Web.Security;
 namespace AzurePlayground.Services {
     [InterfaceInjectable]
     public sealed class AuthenticationService : IAuthenticationService {
-        public string GetIdentity() {
-            return HttpContext.Current.User.Identity.Name;
+        public bool IsAuthenticated {
+            get {
+                return HttpContext.Current.User.Identity.IsAuthenticated;
+            }
+        }
+
+        public string Identity {
+            get {
+                return HttpContext.Current.User.Identity.Name;
+            }
         }
 
         public void SignIn(string identity) {

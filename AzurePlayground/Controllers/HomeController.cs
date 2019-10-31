@@ -94,7 +94,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         [Authorize]
         public ActionResult LogOut() {
-            _messageService.Dispatch(new LogOutUserCommand(_authenticationService.GetIdentity()));
+            _messageService.Dispatch(new LogOutUserCommand(_authenticationService.Identity));
             _authenticationService.SignOut();
             return RedirectToAction("Index");
         }
@@ -110,7 +110,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         [Authorize]
         public ActionResult ChangePassword(ChangeUserPasswordModel model) {
-            return ValidatedCommandResult(model, new ChangeUserPasswordCommand(_authenticationService.GetIdentity(), model.CurrentPassword, model.NewPassword), "PasswordChanged");
+            return ValidatedCommandResult(model, new ChangeUserPasswordCommand(_authenticationService.Identity, model.CurrentPassword, model.NewPassword), "PasswordChanged");
         }
 
         [Route("ForgotPassword")]
@@ -149,7 +149,7 @@ namespace AzurePlayground.Controllers {
         [Authorize]
         public ActionResult Deactivate(DeactivateUserModel model) {
             return ValidatedCommandResult(model,
-                new DeactivateUserCommand(_authenticationService.GetIdentity(), model.Password),
+                new DeactivateUserCommand(_authenticationService.Identity, model.Password),
                 () => {
                     _authenticationService.SignOut();
                     return RedirectToAction("Index");
@@ -160,14 +160,14 @@ namespace AzurePlayground.Controllers {
         [HttpGet]
         [Authorize]
         public ActionResult ChangeProfile() {
-            return View(_messageService.Dispatch(new GetUserProfileQuery(_authenticationService.GetIdentity())));
+            return View(_messageService.Dispatch(new GetUserProfileQuery(_authenticationService.Identity)));
         }
 
         [Route("ChangeProfile")]
         [HttpPost]
         [Authorize]
         public ActionResult ChangeProfile(UserProfileModel model) {
-            return ValidatedCommandResult(model, new ChangeUserProfileCommand(_authenticationService.GetIdentity()) {
+            return ValidatedCommandResult(model, new ChangeUserProfileCommand(_authenticationService.Identity) {
                 DisplayName = model.DisplayName,
                 Description = model.Description,
                 ShowEmail = model.ShowEmail
