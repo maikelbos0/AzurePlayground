@@ -9,6 +9,10 @@ namespace AzurePlayground.Test.Utilities {
         }
         public string Identity { get; set; }
 
+        public string GetUserName() {
+            return Identity;
+        }
+
         public void SignIn(string identity) {
             Identity = identity;
         }

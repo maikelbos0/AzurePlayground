@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Unity;
+@using AzurePlayground;
+@using AzurePlayground.Services;
+
+@{
+    var identityService = UnityConfig.Container.Resolve<IAuthenticationService>();
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -22,12 +30,12 @@
                     @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
                 </li>
 
-                @if (User.Identity.IsAuthenticated) {
+                @if (identityService.IsAuthenticated) {
                     @Html.ActionLink("Users", "Index", "User", null, new { @class = "nav-link" })
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbar-login-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            @User.Identity.Name
+                            @identityService.GetUserName()
                         </a>
                         <div class="dropdown-menu site-dropdown-menu" aria-labelledby="navbar-login-dropdown">
                             @Html.ActionLink("Logged in", "LoggedIn", "Home", null, new { @class = "dropdown-item site-dropdown-item" })
@@ -60,15 +68,15 @@
                 }
             </ul>
 
-            </nav>
-        </div>
+        </nav>
+    </div>
 
-        <div class="container site-container">
-            <div class="site-content">
-                @RenderBody()
-            </div>
+    <div class="container site-container">
+        <div class="site-content">
+            @RenderBody()
         </div>
+    </div>
 
-        @RenderSection("Scripts", required: false)
-    </body>
+    @RenderSection("Scripts", required: false)
+</body>
 </html>
