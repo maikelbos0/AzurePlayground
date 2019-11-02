@@ -101,6 +101,8 @@
     <Compile Include="Container\InjectionRegistrar.cs" />
     <Compile Include="Mail\ActivationMailTemplate.cs" />
     <Compile Include="Mail\ActivationMailTemplateParameters.cs" />
+    <Compile Include="Mail\ConfirmEmailMailTemplate.cs" />
+    <Compile Include="Mail\ConfirmEmailMailTemplateParameters.cs" />
     <Compile Include="Mail\IMailClient.cs" />
     <Compile Include="Mail\MailClient.cs" />
     <Compile Include="Mail\MailMessage.cs" />

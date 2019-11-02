@@ -168,7 +168,7 @@ namespace AzurePlayground.Tests.Integration {
         }
 
         [TestMethod]
-        public void HomeController_ChangeEmail_LogOut_Activate_To_LogIn_Succeeds() {
+        public void HomeController_ChangeEmail_LogOut_ConfirmEmail_To_LogIn_Succeeds() {
             throw new System.NotImplementedException();
         }
     }
