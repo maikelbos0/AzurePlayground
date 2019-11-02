@@ -40,8 +40,8 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
             handler.Execute(command);
 
-            user.Received().ChangeEmail("new@test.com");
-            user.DidNotReceive().ChangeEmailFailed();
+            user.Received().RequestEmailChange("new@test.com");
+            user.DidNotReceive().RequestEmailChangeFailed();
         }
 
         [TestMethod]
@@ -76,8 +76,8 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("c => c.Password");
             result.Errors[0].Message.Should().Be("Invalid password");
-            user.DidNotReceive().ChangeEmail(Arg.Any<string>());
-            user.Received().ChangeEmailFailed();
+            user.DidNotReceive().RequestEmailChange(Arg.Any<string>());
+            user.Received().RequestEmailChangeFailed();
             _mailClient.SentMessages.Should().BeEmpty();
         }
 
@@ -102,8 +102,8 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             result.Errors.Should().HaveCount(1);
             result.Errors[0].Expression.ToString().Should().Be("c => c.NewEmail");
             result.Errors[0].Message.Should().Be("Email address already exists");
-            user.DidNotReceive().ChangeEmail(Arg.Any<string>());
-            user.Received().ChangeEmailFailed();
+            user.DidNotReceive().RequestEmailChange(Arg.Any<string>());
+            user.Received().RequestEmailChangeFailed();
             _mailClient.SentMessages.Should().BeEmpty();
         }
 

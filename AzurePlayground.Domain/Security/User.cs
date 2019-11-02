@@ -10,6 +10,8 @@ namespace AzurePlayground.Domain.Security {
         public virtual int? ActivationCode { get; protected set; }
         public virtual Password Password { get; protected set; }
         public virtual TemporaryPassword PasswordResetToken { get; protected set; } = TemporaryPassword.None;
+        public virtual string NewEmail { get; set; }
+        public virtual int? NewEmailConfirmationCode { get; set; }
         public ICollection<UserEvent> UserEvents { get; protected set; } = new List<UserEvent>();
 
         public virtual string DisplayName { get; set; }
@@ -97,15 +99,21 @@ namespace AzurePlayground.Domain.Security {
             AddEvent(UserEventType.FailedDeactivation);
         }
 
-        public virtual void ChangeEmail(string email) {
-            Email = email;
-            Status = UserStatus.New;
-            ActivationCode = GetNewActivationCode();
-            AddEvent(UserEventType.EmailChanged);
+        public virtual void RequestEmailChange(string email) {
+            NewEmail = email;
+            NewEmailConfirmationCode = GetNewActivationCode();
+            AddEvent(UserEventType.EmailChangeRequested);
         }
 
-        public virtual void ChangeEmailFailed() {
-            AddEvent(UserEventType.FailedEmailChange);
+        public virtual void RequestEmailChangeFailed() {
+            AddEvent(UserEventType.FailedEmailChangeRequest);
+        }
+
+        public virtual void ChangeEmail() {
+            Email = NewEmail;
+            NewEmail = null;
+            NewEmailConfirmationCode = null;
+            AddEvent(UserEventType.EmailChanged);
         }
 
         protected string GetNewPasswordResetToken() {

@@ -37,11 +37,11 @@ namespace AzurePlayground.CommandHandlers.Security {
             }
 
             if (result.Success) {
-                user.ChangeEmail(command.NewEmail);
+                user.RequestEmailChange(command.NewEmail);
                 _mailClient.Send(_template.GetMessage(new ActivationMailTemplateParameters(user.Email, user.ActivationCode.Value), user.Email));
             }
             else {
-                user.ChangeEmailFailed();
+                user.RequestEmailChangeFailed();
             }
 
             _repository.Update();

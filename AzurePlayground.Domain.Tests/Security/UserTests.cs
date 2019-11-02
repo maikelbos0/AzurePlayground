@@ -141,7 +141,7 @@ namespace AzurePlayground.Domain.Tests.Security {
         public void User_GenerateActivationCode_Succeeds() {
             var user = new User("test@test.com", "test");
             var oldActivationCode = user.ActivationCode;
-            
+
             user.GenerateActivationCode();
 
             user.ActivationCode.Should().NotBe(oldActivationCode); // This test will fail once every 256 ^ 3 runs
@@ -173,27 +173,41 @@ namespace AzurePlayground.Domain.Tests.Security {
         }
 
         [TestMethod]
-        public void User_EmailChanged_Succeeds() {
+        public void User_RequestEmailChange_Succeeds() {
             var user = new User("test@test.com", "test");
 
             user.Activate();
-            user.ChangeEmail("new@test.com");
+            user.RequestEmailChange("new@test.com");
 
-            user.Status.Should().Be(UserStatus.New);
-            user.ActivationCode.Should().NotBeNull();
-            user.Email.Should().Be("new@test.com");
-            user.UserEvents.Last().Type.Should().Be(UserEventType.EmailChanged);
+            user.NewEmailConfirmationCode.Should().NotBeNull();
+            user.NewEmail.Should().Be("new@test.com");
+            user.UserEvents.Last().Type.Should().Be(UserEventType.EmailChangeRequested);
             user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
 
         [TestMethod]
-        public void User_ChangeEmailFailed_Succeeds() {
+        public void User_RequestEmailChangeFailed_Succeeds() {
             var user = new User("test@test.com", "test");
 
             user.Activate();
-            user.ChangeEmailFailed();
+            user.RequestEmailChangeFailed();
 
-            user.UserEvents.Last().Type.Should().Be(UserEventType.FailedEmailChange);
+            user.UserEvents.Last().Type.Should().Be(UserEventType.FailedEmailChangeRequest);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
+        }
+
+        [TestMethod]
+        public void User_ChangeEmail_Succeeds() {
+            var user = new User("test@test.com", "test");
+
+            user.Activate();
+            user.RequestEmailChange("new@test.com");
+            user.ChangeEmail();
+
+            user.Email.Should().Be("new@test.com");
+            user.NewEmailConfirmationCode.Should().BeNull();
+            user.NewEmail.Should().BeNull();
+            user.UserEvents.Last().Type.Should().Be(UserEventType.EmailChanged);
             user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
     }

@@ -48,13 +48,14 @@ namespace AzurePlayground.Database {
 
             users.HasMany(u => u.UserEvents).WithRequired(e => e.User);
             users.HasIndex(u => u.Email).IsUnique();
+            users.Property(u => u.Status).HasColumnName("UserStatus_Id");
             users.Property(u => u.Email).IsRequired().HasMaxLength(255);
             users.Property(u => u.Password.Salt).IsRequired().HasMaxLength(20);
             users.Property(u => u.Password.Hash).IsRequired().HasMaxLength(20);
             users.Property(u => u.Password.HashIterations).IsRequired();
             users.Property(u => u.PasswordResetToken.Salt).HasMaxLength(20);
             users.Property(u => u.PasswordResetToken.Hash).HasMaxLength(20);
-            users.Property(u => u.Status).HasColumnName("UserStatus_Id");
+            users.Property(u => u.NewEmail).HasMaxLength(255);
             users.Property(u => u.DisplayName).HasMaxLength(50);
             users.Property(u => u.Description).IsMaxLength();
 

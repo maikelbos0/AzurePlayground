@@ -14,7 +14,8 @@
         FailedPasswordReset = 12,
         Deactivated = 13,
         FailedDeactivation = 14,
-        EmailChanged = 15,
-        FailedEmailChange = 16
+        EmailChangeRequested = 15,
+        FailedEmailChangeRequest = 16,
+        EmailChanged = 17
     }
 }
