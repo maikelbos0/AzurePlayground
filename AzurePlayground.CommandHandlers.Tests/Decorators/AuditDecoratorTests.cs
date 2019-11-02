@@ -31,7 +31,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Decorators {
 
         private readonly Serializer _serializer = new Serializer();
         private readonly FakePlaygroundContext _context = new FakePlaygroundContext();
-        private readonly CommandExecutionRepository  _repository;
+        private readonly CommandExecutionRepository _repository;
 
         public AuditDecoratorTests() {
             _repository = new CommandExecutionRepository(_context);

@@ -173,5 +173,19 @@ namespace AzurePlayground.Controllers {
                 ShowEmail = model.ShowEmail
             }, "ProfileChanged");
         }
+
+        [Route("ChangeEmail")]
+        [HttpGet]
+        [Authorize]
+        public ActionResult ChangeEmail() {
+            return View(new ChangeUserEmailModel());
+        }
+
+        [Route("ChangeEmail")]
+        [HttpPost]
+        [Authorize]
+        public ActionResult ChangeEmail(ChangeUserEmailModel model) {
+            return ValidatedCommandResult(model, new ChangeUserEmailCommand(_authenticationService.Identity, model.Password, model.NewEmail), "EmailChanged");
+        }
     }
 }

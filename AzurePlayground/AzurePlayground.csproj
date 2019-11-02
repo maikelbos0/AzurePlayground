@@ -281,6 +281,8 @@
     <Content Include="Views\Home\ProfileChanged.cshtml" />
     <Content Include="Views\Home\ChangeProfile.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Home\EmailChanged.cshtml" />
+    <Content Include="Views\Home\ChangeEmail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="DataGridViewMetaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\ChangeUserEmailModel.cs" />
     <Compile Include="Security\ChangeUserPasswordModel.cs" />
     <Compile Include="Security\DeactivateUserModel.cs" />
     <Compile Include="Security\UserProfileModel.cs" />
