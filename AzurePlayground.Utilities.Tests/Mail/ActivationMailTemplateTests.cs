@@ -26,7 +26,7 @@ namespace AzurePlayground.Utilities.Tests.Mail {
             var template = new ActivationMailTemplate(_appSettings);
             var parameters = new ActivationMailTemplateParameters("test@test.com", 12345);
 
-            template.GetMessage(parameters, "test@test.com").Body.Should().Be("<p>Please <a href=\"http://localhost/Home/Activate/?activationCode=12345&email=test%40test.com\">click here to activate your account</a>.</p><p>Activation code: 12345</p>");
+            template.GetMessage(parameters, "test@test.com").Body.Should().Be("<p>Please <a href=\"http://localhost/Home/Activate/?activationCode=12345&email=test%40test.com\">click here to activate your account</a>.</p>");
         }
 
         [TestMethod]

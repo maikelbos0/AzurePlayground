@@ -51,7 +51,6 @@
     <Compile Include="Security\ResetUserPasswordModel.cs" />
     <Compile Include="Security\ForgotUserPasswordModel.cs" />
     <Compile Include="Security\SendUserActivationModel.cs" />
-    <Compile Include="Security\ActivateUserModel.cs" />
     <Compile Include="Security\LogInUserModel.cs" />
     <Compile Include="Security\RegisterUserModel.cs" />
     <Compile Include="Security\UserViewModel.cs" />

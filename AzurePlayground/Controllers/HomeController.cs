@@ -33,25 +33,14 @@ namespace AzurePlayground.Controllers {
         [Route("Activate")]
         [HttpGet]
         public ActionResult Activate(string activationCode, string email) {
-            var model = new ActivateUserModel() {
-                ActivationCode = activationCode,
-                Email = email
-            };
+            var result = _messageService.Dispatch(new ActivateUserCommand(email, activationCode));
 
-            if (!string.IsNullOrWhiteSpace(model.ActivationCode)
-                && !string.IsNullOrWhiteSpace(model.Email)
-                && _messageService.Dispatch(new ActivateUserCommand(model.Email, model.ActivationCode)).Success) {
-
+            if (result.Success) {
                 return View("Activated");
             }
-
-            return View(model);
-        }
-
-        [Route("Activate")]
-        [HttpPost]
-        public ActionResult Activate(ActivateUserModel model) {
-            return ValidatedCommandResult(model, new ActivateUserCommand(model.Email, model.ActivationCode), "Activated");
+            else {
+                return View("ActivationFailed");
+            }
         }
 
         [Route("SendActivation")]
