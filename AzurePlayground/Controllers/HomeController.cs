@@ -72,13 +72,6 @@ namespace AzurePlayground.Controllers {
                 });
         }
 
-        [Route("LoggedIn")]
-        [HttpGet]
-        [Authorize]
-        public ActionResult LoggedIn() {
-            return View();
-        }
-
         [Route("LogOut")]
         [HttpPost]
         [Authorize]
@@ -180,19 +173,26 @@ namespace AzurePlayground.Controllers {
         [Route("ConfirmEmail")]
         [HttpGet]
         public ActionResult ConfirmEmail(string confirmationCode, string email) {
+            var newEmail = _messageService.Dispatch(new GetUserNewEmailQuery(email));
             var result = _messageService.Dispatch(new ConfirmUserEmailChangeCommand(email, confirmationCode));
 
             if (result.Success) {
-                // TODO sign in with the new email address if authenticated
                 if (_authenticationService.IsAuthenticated) {
-                    _authenticationService.SignOut();
+                    _authenticationService.SignIn(newEmail);
                 }
 
-                return View("EmailChangeConfirmed");
+                return RedirectToAction("EmailChangeConfirmed");
             }
             else {
                 return View("EmailChangeFailed");
             }
+        }
+
+        [Route("EmailChangeConfirmed")]
+        [HttpGet]
+        [Authorize]
+        public ActionResult EmailChangeConfirmed() {
+            return View();
         }
     }
 }

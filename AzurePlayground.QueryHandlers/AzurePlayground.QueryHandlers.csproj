@@ -54,6 +54,7 @@
     <Compile Include="Decorators\AuditDecorator.cs" />
     <Compile Include="IQueryHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\GetUserNewEmailQueryHandler.cs" />
     <Compile Include="Security\GetUserNameQueryHandler.cs" />
     <Compile Include="Security\GetUserProfileQueryHandler.cs" />
     <Compile Include="Security\GetUsersQueryHandler.cs" />
