@@ -68,7 +68,7 @@ namespace AzurePlayground.Controllers {
                 new LogInUserCommand(model.Email, model.Password),
                 () => {
                     _authenticationService.SignIn(model.Email);
-                    return RedirectToAction("LoggedIn");
+                    return RedirectToAction("Index");
                 });
         }
 

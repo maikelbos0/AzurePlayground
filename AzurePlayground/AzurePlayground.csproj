@@ -269,7 +269,6 @@
     <Content Include="Views\Home\SendActivation.cshtml" />
     <Content Include="Views\Home\ActivationSent.cshtml" />
     <Content Include="Views\Home\LogIn.cshtml" />
-    <Content Include="Views\Home\LoggedIn.cshtml" />
     <Content Include="Views\Home\ChangePassword.cshtml" />
     <Content Include="Views\Home\PasswordChanged.cshtml" />
     <Content Include="Views\Home\ForgotPassword.cshtml" />
