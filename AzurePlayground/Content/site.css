@@ -63,3 +63,23 @@
     list-style: none;
     margin-bottom: 0.5rem;
 }
+
+.site-password-meter {
+    text-align: center;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    width: 100%;
+}
+
+.site-password-meter-1 {
+    background-color: #ee3333;
+    color: #eeeeee;
+}
+
+.site-password-meter-2 {
+    background-color: #eeee33;
+}
+
+.site-password-meter-3 {
+    background-color: #33ee33;
+}
