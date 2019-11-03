@@ -1,66 +1,71 @@
-﻿function getPasswordStrength(password) {
-    if (password === null || password === undefined || password.toString().trim() === '') {
-        return 0;
-    }
-
-    password = password.toString().trim();
-
-    let score = 0;
-
-    if (hasLowerCaseLetters(password)) { score++; }
-    if (hasUpperCaseLetters(password)) { score++; }
-    if (hasDigits(password)) { score++; }
-    if (hasSpecialCharacters(password)) { score++; }
-
-    if (password.length < 6) {
-        return Math.min(score, 1);
-    }
-    else if (password.length < 8) {
-        return Math.min(score, 2);
-    }
-    else {
-        return score;
-    }
-}
-
-function hasLowerCaseLetters(password) {
-    for (var i = 0; i < password.length; i++) {
-        let c = password.charAt(i);
-
-        if (c === c.toLowerCase() && c !== c.toUpperCase()) {
-            return true;
+﻿let PasswordStrength = {
+    get: function (password) {
+        if (password === null || password === undefined || password.toString().trim() === '') {
+            return 0;
         }
-    }
 
-    return false;
-}
+        password = password.toString().trim();
 
-function hasUpperCaseLetters(password) {
-    for (var i = 0; i < password.length; i++) {
-        let c = password.charAt(i);
+        let score = 0;
 
-        if (c !== c.toLowerCase() && c === c.toUpperCase()) {
-            return true;
+        if (PasswordStrength.hasLowerCaseLetters(password)) { score++; }
+        if (PasswordStrength.hasUpperCaseLetters(password)) { score++; }
+        if (PasswordStrength.hasDigits(password)) { score++; }
+        if (PasswordStrength.hasSpecialCharacters(password)) { score++; }
+
+        if (password.length < 6) {
+            return Math.min(score, 1);
         }
-    }
-
-    return false;
-}
-
-function hasDigits(password) {
-    return /\d/.test(password);
-}
-
-function hasSpecialCharacters(password) {
-    for (var i = 0; i < password.length; i++) {
-        let c = password.charAt(i);
-
-        if (c === c.toLowerCase() && c === c.toUpperCase() && !/\d/.test(c)) {
-            return true;
+        else if (password.length < 8) {
+            return Math.min(score, 2);
         }
-    }
+        else if (password.length < 10) {
+            return Math.min(score, 3);
+        }
+        else {
+            return score;
+        }
+    },
 
-    return false;
+    hasLowerCaseLetters: function (password) {
+        for (var i = 0; i < password.length; i++) {
+            let c = password.charAt(i);
+
+            if (c === c.toLowerCase() && c !== c.toUpperCase()) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    hasUpperCaseLetters: function (password) {
+        for (var i = 0; i < password.length; i++) {
+            let c = password.charAt(i);
+
+            if (c !== c.toLowerCase() && c === c.toUpperCase()) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    hasDigits: function (password) {
+        return /\d/.test(password);
+    },
+
+    hasSpecialCharacters: function (password) {
+        for (var i = 0; i < password.length; i++) {
+            let c = password.charAt(i);
+
+            if (c === c.toLowerCase() && c === c.toUpperCase() && !/\d/.test(c)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 $(function () {
@@ -70,8 +75,8 @@ $(function () {
 
         base.after(meter);
 
-        base.on('keyup', function () {            
-            switch (getPasswordStrength(base.val())) {
+        base.on('keyup', function () {
+            switch (PasswordStrength.get(base.val())) {
                 case 0:
                     meter.hide();
                     break;
@@ -95,7 +100,7 @@ $(function () {
                     meter.show();
                     break;
             }
-            
+
         });
     });
 });
