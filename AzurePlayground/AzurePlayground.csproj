@@ -283,6 +283,8 @@
     <Content Include="Views\Home\EmailChangeRequested.cshtml" />
     <Content Include="Views\Home\ChangeEmail.cshtml" />
     <Content Include="Views\Home\ActivationFailed.cshtml" />
+    <Content Include="Views\Home\EmailChangeConfirmed.cshtml" />
+    <Content Include="Views\Home\EmailChangeFailed.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,8 +1,10 @@
 ﻿using AzurePlayground.Commands.Security;
 using AzurePlayground.Domain.Security;
 using AzurePlayground.Repositories.Security;
+using AzurePlayground.Utilities.Container;
 
 namespace AzurePlayground.CommandHandlers.Security {
+    [InterfaceInjectable]
     public sealed class ConfirmUserEmailChangeCommandHandler : ICommandHandler<ConfirmUserEmailChangeCommand> {
         private readonly IUserRepository _repository;
 

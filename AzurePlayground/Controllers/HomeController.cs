@@ -176,5 +176,23 @@ namespace AzurePlayground.Controllers {
         public ActionResult ChangeEmail(ChangeUserEmailModel model) {
             return ValidatedCommandResult(model, new ChangeUserEmailCommand(_authenticationService.Identity, model.Password, model.NewEmail), "EmailChangeRequested");
         }
+
+        [Route("ConfirmEmail")]
+        [HttpGet]
+        public ActionResult ConfirmEmail(string confirmationCode, string email) {
+            var result = _messageService.Dispatch(new ConfirmUserEmailChangeCommand(email, confirmationCode));
+
+            if (result.Success) {
+                // TODO sign in with the new email address if authenticated
+                if (_authenticationService.IsAuthenticated) {
+                    _authenticationService.SignOut();
+                }
+
+                return View("EmailChangeConfirmed");
+            }
+            else {
+                return View("EmailChangeFailed");
+            }
+        }
     }
 }

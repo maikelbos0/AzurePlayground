@@ -169,7 +169,40 @@ namespace AzurePlayground.Tests.Integration {
 
         [TestMethod]
         public void HomeController_ChangeEmail_LogOut_ConfirmEmail_To_LogIn_Succeeds() {
-            throw new System.NotImplementedException();
+            // Set up
+            var user = new User("test@test.com", "test");
+            user.Activate();
+            _context.Users.Add(user);
+            _authenticationService.Identity = "test@test.com";
+
+            // Change email
+            var changeEmailResult = (ViewResult)GetController().ChangeEmail(new ChangeUserEmailModel() {
+                Password = "test",
+                NewEmail = "new@test.com",
+                ConfirmNewEmail = "new@test.com"
+            });
+            changeEmailResult.ViewName.Should().Be("EmailChangeRequested");
+
+            // Log out
+            var logOutResult = GetController().LogOut();
+
+            logOutResult.Should().BeOfType<RedirectToRouteResult>();
+            _authenticationService.Identity.Should().BeNull();
+
+            // Confirm email change
+            var confirmationCode = Regex.Match(_mailClient.SentMessages.Last().Body, "\\d+").Value;
+            var confirmationResult = (ViewResult)GetController().ConfirmEmail(confirmationCode, "test@test.com");
+
+            confirmationResult.ViewName.Should().Be("EmailChangeConfirmed");
+
+            // Log in with new email address
+            var logInResult = GetController().LogIn(new LogInUserModel() {
+                Email = "new@test.com",
+                Password = "test"
+            });
+
+            logInResult.Should().BeOfType<RedirectToRouteResult>();
+            _authenticationService.Identity.Should().Be("new@test.com");
         }
     }
 }
