@@ -28,11 +28,11 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserEmailCommandHandler_Succeeds() {
-            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
             var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
-            user.ActivationCode.Returns(999999);
+            user.NewEmailConfirmationCode.Returns(999999);
             user.Password.Returns(new Password("test"));
             user.Status.Returns(UserStatus.Active);
 
@@ -46,7 +46,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserEmailCommandHandler_Sends_Email() {
-            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
             var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
             var user = new User("test@test.com", "test");
 
@@ -56,13 +56,13 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             handler.Execute(command);
 
             _mailClient.SentMessages.Should().HaveCount(1);
-            _mailClient.SentMessages[0].Subject.Should().Be("Please activate your account");
+            _mailClient.SentMessages[0].Subject.Should().Be("Please confirm your email address");
             _mailClient.SentMessages[0].To.Should().Be("new@test.com");
         }
 
         [TestMethod]
         public void ChangeUserEmailCommandHandler_Fails_For_Wrong_Password() {
-            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
             var command = new ChangeUserEmailCommand("test@test.com", "wrong", "new@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -83,7 +83,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserEmailCommandHandler_Fails_For_Existing_New_Email() {
-            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
             var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -109,7 +109,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserEmailCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
             var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
 
             Action commandAction = () => {
@@ -123,7 +123,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserEmailCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
             var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");
@@ -143,7 +143,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
         [TestMethod]
         public void ChangeUserEmailCommandHandler_Throws_Exception_For_Inactive_User() {
-            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ActivationMailTemplate(_appSettings));
+            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
             var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
             var user = Substitute.For<User>();
             user.Email.Returns("test@test.com");

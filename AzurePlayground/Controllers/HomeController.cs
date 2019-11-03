@@ -174,7 +174,7 @@ namespace AzurePlayground.Controllers {
         [HttpPost]
         [Authorize]
         public ActionResult ChangeEmail(ChangeUserEmailModel model) {
-            return ValidatedCommandResult(model, new ChangeUserEmailCommand(_authenticationService.Identity, model.Password, model.NewEmail), "EmailChanged");
+            return ValidatedCommandResult(model, new ChangeUserEmailCommand(_authenticationService.Identity, model.Password, model.NewEmail), "EmailChangeRequested");
         }
     }
 }

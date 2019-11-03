@@ -10,9 +10,9 @@ namespace AzurePlayground.CommandHandlers.Security {
     public sealed class ChangeUserEmailCommandHandler : ICommandHandler<ChangeUserEmailCommand> {
         private readonly IUserRepository _repository;
         private readonly IMailClient _mailClient;
-        private readonly IMailTemplate<ActivationMailTemplateParameters> _template;
+        private readonly IMailTemplate<ConfirmEmailMailTemplateParameters> _template;
 
-        public ChangeUserEmailCommandHandler(IUserRepository repository, IMailClient mailClient, IMailTemplate<ActivationMailTemplateParameters> template) {
+        public ChangeUserEmailCommandHandler(IUserRepository repository, IMailClient mailClient, IMailTemplate<ConfirmEmailMailTemplateParameters> template) {
             _repository = repository;
             _mailClient = mailClient;
             _template = template;
@@ -38,7 +38,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
             if (result.Success) {
                 user.RequestEmailChange(command.NewEmail);
-                _mailClient.Send(_template.GetMessage(new ActivationMailTemplateParameters(user.Email, user.ActivationCode.Value), user.Email));
+                _mailClient.Send(_template.GetMessage(new ConfirmEmailMailTemplateParameters(user.Email, user.NewEmailConfirmationCode.Value), user.NewEmail));
             }
             else {
                 user.RequestEmailChangeFailed();
