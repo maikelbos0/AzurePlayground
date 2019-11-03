@@ -56,6 +56,10 @@ namespace AzurePlayground.Domain.Security {
             return token;
         }
 
+        public virtual void PasswordResetRequestFailed() {
+            AddEvent(UserEventType.FailedPasswordResetRequest);
+        }
+
         public virtual void Activate() {
             Status = UserStatus.Active;
             ActivationCode = null;

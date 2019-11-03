@@ -57,19 +57,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
         }
 
         [TestMethod]
-        public void DeactivateUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new DeactivateUserCommandHandler(_repository);
-            var command = new DeactivateUserCommand("test@test.com", "test");
-
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate non-existent user 'test@test.com'");
-        }
-
-        [TestMethod]
-        public void DeactivateUserCommandHandler_Throws_Exception_For_Inactive_User() {
+        public void DeactivateUserCommandHandler_Throws_Exception_For_Invalid_User() {
             var handler = new DeactivateUserCommandHandler(_repository);
             var command = new DeactivateUserCommand("test@test.com", "test");
             var user = Substitute.For<User>();
@@ -83,27 +71,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
             _context.Users.Add(user);
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
-            user.DidNotReceive().Deactivate();
-            user.DidNotReceive().DeactivationFailed();
-        }
-
-        [TestMethod]
-        public void DeactivateUserCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new DeactivateUserCommandHandler(_repository);
-            var command = new DeactivateUserCommand("test@test.com", "test");
-            var user = Substitute.For<User>();
-            user.Email.Returns("test@test.com");
-            user.Password.Returns(new Password("test"));
-            user.Status.Returns(UserStatus.New);
-
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            _context.Users.Add(user);
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to deactivate inactive user 'test@test.com'");
+            commandAction.Should().Throw<InvalidOperationException>();
             user.DidNotReceive().Deactivate();
             user.DidNotReceive().DeactivationFailed();
         }

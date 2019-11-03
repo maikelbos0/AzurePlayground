@@ -25,9 +25,13 @@ namespace AzurePlayground.CommandHandlers.Security {
             if (user != null && user.Status == UserStatus.Active) {
                 var token = user.GeneratePasswordResetToken();
 
-                _repository.Update();
                 _mailClient.Send(_template.GetMessage(new PasswordResetMailTemplateParameters(user.Email, token), user.Email));
             }
+            else {
+                user?.PasswordResetRequestFailed();
+            }
+            
+            _repository.Update();
 
             return result;
         }

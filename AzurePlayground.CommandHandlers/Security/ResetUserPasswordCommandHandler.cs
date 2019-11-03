@@ -15,12 +15,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<ResetUserPasswordCommand> Execute(ResetUserPasswordCommand parameter) {
             var result = new CommandResult<ResetUserPasswordCommand>();
-            var user = _repository.TryGetByEmail(parameter.Email);
-
-            if (user == null || user.Status != UserStatus.Active) {
-                // Since there is no user input for email, the user is not responsible for these errors and we should not use the command result for feedback
-                throw new InvalidOperationException($"Attempted to reset password for {(user == null ? "non-existent" : "inactive")} user '{parameter.Email}'");
-            }
+            var user = _repository.GetByEmail(parameter.Email, UserStatus.Active);
 
             if (user.PasswordResetToken.Verify(parameter.PasswordResetToken)) {
                 user.ResetPassword(parameter.NewPassword);

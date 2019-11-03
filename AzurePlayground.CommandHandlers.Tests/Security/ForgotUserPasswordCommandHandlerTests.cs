@@ -58,6 +58,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
             result.Success.Should().BeTrue();
             user.Received().GeneratePasswordResetToken();
+            user.DidNotReceive().PasswordResetRequestFailed();
         }
 
         [TestMethod]
@@ -87,6 +88,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             result.Success.Should().BeTrue();
             _mailClient.SentMessages.Should().BeEmpty();
             user.DidNotReceive().GeneratePasswordResetToken();
+            user.Received().PasswordResetRequestFailed();
         }
 
         [TestMethod]
@@ -105,6 +107,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             result.Success.Should().BeTrue();
             _mailClient.SentMessages.Should().BeEmpty();
             user.DidNotReceive().GeneratePasswordResetToken();
+            user.Received().PasswordResetRequestFailed();
         }
     }
 }

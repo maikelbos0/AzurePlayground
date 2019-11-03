@@ -35,25 +35,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
         }
 
         [TestMethod]
-        public void LogOutUserCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new LogOutUserCommandHandler(_repository);
-            var command = new LogOutUserCommand("test@test.com");
-            var user = Substitute.For<User>();
-            user.Email.Returns("test@test.com");
-            user.Status.Returns(UserStatus.New);
-
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            _context.Users.Add(user);
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out inactive user 'test@test.com'");
-            user.DidNotReceive().LogOut();
-        }
-
-        [TestMethod]
-        public void LogOutUserCommandHandler_Throws_Exception_For_Inactive_User() {
+        public void LogOutUserCommandHandler_Throws_Exception_For_Invalid_User() {
             var handler = new LogOutUserCommandHandler(_repository);
             var command = new LogOutUserCommand("test@test.com");
             var user = Substitute.For<User>();
@@ -66,20 +48,8 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
             _context.Users.Add(user);
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out inactive user 'test@test.com'");
+            commandAction.Should().Throw<InvalidOperationException>();
             user.DidNotReceive().LogOut();
-
-        }
-
-        [TestMethod]
-        public void LogOutUserCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new LogOutUserCommandHandler(_repository);
-            var command = new LogOutUserCommand("test@test.com");
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to log out non-existent user 'test@test.com'");
         }
     }
 }

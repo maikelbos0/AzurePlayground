@@ -125,6 +125,17 @@ namespace AzurePlayground.Domain.Tests.Security {
             user.UserEvents.Last().Type.Should().Be(UserEventType.PasswordReset);
             user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
+        
+        [TestMethod]
+        public void User_PasswordResetRequestFailed_Succeeds() {
+            var user = new User("test@test.com", "test");
+
+            user.Activate();
+            user.PasswordResetRequestFailed();
+
+            user.UserEvents.Last().Type.Should().Be(UserEventType.FailedPasswordResetRequest); 
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
+        }
 
         [TestMethod]
         public void User_ResetPasswordFailed_Succeeds() {

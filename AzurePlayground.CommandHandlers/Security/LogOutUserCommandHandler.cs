@@ -15,16 +15,10 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<LogOutUserCommand> Execute(LogOutUserCommand parameter) {
             var result = new CommandResult<LogOutUserCommand>();
-            var user = _repository.TryGetByEmail(parameter.Email);
+            var user = _repository.GetByEmail(parameter.Email, UserStatus.Active);
 
-            if (user != null && user.Status == UserStatus.Active) {
-                user.LogOut();
-                _repository.Update();
-            }
-            else {
-                // Since there is no user input, the user is not responsible for errors and we should not use the command result for feedback
-                throw new InvalidOperationException($"Attempted to log out {(user == null ? "non-existent" : "inactive")} user '{parameter.Email}'");
-            }
+            user.LogOut();
+            _repository.Update();
 
             return result;
         }

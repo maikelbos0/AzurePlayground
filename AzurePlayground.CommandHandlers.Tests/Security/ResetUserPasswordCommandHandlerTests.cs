@@ -103,7 +103,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
         }
 
         [TestMethod]
-        public void ResetUserPasswordCommandHandler_Throws_Exception_For_Inactive_User() {
+        public void ResetUserPasswordCommandHandler_Throws_Exception_For_Invalid_User() {
             var handler = new ResetUserPasswordCommandHandler(_repository);
             var command = new ResetUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
@@ -118,44 +118,9 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
                 var result = handler.Execute(command);
             };
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for inactive user 'test@test.com'");
+            commandAction.Should().Throw<InvalidOperationException>();
             user.DidNotReceive().ResetPassword(Arg.Any<string>());
             user.DidNotReceive().ResetPasswordFailed();
-
-        }
-
-        [TestMethod]
-        public void ResetUserPasswordCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new ResetUserPasswordCommandHandler(_repository);
-            var command = new ResetUserPasswordCommand("test@test.com", "test", "test2");
-            var user = Substitute.For<User>();
-            user.Email.Returns("test@test.com");
-            user.Status.Returns(UserStatus.New);
-            user.Password.Returns(new Password("test"));
-            user.PasswordResetToken.Returns(new TemporaryPassword("test"));
-
-            _context.Users.Add(user);
-
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for inactive user 'test@test.com'");
-            user.DidNotReceive().ResetPassword(Arg.Any<string>());
-            user.DidNotReceive().ResetPasswordFailed();
-
-        }
-
-        [TestMethod]
-        public void ResetUserPasswordCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new ResetUserPasswordCommandHandler(_repository);
-            var command = new ResetUserPasswordCommand("test@test.com", "test", "test2");
-
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to reset password for non-existent user 'test@test.com'");
         }
     }
 }

@@ -44,45 +44,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
         }
 
         [TestMethod]
-        public void ChangeUserProfileCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new ChangeUserProfileCommandHandler(_repository);
-            var command = new ChangeUserProfileCommand("test@test.com") {
-                DisplayName = "Test",
-                Description = "A test description",
-                ShowEmail = true
-            };
-                        
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to save user information for non-existent user 'test@test.com'");
-        }
-
-        [TestMethod]
-        public void ChangeUserProfileCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new ChangeUserProfileCommandHandler(_repository);
-            var command = new ChangeUserProfileCommand("test@test.com") {
-                DisplayName = "Test",
-                Description = "A test description",
-                ShowEmail = true
-            };
-
-            var user = Substitute.For<User>();
-            user.Email.Returns("test@test.com");
-            user.Status.Returns(UserStatus.New);
-            
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            _context.Users.Add(user);
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to save user information for inactive user 'test@test.com'");
-        }
-
-        [TestMethod]
-        public void ChangeUserProfileCommandHandler_Throws_Exception_For_Inactive_User() {
+        public void ChangeUserProfileCommandHandler_Throws_Exception_For_Invalid_User() {
             var handler = new ChangeUserProfileCommandHandler(_repository);
             var command = new ChangeUserProfileCommand("test@test.com") {
                 DisplayName = "Test",
@@ -100,7 +62,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
 
             _context.Users.Add(user);
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to save user information for inactive user 'test@test.com'");
+            commandAction.Should().Throw<InvalidOperationException>();
         }
     }
 }

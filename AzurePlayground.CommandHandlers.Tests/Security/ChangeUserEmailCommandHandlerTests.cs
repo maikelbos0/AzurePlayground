@@ -106,43 +106,9 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
             user.Received().RequestEmailChangeFailed();
             _mailClient.SentMessages.Should().BeEmpty();
         }
-
+        
         [TestMethod]
-        public void ChangeUserEmailCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
-            var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
-
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change email for non-existent user 'test@test.com'");
-
-            _mailClient.SentMessages.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void ChangeUserEmailCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
-            var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
-            var user = Substitute.For<User>();
-            user.Email.Returns("test@test.com");
-            user.Password.Returns(new Password("test"));
-            user.Status.Returns(UserStatus.New);
-
-            _context.Users.Add(user);
-
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change email for inactive user 'test@test.com'");
-
-            _mailClient.SentMessages.Should().BeEmpty();
-        }
-
-        [TestMethod]
-        public void ChangeUserEmailCommandHandler_Throws_Exception_For_Inactive_User() {
+        public void ChangeUserEmailCommandHandler_Throws_Exception_For_Invalid_User() {
             var handler = new ChangeUserEmailCommandHandler(_repository, _mailClient, new ConfirmEmailMailTemplate(_appSettings));
             var command = new ChangeUserEmailCommand("test@test.com", "test", "new@test.com");
             var user = Substitute.For<User>();
@@ -156,7 +122,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
                 var result = handler.Execute(command);
             };
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change email for inactive user 'test@test.com'");
+            commandAction.Should().Throw<InvalidOperationException>();
 
             _mailClient.SentMessages.Should().BeEmpty();
         }

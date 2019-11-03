@@ -15,12 +15,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<ChangeUserPasswordCommand> Execute(ChangeUserPasswordCommand parameter) {
             var result = new CommandResult<ChangeUserPasswordCommand>();
-            var user = _repository.TryGetByEmail(parameter.Email);
-
-            if (user == null || user.Status != UserStatus.Active) {
-                // Since there is no user input for email, the user is not responsible for these errors and we should not use the command result for feedback
-                throw new InvalidOperationException($"Attempted to change password for {(user == null ? "non-existent" : "inactive")} user '{parameter.Email}'");
-            }
+            var user = _repository.GetByEmail(parameter.Email, UserStatus.Active);
 
             if (user.Password.Verify(parameter.CurrentPassword)) {
                 user.ChangePassword(parameter.NewPassword);

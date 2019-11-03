@@ -17,6 +17,10 @@ namespace AzurePlayground.Repositories.Security {
             return _context.Users.SingleOrDefault(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public User GetByEmail(string email, UserStatus expectedStatus) {
+            return _context.Users.Single(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase) && u.Status == expectedStatus);
+        }
+
         public void Add(User user) {
             _context.Users.Add(user);
             _context.SaveChanges();

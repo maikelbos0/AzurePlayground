@@ -17,6 +17,7 @@
         EmailChangeRequested = 15,
         FailedEmailChangeRequest = 16,
         EmailChanged = 17,
-        FailedEmailChange = 18
+        FailedEmailChange = 18,
+        FailedPasswordResetRequest = 19
     }
 }

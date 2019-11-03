@@ -17,19 +17,13 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<ChangeUserProfileCommand> Execute(ChangeUserProfileCommand command) {
             var result = new CommandResult<ChangeUserProfileCommand>();
-            var user = _repository.TryGetByEmail(command.Email);
+            var user = _repository.GetByEmail(command.Email, UserStatus.Active);
 
-            if (user != null && user.Status == UserStatus.Active) {
-                user.DisplayName = command.DisplayName;
-                user.Description = command.Description;
-                user.ShowEmail = command.ShowEmail;
+            user.DisplayName = command.DisplayName;
+            user.Description = command.Description;
+            user.ShowEmail = command.ShowEmail;
 
-                _repository.Update();
-            }
-            else {
-                // Since there is no user input, the user is not responsible for errors and we should not use the command result for feedback
-                throw new InvalidOperationException($"Attempted to save user information for {(user == null ? "non-existent" : "inactive")} user '{command.Email}'");
-            }
+            _repository.Update();
 
             return result;
         }

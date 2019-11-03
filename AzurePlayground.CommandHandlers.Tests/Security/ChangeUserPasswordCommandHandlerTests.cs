@@ -37,19 +37,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
         }
 
         [TestMethod]
-        public void ChangeUserPasswordCommandHandler_Throws_Exception_For_Nonexistent_User() {
-            var handler = new ChangeUserPasswordCommandHandler(_repository);
-            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
-
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change password for non-existent user 'test@test.com'");
-        }
-
-        [TestMethod]
-        public void ChangeUserPasswordCommandHandler_Throws_Exception_For_Inactive_User() {
+        public void ChangeUserPasswordCommandHandler_Throws_Exception_For_Invalid_User() {
             var handler = new ChangeUserPasswordCommandHandler(_repository);
             var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
             var user = Substitute.For<User>();
@@ -63,27 +51,7 @@ namespace AzurePlayground.CommandHandlers.Tests.Security {
                 var result = handler.Execute(command);
             };
 
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change password for inactive user 'test@test.com'");
-            user.DidNotReceive().ChangePassword(Arg.Any<string>());
-            user.DidNotReceive().ChangePasswordFailed();
-        }
-
-        [TestMethod]
-        public void ChangeUserPasswordCommandHandler_Throws_Exception_For_New_User() {
-            var handler = new ChangeUserPasswordCommandHandler(_repository);
-            var command = new ChangeUserPasswordCommand("test@test.com", "test", "test2");
-            var user = Substitute.For<User>();
-            user.Email.Returns("test@test.com");
-            user.Password.Returns(new Password("test"));
-            user.Status.Returns(UserStatus.New);
-
-            _context.Users.Add(user);
-
-            Action commandAction = () => {
-                var result = handler.Execute(command);
-            };
-
-            commandAction.Should().Throw<InvalidOperationException>().WithMessage("Attempted to change password for inactive user 'test@test.com'");
+            commandAction.Should().Throw<InvalidOperationException>();
             user.DidNotReceive().ChangePassword(Arg.Any<string>());
             user.DidNotReceive().ChangePasswordFailed();
         }
