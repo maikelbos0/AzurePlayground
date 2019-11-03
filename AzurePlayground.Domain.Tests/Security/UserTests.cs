@@ -210,5 +210,15 @@ namespace AzurePlayground.Domain.Tests.Security {
             user.UserEvents.Last().Type.Should().Be(UserEventType.EmailChanged);
             user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
         }
+
+        [TestMethod]
+        public void User_ChangeEmailFailed_Succeeds() {
+            var user = new User("test@test.com", "test");
+
+            user.ChangeEmailFailed();
+
+            user.UserEvents.Last().Type.Should().Be(UserEventType.FailedEmailChange);
+            user.UserEvents.Last().Date.Should().BeCloseTo(DateTime.UtcNow);
+        }
     }
 }

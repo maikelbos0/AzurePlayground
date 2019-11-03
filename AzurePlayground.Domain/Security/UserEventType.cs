@@ -16,6 +16,7 @@
         FailedDeactivation = 14,
         EmailChangeRequested = 15,
         FailedEmailChangeRequest = 16,
-        EmailChanged = 17
+        EmailChanged = 17,
+        FailedEmailChange = 18
     }
 }

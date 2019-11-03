@@ -26,7 +26,7 @@ namespace AzurePlayground.Utilities.Tests.Mail {
             var template = new ConfirmEmailMailTemplate(_appSettings);
             var parameters = new ConfirmEmailMailTemplateParameters("new@test.com", 12345);
 
-            template.GetMessage(parameters, "test@test.com").Body.Should().Be("<p>Please <a href=\"http://localhost/Home/ConfirmEmail/?activationCode=12345&email=new%40test.com\">click here to confirm your new email address</a>.</p>");
+            template.GetMessage(parameters, "test@test.com").Body.Should().Be("<p>Please <a href=\"http://localhost/Home/ConfirmEmail/?confirmationCode=12345&email=new%40test.com\">click here to confirm your new email address</a>.</p>");
         }
 
         [TestMethod]

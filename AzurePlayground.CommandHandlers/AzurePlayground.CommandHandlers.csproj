@@ -59,6 +59,7 @@
     <Compile Include="Security\ActivateUserCommandHandler.cs" />
     <Compile Include="Security\ChangeUserEmailCommandHandler.cs" />
     <Compile Include="Security\ChangeUserPasswordCommandHandler.cs" />
+    <Compile Include="Security\ConfirmUserEmailChangeCommandHandler.cs" />
     <Compile Include="Security\DeactivateUserCommandHandler.cs" />
     <Compile Include="Security\LogOutUserCommandHandler.cs" />
     <Compile Include="Security\RegisterUserCommandHandler.cs" />

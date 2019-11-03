@@ -46,6 +46,7 @@
     <Compile Include="Security\ActivateUserCommand.cs" />
     <Compile Include="Security\ChangeUserEmailCommand.cs" />
     <Compile Include="Security\ChangeUserPasswordCommand.cs" />
+    <Compile Include="Security\ConfirmUserEmailChangeCommand.cs" />
     <Compile Include="Security\DeactivateUserCommand.cs" />
     <Compile Include="Security\ForgotUserPasswordCommand.cs" />
     <Compile Include="Security\LogInUserCommand.cs" />

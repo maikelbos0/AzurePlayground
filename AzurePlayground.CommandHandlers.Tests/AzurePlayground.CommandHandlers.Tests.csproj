@@ -80,6 +80,7 @@
     <Compile Include="Security\ActivateUserCommandHandlerTests.cs" />
     <Compile Include="Security\ChangeUserEmailCommandHandlerTests.cs" />
     <Compile Include="Security\ChangeUserPasswordCommandHandlerTests.cs" />
+    <Compile Include="Security\ConfirmUserEmailChangeCommandHandlerTests.cs" />
     <Compile Include="Security\DeactivateUserCommandHandlerTests.cs" />
     <Compile Include="Security\LogInUserCommandHandlerTests.cs" />
     <Compile Include="Security\LogOutUserCommandHandlerTests.cs" />
