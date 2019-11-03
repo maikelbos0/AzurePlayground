@@ -3,7 +3,7 @@
 namespace AzurePlayground.Repositories.Security {
     public interface IUserRepository {
         User TryGetByEmail(string email);
-        User GetByEmail(string email, UserStatus expectedStatus);
+        User GetActiveByEmail(string email);
         void Add(User user);
         void Update();
     }

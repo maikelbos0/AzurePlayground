@@ -20,7 +20,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<ChangeUserEmailCommand> Execute(ChangeUserEmailCommand command) {
             var result = new CommandResult<ChangeUserEmailCommand>();
-            var user = _repository.GetByEmail(command.CurrentEmail, UserStatus.Active);
+            var user = _repository.GetActiveByEmail(command.CurrentEmail);
             var existingUser = _repository.TryGetByEmail(command.NewEmail);
 
             if (!user.Password.Verify(command.Password)) {

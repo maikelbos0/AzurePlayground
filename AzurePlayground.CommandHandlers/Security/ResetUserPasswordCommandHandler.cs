@@ -15,7 +15,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<ResetUserPasswordCommand> Execute(ResetUserPasswordCommand parameter) {
             var result = new CommandResult<ResetUserPasswordCommand>();
-            var user = _repository.GetByEmail(parameter.Email, UserStatus.Active);
+            var user = _repository.GetActiveByEmail(parameter.Email);
 
             if (user.PasswordResetToken.Verify(parameter.PasswordResetToken)) {
                 user.ResetPassword(parameter.NewPassword);

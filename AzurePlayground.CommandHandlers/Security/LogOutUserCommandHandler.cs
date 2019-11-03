@@ -15,7 +15,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<LogOutUserCommand> Execute(LogOutUserCommand parameter) {
             var result = new CommandResult<LogOutUserCommand>();
-            var user = _repository.GetByEmail(parameter.Email, UserStatus.Active);
+            var user = _repository.GetActiveByEmail(parameter.Email);
 
             user.LogOut();
             _repository.Update();

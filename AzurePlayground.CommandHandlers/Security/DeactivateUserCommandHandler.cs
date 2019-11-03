@@ -15,7 +15,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<DeactivateUserCommand> Execute(DeactivateUserCommand parameter) {
             var result = new CommandResult<DeactivateUserCommand>();
-            var user = _repository.GetByEmail(parameter.Email, UserStatus.Active);
+            var user = _repository.GetActiveByEmail(parameter.Email);
 
             if (user.Password.Verify(parameter.Password)) {
                 user.Deactivate();

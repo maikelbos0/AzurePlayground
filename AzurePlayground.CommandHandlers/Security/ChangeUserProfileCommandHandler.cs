@@ -17,7 +17,7 @@ namespace AzurePlayground.CommandHandlers.Security {
 
         public CommandResult<ChangeUserProfileCommand> Execute(ChangeUserProfileCommand command) {
             var result = new CommandResult<ChangeUserProfileCommand>();
-            var user = _repository.GetByEmail(command.Email, UserStatus.Active);
+            var user = _repository.GetActiveByEmail(command.Email);
 
             user.DisplayName = command.DisplayName;
             user.Description = command.Description;

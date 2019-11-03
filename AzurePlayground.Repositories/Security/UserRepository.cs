@@ -17,8 +17,8 @@ namespace AzurePlayground.Repositories.Security {
             return _context.Users.SingleOrDefault(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public User GetByEmail(string email, UserStatus expectedStatus) {
-            return _context.Users.Single(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase) && u.Status == expectedStatus);
+        public User GetActiveByEmail(string email) {
+            return _context.Users.Single(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase) && u.Status == UserStatus.Active);
         }
 
         public void Add(User user) {
